@@ -1,0 +1,13 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Netlify local state
+.netlify/
+
+# Node (only if you ever add tooling; the site itself needs none)
+node_modules/
+npm-debug.log*

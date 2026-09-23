@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lawliet - Compliance operations for people who have to prove it</title>
+<meta name="description" content="Lawliet is a self-hosted compliance and security operations platform. Continuous control assessment, auditor-grade evidence, and pull-only agents, running entirely on your own infrastructure. Air-gapped by design.">
+<meta name="author" content="Mher Saratikyan">
+<meta name="theme-color" content="#06080d">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lawliet - Hardened by design">
+<meta property="og:description" content="Continuous control assessment, drift detection, and auditor-grade evidence across every managed asset, from one console you run yourself.">
+<meta property="og:image" content="assets/img/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<!-- reusable blade mark, referenced via <use> across the page -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="blade-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4f8ff"/>
+      <stop offset="0.55" stop-color="#6f9dff"/>
+      <stop offset="1" stop-color="#1e5fe0"/>
+    </linearGradient>
+    <symbol id="blade" viewBox="0 0 100 100">
+      <path d="M44 8 L56 12 L52 60 L44 66 Z" fill="url(#blade-grad)"/>
+      <path d="M44 66 L52 60 L88 74 L70 80 Z" fill="url(#blade-grad)"/>
+      <path d="M44 66 L48 58 L40 80 L30 78 Z" fill="#1e5fe0" opacity="0.85"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ======================================================== NAV -->
+<nav class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Lawliet home">
+    <svg class="mark"><use href="#blade"/></svg>
+    <span class="name"><b>LAWLIET</b></span>
+  </a>
+  <div class="nav-menu" id="navMenu">
+    <div class="nav-links" id="navLinks">
+      <a href="#platform">Platform</a>
+      <a href="#modules">Modules</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#frameworks">Frameworks</a>
+      <a href="#maturity">Maturity</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="https://github.com/sarat1kyan/lawliet" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+        GitHub
+      </a>
+      <a class="btn btn-primary" href="#demo">Book a demo</a>
+    </div>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+</nav>
+
+<span id="top"></span>
+
+<!-- ======================================================== HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">Self-hosted security operations</span>
+      <h1>Compliance operations <br>for people who have <span class="grad">to prove it.</span></h1>
+      <p class="lede">
+        Continuous control assessment, drift detection, and auditor-grade evidence
+        across every managed asset, from one console you run yourself. Nothing about
+        your estate ever leaves it.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#demo">
+          Book a demo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#platform">See how it works</a>
+      </div>
+      <div class="hero-trust">
+        <span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>On-prem and air-gapped</span>
+        <span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l6 6L20 6"/></svg>No phone-home, ever</span>
+        <span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>MIT source</span>
+      </div>
+    </div>
+
+    <div class="reticle-wrap">
+      <svg class="reticle" viewBox="0 0 200 200" fill="none" stroke="currentColor" aria-hidden="true">
+        <g class="ring-outer">
+          <circle cx="100" cy="100" r="86" stroke-width="1" opacity="0.6"/>
+          <path d="M100 4 v18 M100 178 v18 M4 100 h18 M178 100 h18" stroke-width="1.4"/>
+        </g>
+        <g class="ring-inner">
+          <circle cx="100" cy="100" r="64" stroke-width="0.8" stroke-dasharray="4 8" opacity="0.7"/>
+          <rect x="70" y="70" width="60" height="60" stroke-width="0.8" opacity="0.4"/>
+        </g>
+      </svg>
+      <svg class="blade"><use href="#blade"/></svg>
+
+      <div class="term" id="term" aria-hidden="true">
+        <div class="term-head">
+          <span class="dot g"></span><span class="dot"></span><span class="dot"></span>
+          <span class="lbl">agent - heartbeat</span>
+        </div>
+        <div class="term-body" id="termBody"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ======================================================== PLATFORM / PULL-ONLY -->
+<section id="platform">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">The model</span>
+      <h2>Agents are pull-only. Nothing ever connects to a monitored host.</h2>
+      <p>
+        Every command sits in a queue on the server, HMAC-signed with a timestamp.
+        Hosts reach out on a heartbeat, verify the signature and the clock skew, then
+        execute. There is no inbound port to expose on an endpoint.
+      </p>
+    </div>
+
+    <div class="pull-grid">
+      <div class="flow reveal">
+        <div class="flow-row">
+          <div class="flow-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8M12 16v4"/></svg></div>
+          <div class="flow-txt"><strong>Monitored host</strong><span>No listening port. Sits behind NAT.</span></div>
+          <div class="flow-arrow"><span class="pkt"></span>heartbeat &gt;</div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="7" rx="1"/><rect x="3" y="13" width="18" height="7" rx="1"/><path d="M7 7.5h.01M7 16.5h.01"/></svg></div>
+          <div class="flow-txt"><strong>Lawliet server</strong><span>Signed command queue, evidence store.</span></div>
+          <div class="flow-arrow"><span class="pkt" style="animation-delay:.8s"></span>signed reply &gt;</div>
+        </div>
+        <div class="flow-row">
+          <div class="flow-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg></div>
+          <div class="flow-txt"><strong>Operator</strong><span>Queues actions, reads outcomes and evidence.</span></div>
+          <div class="flow-arrow"><span class="pkt" style="animation-delay:1.6s"></span>outcomes &gt;</div>
+        </div>
+      </div>
+
+      <div class="reveal d1">
+        <ul class="consequences">
+          <li><strong>No listening port on an endpoint.</strong> Nothing to expose, nothing to firewall inbound, and roaming laptops behind NAT work unchanged.</li>
+          <li><strong>Commands arrive on the next heartbeat.</strong> Worst case is about a minute at the default interval, not instant, and that trade is deliberate.</li>
+          <li><strong>Clocks matter.</strong> A command older than 10 minutes or more than 60 seconds in the future is rejected, so a host with drifted time refuses everything it is sent.</li>
+          <li><strong>Air-gapped runs indefinitely.</strong> The licence verifies against a local RSA-4096 signature. No check-in, no grace period to run out.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== STATS -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><div class="num" data-count="3472" data-suffix="">0</div><div class="lbl">Automated tests passing</div></div>
+      <div class="stat"><div class="num" data-count="9" data-suffix="">0</div><div class="lbl">Compliance frameworks mapped</div></div>
+      <div class="stat"><div class="num" data-count="12" data-suffix="">0</div><div class="lbl">Network discovery techniques</div></div>
+      <div class="stat"><div class="num" data-count="100" data-suffix="%">0</div><div class="lbl">Runs offline, no phone-home</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== MODULES -->
+<section id="modules">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">In the console</span>
+      <h2>One console. The whole compliance and response surface.</h2>
+      <p>Grouped the way the interface groups it: operations, investigation, network and data, administration. Every module writes to the same evidence and audit trail.</p>
+    </div>
+
+    <div class="mod-grid">
+      <article class="mod reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v16H4z"/><path d="M8 12l3 3 5-6"/></svg></div>
+        <span class="tag">Operations</span>
+        <h3>Continuous compliance</h3>
+        <p>Every score decomposes into per-control, per-host outcomes with timestamps. Unreachable hosts count as not-assessed, so a partial scan reports lower, not perfect.</p>
+      </article>
+
+      <article class="mod reveal d1">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h9l3 3v15H6z"/><path d="M15 3v4h4M9 13h6M9 17h6"/></svg></div>
+        <span class="tag">Operations</span>
+        <h3>Evidence bundles</h3>
+        <p>Export as JSON or a standalone HTML report across five scopes, with secrets redacted and the SHA-256 of every referenced artefact recorded alongside it.</p>
+      </article>
+
+      <article class="mod reveal d2">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <span class="tag">Operations</span>
+        <h3>Hardening</h3>
+        <p>Real remediation with approval, rollback and post-change validation. A control returns to compliant only when a re-check says so, never on attempt alone.</p>
+      </article>
+
+      <article class="mod reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+        <span class="tag">Investigation</span>
+        <h3>Digital forensics</h3>
+        <p>Case management with full chain-of-custody, artefact collection, metadata and entropy analysis, YARA scanning and IOC extraction for threat hunting.</p>
+      </article>
+
+      <article class="mod reveal d1">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="1.6" fill="currentColor"/><circle cx="15" cy="12" r="1.6" fill="currentColor"/><circle cx="10" cy="18" r="1.6" fill="currentColor"/></svg></div>
+        <span class="tag">Investigation</span>
+        <h3>File integrity monitoring</h3>
+        <p>Continuous monitoring on every enrolled endpoint. Any add, modify or delete on a watched path generates an immutable event that surfaces in compliance posture.</p>
+      </article>
+
+      <article class="mod reveal d2">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M9 9h6v6H9z"/></svg></div>
+        <span class="tag">Investigation</span>
+        <h3>Review queue</h3>
+        <p>A single analyst workflow for DLP incidents, FIM violations and firewall findings, with centralized cross-team triage and disposition.</p>
+      </article>
+
+      <article class="mod reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 7l3 3M17 7l-3 3M17 17l-3-3"/></svg></div>
+        <span class="tag">Network and data</span>
+        <h3>Network discovery</h3>
+        <p>Twelve techniques including ARP, mDNS, SSDP, NetBIOS, SNMP, banner and TLS inspection, and OUI lookup, so switches, printers and appliances get identified, not listed as an IP.</p>
+      </article>
+
+      <article class="mod reveal d1">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 3v6c0 4-3 7-8 9-5-2-8-5-8-9V6z"/><path d="M12 8v8M8 12h8"/></svg></div>
+        <span class="tag">Network and data</span>
+        <h3>Firewall governance</h3>
+        <p>Set-based shadow and duplicate detection with CIDR and port containment. Dangerous patterns like any-any and broad subnets are scored and mapped into topology.</p>
+      </article>
+
+      <article class="mod reveal d2">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="12" rx="1"/><path d="M7 7V5a5 5 0 0 1 10 0v2M12 12v3"/></svg></div>
+        <span class="tag">Network and data</span>
+        <h3>Data loss prevention</h3>
+        <p>Pattern-based detection for credentials and PII. File-write violations are blocked inline at the agent; network, USB, clipboard and email are monitored, with evidence redacted.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ======================================================== EVIDENCE -->
+<section>
+  <div class="wrap split">
+    <div class="reveal">
+      <span class="eyebrow">Why it holds up</span>
+      <h2 style="font-size:clamp(1.8rem,3.2vw,2.6rem);margin-top:16px">The sentence after the score.</h2>
+      <p style="color:var(--muted);margin-top:18px">
+        Most tooling gives you a number. The hard part is the sentence after it: why that
+        score, which control, on which host, at what time, and where is the artefact that
+        proves it to an auditor who does not trust you.
+      </p>
+      <ul class="feature-list">
+        <li>
+          <svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l6 6L20 6"/></svg>
+          <span><b>Decomposable scores.</b> Every percentage traces to real, timestamped test results, never estimates.</span>
+        </li>
+        <li>
+          <svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l6 6L20 6"/></svg>
+          <span><b>Content-hashed evidence.</b> Bundles carry the SHA-256 of everything they reference, redacted where sensitive.</span>
+        </li>
+        <li>
+          <svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l6 6L20 6"/></svg>
+          <span><b>Validated remediation.</b> Compliant is a state a re-check confirms, not a box someone ticked.</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="evidence-card reveal d1">
+      <div class="ev-head">
+        <span class="title">Evidence bundle - CIS scan #4471</span>
+        <span class="pill ok">Signed</span>
+      </div>
+      <div class="ctrl-row"><span class="cid">CIS 1.1.1</span><span class="host">db-prod-01</span><span class="st pass">pass</span></div>
+      <div class="ctrl-row"><span class="cid">CIS 5.2.4</span><span class="host">app-edge-07</span><span class="st fail">fail</span></div>
+      <div class="ctrl-row"><span class="cid">CIS 3.4.1</span><span class="host">bastion-02</span><span class="st pass">pass</span></div>
+      <div class="ctrl-row"><span class="cid">CIS 4.1.3</span><span class="host">nas-arch-01</span><span class="st na">not assessed</span></div>
+      <div class="ev-head" style="border-bottom:0;padding-top:18px;padding-bottom:0">
+        <span class="title">Posture</span>
+        <span class="mono" style="color:var(--accent-bright)">86.4%</span>
+      </div>
+      <div class="score-bar"><i data-score="86"></i></div>
+      <div class="ev-foot">sha256: <b>9f2c4a</b>e1b8d7...c0a3 &nbsp;|&nbsp; captured 2026-09-22T14:02:11Z &nbsp;|&nbsp; retention 7y</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== FRAMEWORKS -->
+<section id="frameworks" style="padding-bottom:0">
+  <div class="wrap">
+    <div class="section-head reveal" style="max-width:640px">
+      <span class="eyebrow">Control content</span>
+      <h2>Mapped against the frameworks your auditors already speak.</h2>
+    </div>
+  </div>
+  <div class="marquee reveal">
+    <div class="marquee-track">
+      <span>CIS Benchmarks</span><span>NIST 800-53</span><span>NIST CSF 2.0</span><span>DISA STIG</span><span>ISO 27001</span><span>PCI-DSS</span><span>HIPAA</span><span>SOC 2</span><span>GDPR</span>
+      <span>CIS Benchmarks</span><span>NIST 800-53</span><span>NIST CSF 2.0</span><span>DISA STIG</span><span>ISO 27001</span><span>PCI-DSS</span><span>HIPAA</span><span>SOC 2</span><span>GDPR</span>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== ARCHITECTURE -->
+<section id="architecture">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Under the hood</span>
+      <h2>One compose file. Yours to run.</h2>
+      <p>PostgreSQL and Redis stay on the container network and are never published. The whole stack comes up from a single installer that generates every secret and checks its own work.</p>
+    </div>
+
+    <div class="arch">
+      <div class="arch-col reveal">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="13" rx="1"/><path d="M8 21h8M12 17v4"/></svg>Frontend</h3>
+        <div class="meta">36 page routes</div>
+        <ul>
+          <li>Next.js 14 App Router</li>
+          <li>TypeScript, Tailwind</li>
+          <li>Dual theme, fully tokenized</li>
+          <li>206 component tests</li>
+        </ul>
+      </div>
+      <div class="arch-col reveal d1">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16v4H4zM4 14h16v4H4z"/><path d="M8 8h.01M8 16h.01"/></svg>Backend</h3>
+        <div class="meta">23 routers, 35 migrations</div>
+        <ul>
+          <li>FastAPI, async SQLAlchemy</li>
+          <li>Alembic migrations</li>
+          <li>PostgreSQL, Redis</li>
+          <li>3,266 backend tests</li>
+        </ul>
+      </div>
+      <div class="arch-col reveal d2">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18M3 12h18"/></svg>Agents</h3>
+        <div class="meta">Linux, macOS, Windows</div>
+        <ul>
+          <li>Pull-only, HMAC-signed</li>
+          <li>Signed self-upgrade, Ed25519</li>
+          <li>Compliance, FIM, DLP</li>
+          <li>No inbound port required</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="arch-note reveal">
+      $ ./lawliet install &nbsp;<span style="color:var(--muted-2)"># generates secrets, boots the stack, waits for health, verifies the API, login page and schema</span>
+    </p>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ======================================================== MATURITY -->
+<section id="maturity">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">An honest map</span>
+      <h2>Where the product actually is.</h2>
+      <p>"Production ready" without qualification is not useful to anyone planning a pilot. Here is the real state.</p>
+    </div>
+
+    <div class="maturity">
+      <div class="mat field reveal">
+        <div class="head"><span class="d"></span>Field-tested end to end</div>
+        <p><b>Linux agent</b> across install, heartbeat, compliance scanning, FIM, DLP, command signing and signed self-upgrade, verified against real Ubuntu hosts and PostgreSQL. Network discovery and full offline licensing, verified against real environments.</p>
+      </div>
+      <div class="mat tested reveal d1">
+        <div class="head"><span class="d"></span>Covered by tests, not yet field-tested</div>
+        <p><b>macOS and Windows agents</b> are implemented and covered by the suite. <b>Hardening</b> has run against lab hosts only, never a production host, and is gated behind approval and rollback for exactly that reason.</p>
+      </div>
+      <div class="mat absent reveal d2">
+        <div class="head"><span class="d"></span>Deliberately absent</div>
+        <p><b>Multi-tenancy.</b> Every deployment is one organisation, which is the right trade for on-premises and the wrong one for SaaS. That decision is load-bearing, not a gap.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== DEMO -->
+<section id="demo" class="demo">
+  <div class="wrap demo-grid">
+    <div class="demo-aside reveal">
+      <span class="eyebrow">Book a demo</span>
+      <h2>See it run on your terms.</h2>
+      <p>
+        A working console, walked through against a scenario close to your estate. On-prem,
+        air-gapped, or in a throwaway lab, whichever matches how you would actually deploy.
+      </p>
+      <ul class="expect">
+        <li><span class="n">01</span><div>A 30-minute walkthrough of compliance scoring, evidence export and pull-only agent rollout.</div></li>
+        <li><span class="n">02</span><div>Straight answers on deployment shape, framework coverage and the licence model.</div></li>
+        <li><span class="n">03</span><div>A sandbox bundle you can install yourself, no outbound access required.</div></li>
+      </ul>
+    </div>
+
+    <div class="form-card reveal d1">
+      <form name="demo-request" method="POST" data-netlify="true" netlify-honeypot="company-website" id="demoForm">
+        <input type="hidden" name="form-name" value="demo-request">
+        <p class="hp">
+          <label>Do not fill this out: <input name="company-website" tabindex="-1" autocomplete="off"></label>
+        </p>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Full name <span class="req">*</span></label>
+            <input id="name" name="name" type="text" required autocomplete="name" placeholder="Jane Okafor">
+          </div>
+          <div class="field">
+            <label for="email">Work email <span class="req">*</span></label>
+            <input id="email" name="email" type="email" required autocomplete="email" placeholder="jane@company.com">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="company">Organisation <span class="req">*</span></label>
+            <input id="company" name="company" type="text" required autocomplete="organization" placeholder="Company name">
+          </div>
+          <div class="field">
+            <label for="role">Role</label>
+            <input id="role" name="role" type="text" autocomplete="organization-title" placeholder="CISO, SecOps, Compliance">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="fleet">Fleet size</label>
+            <select id="fleet" name="fleet_size">
+              <option value="">Select range</option>
+              <option>Under 50 endpoints</option>
+              <option>50 - 250 endpoints</option>
+              <option>250 - 1000 endpoints</option>
+              <option>1000+ endpoints</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="deployment">Deployment</label>
+            <select id="deployment" name="deployment">
+              <option value="">Select shape</option>
+              <option>On-premises</option>
+              <option>Air-gapped</option>
+              <option>Private cloud</option>
+              <option>Still deciding</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label for="message">What are you trying to prove?</label>
+          <textarea id="message" name="message" placeholder="Frameworks in scope, audit deadlines, the estate you need to cover..."></textarea>
+        </div>
+
+        <div class="form-submit">
+          <button class="btn btn-primary" type="submit" id="submitBtn">
+            Request the demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <span class="form-note">Goes straight to the maintainer. No sales sequence.</span>
+        </div>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+        <h3>Request received.</h3>
+        <p>You will hear back at the address you gave, usually within a working day. In the meantime, the source and docs are on GitHub.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="#top">
+          <svg class="mark"><use href="#blade"/></svg>
+          <span class="name"><b>LAWLIET</b></span>
+        </a>
+        <p>Continuous control assessment, drift detection and auditor-grade evidence, on infrastructure you own. Hardened by design.</p>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#platform">Pull-only agents</a></li>
+          <li><a href="#modules">Modules</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+          <li><a href="#frameworks">Frameworks</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Project</h4>
+        <ul>
+          <li><a href="https://github.com/sarat1kyan/lawliet" target="_blank" rel="noopener">Source (GitHub)</a></li>
+          <li><a href="https://github.com/sarat1kyan/lawliet/tree/main/docs" target="_blank" rel="noopener">Documentation</a></li>
+          <li><a href="https://github.com/sarat1kyan/lawliet/blob/main/LICENSE" target="_blank" rel="noopener">MIT licence</a></li>
+          <li><a href="#maturity">Product maturity</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Get started</h4>
+        <ul>
+          <li><a href="#demo">Book a demo</a></li>
+          <li><a href="https://github.com/sarat1kyan/lawliet" target="_blank" rel="noopener">Self-host it</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year">2026</span> Mher Saratikyan. Lawliet. Source under MIT.</span>
+      <div class="socials">
+        <a href="https://github.com/sarat1kyan/lawliet" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

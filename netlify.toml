@@ -1,0 +1,29 @@
+# Static site, no build step. Import the repo into Netlify and it deploys as-is.
+[build]
+  publish = "."
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[redirects]]
+  from = "/docs"
+  to = "https://github.com/sarat1kyan/lawliet/tree/main/docs"
+  status = 302
+  force = false
+
+[[redirects]]
+  from = "/source"
+  to = "https://github.com/sarat1kyan/lawliet"
+  status = 302
+  force = false
