@@ -8,9 +8,12 @@ A single-page, zero-build landing page for **[Lawliet](https://github.com/sarat1
 the self-hosted compliance and security operations platform. Import this repository into
 Netlify and it deploys as-is, demo booking form included.
 
-[![deploy](https://img.shields.io/badge/deploy-netlify-1e5fe0?style=flat-square)](https://www.netlify.com/)
 [![build](https://img.shields.io/badge/build-none%20required-4f89f5?style=flat-square)](#deploy-to-netlify)
 [![license](https://img.shields.io/badge/license-MIT-4f89f5?style=flat-square)](LICENSE)
+
+<br>
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/sarat1kyan/lawliet-demo)
 
 </div>
 
@@ -27,15 +30,22 @@ The product itself lives in a separate repository and is not included here.
 
 ## Deploy to Netlify
 
-Two ways, both zero-config.
+Three ways, all zero-config.
 
-**From the dashboard**
+**One click**
 
-1. Push this repository to your GitHub account (already done if you are reading it there).
-2. In Netlify: **Add new site -> Import an existing project -> GitHub**, and pick this repo.
+Use the **Deploy to Netlify** button above. It opens `app.netlify.com`, clones this
+repository into your account, and deploys it. Nothing to configure.
+
+**Import an existing repo (app.netlify.com)**
+
+1. Go to `https://app.netlify.com` and sign in.
+2. **Add new site -> Import an existing project -> Deploy with GitHub**, then pick
+   `lawliet-demo`.
 3. Leave the build command empty and the publish directory as the repository root. The
-   included `netlify.toml` already sets `publish = "."`, so you can just click **Deploy**.
-4. Done. Netlify serves `index.html` and picks up the demo form automatically.
+   included `netlify.toml` already sets `publish = "."`, so just click **Deploy**.
+4. Netlify serves `index.html`, picks up the demo form, and redeploys on every push to
+   `main`.
 
 **From the CLI**
 
