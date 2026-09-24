@@ -1,51 +1,178 @@
-/* Lawliet site: header state, mobile menu, and the demo form. No dependencies. */
+/* Lawliet site. Header state, mobile menu, the demo form, and an additive
+   motion layer (ambient canvas, scroll reveals, counters, marquee, cursor).
+   No dependencies. Everything degrades to a complete, static page. */
 (function () {
-  var head = document.querySelector('.site-head');
+  'use strict';
+  var doc = document, root = doc.documentElement, body = doc.body;
+  root.classList.add('js');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var touch = window.matchMedia('(hover: none)').matches;
+  var $ = function (s, c) { return (c || doc).querySelector(s); };
+  var $$ = function (s, c) { return [].slice.call((c || doc).querySelectorAll(s)); };
+
+  /* ---- Header state -------------------------------------------------- */
+  var head = $('.site-head');
   var onScroll = function () { if (head) head.classList.toggle('scrolled', window.scrollY > 8); };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  var btn = document.getElementById('menuBtn');
+  /* ---- Mobile menu -------------------------------------------------- */
+  var btn = $('#menuBtn');
   if (btn && head) {
     btn.addEventListener('click', function () {
       var open = head.classList.toggle('open');
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       btn.textContent = open ? 'Close' : 'Menu';
     });
-    document.querySelectorAll('#nav a').forEach(function (a) {
+    $$('#nav a').forEach(function (a) {
       a.addEventListener('click', function () { head.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); btn.textContent = 'Menu'; });
     });
   }
 
-  var year = document.getElementById('year');
+  var year = $('#year');
   if (year) year.textContent = String(new Date().getFullYear());
 
-  // Netlify registers the form from the static HTML; this posts it without leaving the page.
-  // Without JavaScript the form still posts and lands on thanks.html.
-  var form = document.getElementById('demoForm');
-  if (!form) return;
-  var sent = document.getElementById('formSent');
-  var err = document.getElementById('formError');
-  var submit = document.getElementById('formBtn');
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (!form.checkValidity()) { form.reportValidity(); return; }
-    err.hidden = true;
-    submit.disabled = true;
-    submit.textContent = 'Sending...';
-    var body = new URLSearchParams(new FormData(form)).toString();
-    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
-      .then(function (res) {
-        if (!res.ok) throw new Error('status ' + res.status);
-        form.hidden = true;
-        sent.hidden = false;
-        sent.focus();
-      })
-      .catch(function () {
-        submit.disabled = false;
-        submit.textContent = 'Request a demo';
-        err.textContent = 'That did not send. Try again, or write to info@justlawliet.net.';
-        err.hidden = false;
-      });
+  /* ---- Demo form (Netlify) ----------------------------------------- */
+  (function () {
+    var form = $('#demoForm');
+    if (!form) return;
+    var sent = $('#formSent'), err = $('#formError'), submit = $('#formBtn');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      if (err) err.hidden = true;
+      submit.disabled = true; submit.textContent = 'Sending...';
+      var payload = new URLSearchParams(new FormData(form)).toString();
+      fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload })
+        .then(function (res) { if (!res.ok) throw new Error('status ' + res.status); form.hidden = true; sent.hidden = false; sent.focus(); })
+        .catch(function () { submit.disabled = false; submit.textContent = 'Request a demo'; if (err) { err.textContent = 'That did not send. Try again, or write to info@justlawliet.net.'; err.hidden = false; } });
+    });
+  })();
+
+  if (reduce) { return; } // static page below this line
+
+  /* ---- Atmosphere layers (injected, so every page shares them) ------ */
+  function el(tag, cls) { var n = doc.createElement(tag); if (cls) n.className = cls; return n; }
+  var canvas = el('canvas'); canvas.id = 'bg-canvas'; canvas.setAttribute('aria-hidden', 'true');
+  body.insertBefore(canvas, body.firstChild);
+  body.insertBefore(Object.assign(el('div', 'bg-wash'), { ariaHidden: 'true' }), body.firstChild);
+  body.insertBefore(Object.assign(el('div', 'bg-grain'), { ariaHidden: 'true' }), body.firstChild);
+  var progress = el('div', 'scroll-progress'); progress.setAttribute('aria-hidden', 'true'); body.appendChild(progress);
+
+  window.addEventListener('scroll', function () {
+    var h = root.scrollHeight - root.clientHeight;
+    progress.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+  }, { passive: true });
+
+  /* ---- Custom cursor + magnetic buttons ---------------------------- */
+  if (!touch) {
+    var dot = el('div', 'cur-dot'), ring = el('div', 'cur-ring');
+    dot.setAttribute('aria-hidden', 'true'); ring.setAttribute('aria-hidden', 'true');
+    body.appendChild(dot); body.appendChild(ring);
+    var mx = innerWidth / 2, my = innerHeight / 2, rxp = mx, ryp = my;
+    window.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; dot.style.transform = 'translate(' + mx + 'px,' + my + 'px)'; });
+    (function ringLoop() { rxp += (mx - rxp) * 0.2; ryp += (my - ryp) * 0.2; ring.style.transform = 'translate(' + rxp + 'px,' + ryp + 'px)'; requestAnimationFrame(ringLoop); })();
+    $$('a, button, summary, input, select, textarea').forEach(function (n) {
+      n.addEventListener('mouseenter', function () { ring.classList.add('hot'); });
+      n.addEventListener('mouseleave', function () { ring.classList.remove('hot'); });
+    });
+    $$('.btn').forEach(function (b) {
+      b.addEventListener('mousemove', function (e) { var r = b.getBoundingClientRect(); b.style.transform = 'translate(' + (e.clientX - r.left - r.width / 2) * 0.16 + 'px,' + (e.clientY - r.top - r.height / 2) * 0.28 + 'px)'; });
+      b.addEventListener('mouseleave', function () { b.style.transform = ''; });
+    });
+  }
+
+  /* ---- Background node field --------------------------------------- */
+  (function () {
+    var ctx = canvas.getContext('2d');
+    var w, h, dpr, nodes = [], count, mouse = { x: -999, y: -999 }, shift = 0;
+    function size() {
+      dpr = Math.min(devicePixelRatio || 1, 2); w = canvas.clientWidth; h = canvas.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      count = Math.max(26, Math.min(70, Math.round(w * h / 26000))); nodes = [];
+      for (var i = 0; i < count; i++) nodes.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.24, vy: (Math.random() - 0.5) * 0.24, r: Math.random() * 1.5 + 0.6 });
+    }
+    window.addEventListener('mousemove', function (e) { mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener('mouseout', function () { mouse.x = -999; mouse.y = -999; });
+    window.addEventListener('scroll', function () { shift = window.scrollY * 0.02; }, { passive: true });
+    function frame() {
+      ctx.clearRect(0, 0, w, h);
+      for (var i = 0; i < nodes.length; i++) {
+        var n = nodes[i]; n.x += n.vx; n.y += n.vy;
+        if (n.x < 0 || n.x > w) n.vx *= -1; if (n.y < 0 || n.y > h) n.vy *= -1;
+        var ddx = n.x - mouse.x, ddy = n.y - (mouse.y + shift), md = Math.sqrt(ddx * ddx + ddy * ddy);
+        if (md < 150) { n.x += ddx / md * 0.7; n.y += ddy / md * 0.7; }
+        for (var j = i + 1; j < nodes.length; j++) {
+          var m = nodes[j], dx = n.x - m.x, dy = n.y - m.y, d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 130) { ctx.strokeStyle = 'rgba(60,131,255,' + (0.16 * (1 - d / 130)) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke(); }
+        }
+        ctx.fillStyle = 'rgba(114,160,255,0.55)'; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.2832); ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+    size(); window.addEventListener('resize', size); frame();
+  })();
+
+  /* ---- Reveal on scroll (matches the CSS selector list) ------------ */
+  var revealSel = '.hero .kicker, .hero h1, .hero .lede, .hero .ctas, .facts > div, .stage, .problem .say, .proof > div, .band-head, .outcome, .control, .req, .steps > li, .terminal, .edition, .faq details, .demo-points > li, .demo .form, .foot-grid > div';
+  $$(revealSel).forEach(function (n) {
+    var idx = [].indexOf.call(n.parentNode.children, n); // stagger among siblings
+    n.style.transitionDelay = Math.min(idx, 6) * 0.07 + 's';
   });
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (ents) {
+      ents.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); if (e.target.matches('.facts > div')) runCounters(); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    $$(revealSel).forEach(function (n) { io.observe(n); });
+  } else {
+    $$(revealSel).forEach(function (n) { n.classList.add('in'); }); runCounters();
+  }
+
+  /* ---- Counters (hero facts) --------------------------------------- */
+  var countersDone = false;
+  function runCounters() {
+    if (countersDone) return; countersDone = true;
+    $$('.facts dt').forEach(function (dt) {
+      var raw = dt.textContent.trim(); if (!/^\d+$/.test(raw)) return;
+      var target = parseInt(raw, 10), start = null, durn = 1400;
+      function tick(t) { if (start === null) start = t; var p = Math.min((t - start) / durn, 1); dt.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(tick); }
+      dt.textContent = '0'; requestAnimationFrame(tick);
+    });
+  }
+
+  /* ---- Frameworks marquees ----------------------------------------- */
+  $$('.frameworks').forEach(function (fw, i) {
+    var kids = [].slice.call(fw.children);
+    if (!kids.length) return;
+    var track = el('div', 'mq-track'); if (i % 2) track.classList.add('rev');
+    kids.forEach(function (k) { track.appendChild(k); });
+    var clone = track.cloneNode(true); clone.setAttribute('aria-hidden', 'true');
+    fw.appendChild(track); fw.appendChild(clone);
+    fw.classList.add('mq');
+    fw.style.setProperty('--mqdur', (38 + i * 8) + 's');
+  });
+
+  /* ---- Hero stage parallax + evidence tilt ------------------------- */
+  var stage = $('.stage'), evidence = $('.evidence');
+  if (stage && !touch) {
+    stage.addEventListener('mousemove', function (e) {
+      var r = stage.getBoundingClientRect(), px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+      if (evidence) evidence.style.transform = 'perspective(1000px) rotateX(' + (-py * 6) + 'deg) rotateY(' + (px * 7) + 'deg) translateZ(0)';
+    });
+    stage.addEventListener('mouseleave', function () { if (evidence) evidence.style.transform = ''; });
+  }
+
+  /* ---- Section scroll-spy in the nav ------------------------------- */
+  var spy = $$('#nav a[href^="#"], #nav a[href^="../#"]');
+  var map = {};
+  spy.forEach(function (a) { var id = a.getAttribute('href').split('#')[1]; if (id) map[id] = a; });
+  var ids = Object.keys(map);
+  if (ids.length && 'IntersectionObserver' in window) {
+    var so = new IntersectionObserver(function (ents) {
+      ents.forEach(function (e) {
+        if (e.isIntersecting) { spy.forEach(function (a) { a.removeAttribute('aria-current'); }); if (map[e.target.id]) map[e.target.id].setAttribute('aria-current', 'true'); }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    ids.forEach(function (id) { var s = doc.getElementById(id); if (s) so.observe(s); });
+  }
 })();

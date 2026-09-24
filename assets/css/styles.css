@@ -305,3 +305,94 @@ section.band { padding-block: 104px; border-top: 1px solid var(--line); }
   .head-cta .btn-primary { padding: 10px 13px; font-size: 13.5px; }
   .lockup .word { display: none; }
 }
+
+/* ==========================================================================
+ * Motion and atmosphere layer. Additive: everything above still styles the
+ * content and the docs. These rules add the ambient canvas, scroll reveals,
+ * counters, marquee, cursor and hover depth. All gated so the page is complete
+ * and readable with no JavaScript and under reduced-motion.
+ * ====================================================================== */
+
+html { background: var(--ground); }
+body { background: transparent; }
+
+/* Fixed atmosphere behind all content */
+#bg-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -3; display: block; pointer-events: none; }
+.bg-wash { position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(1100px 760px at 82% -8%, rgba(37,107,255,0.10), transparent 60%),
+    radial-gradient(820px 560px at 4% 2%, rgba(56,140,255,0.05), transparent 55%); }
+.bg-grain { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+/* Scroll progress */
+.scroll-progress { position: fixed; top: 0; left: 0; height: 2px; width: 0; z-index: 60;
+  background: linear-gradient(90deg, var(--brand), var(--accent)); box-shadow: 0 0 12px rgba(37,107,255,0.5); }
+
+/* Custom cursor (pointer devices only) */
+.cur-dot, .cur-ring { position: fixed; top: 0; left: 0; z-index: 70; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; will-change: transform; }
+.cur-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: var(--accent); }
+.cur-ring { width: 32px; height: 32px; margin: -16px 0 0 -16px; border: 1px solid rgba(114,160,255,0.6);
+  transition: width .2s, height .2s, background .2s, border-color .2s, opacity .2s; }
+.cur-ring.hot { width: 50px; height: 50px; background: rgba(37,107,255,0.10); border-color: var(--brand-2); }
+@media (hover: none) { .cur-dot, .cur-ring { display: none; } }
+
+/* Reveal on scroll. Hidden state applies only with JS on and motion allowed. */
+html.js body:not(.reduced) :is(
+  .hero .kicker, .hero h1, .hero .lede, .hero .ctas, .facts > div, .stage,
+  .problem .say, .proof > div, .band-head, .outcome, .control,
+  .req, .steps > li, .terminal, .edition, .faq details, .demo-points > li,
+  .demo .form, .foot-grid > div
+) { opacity: 0; transform: translateY(26px); transition: opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1); }
+html.js body:not(.reduced) :is(
+  .hero .kicker, .hero h1, .hero .lede, .hero .ctas, .facts > div, .stage,
+  .problem .say, .proof > div, .band-head, .outcome, .control,
+  .req, .steps > li, .terminal, .edition, .faq details, .demo-points > li,
+  .demo .form, .foot-grid > div
+).in { opacity: 1; transform: none; }
+
+/* Hover depth on the interactive cards */
+.outcome, .edition, .control { transition: transform .3s cubic-bezier(.22,.61,.36,1), border-color .3s, box-shadow .3s, background .3s; }
+.outcome { position: relative; }
+.outcome::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--brand-2), transparent); opacity: 0; transition: opacity .3s; }
+.outcome:hover { transform: translateY(-4px); background: var(--panel-2); }
+.outcome:hover::after { opacity: 1; }
+.control:hover { border-left-color: var(--brand-2); }
+.control:hover h3 { color: var(--accent); }
+.edition:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(114,160,255,0.2); }
+.edition.featured { position: relative; }
+.edition.featured::before { content: ""; position: absolute; inset: -1px; border-radius: 3px; pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(37,107,255,0.35), 0 0 50px rgba(37,107,255,0.15); }
+
+/* Facts headline numbers pick up the brand gradient */
+.facts dt { background: linear-gradient(120deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* Primary button sheen */
+.btn-primary { position: relative; overflow: hidden; }
+.btn-primary::after { content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 100%; transform: skewX(-20deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent); transition: left .6s; }
+.btn-primary:hover::after { left: 140%; }
+
+/* Frameworks as a marquee once JS wraps them (falls back to the wrapped grid) */
+.frameworks.mq { flex-wrap: nowrap; overflow: hidden; gap: 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.frameworks.mq .mq-track { display: flex; gap: 10px; padding-right: 10px; flex: none; will-change: transform; animation: mq var(--mqdur, 42s) linear infinite; }
+.frameworks.mq:hover .mq-track { animation-play-state: paused; }
+.frameworks.mq .mq-track.rev { animation-direction: reverse; }
+@keyframes mq { to { transform: translateX(-100%); } }
+.frameworks span { transition: color .2s, border-color .2s, background .2s; }
+.frameworks span:hover { color: var(--brand-2); border-color: rgba(114,160,255,0.4); background: var(--brand-dim); }
+
+/* Hero stage gets a little parallax life; evidence lifts on hover */
+.stage { transition: transform .4s cubic-bezier(.22,.61,.36,1); }
+.evidence { transition: box-shadow .3s, transform .3s; transform-style: preserve-3d; }
+
+/* Section scroll-spy underline in the nav */
+.nav a { position: relative; }
+.nav a[aria-current="true"] { color: var(--ink); }
+.nav a[aria-current="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px; background: var(--brand-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  #bg-canvas { display: none; }
+  .cur-dot, .cur-ring { display: none; }
+  .frameworks.mq .mq-track { animation: none; }
+}
