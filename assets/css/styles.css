@@ -485,3 +485,62 @@ body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-event
   .aurora i { filter: blur(64px); }
   .evidence { animation: none; }
 }
+
+/* ==========================================================================
+ * Neon + 3D globe + cinematic reveals. Additive, reduced-motion aware.
+ * ====================================================================== */
+
+/* --- Neon crank ------------------------------------------------------ */
+.aurora .a1 { opacity: .58; }
+.aurora .a2 { opacity: .42; }
+.aurora .a3 { opacity: .34; }
+.aurora .a4 { position: absolute; display: block; border-radius: 50%; filter: blur(80px); mix-blend-mode: screen;
+  width: 34vw; height: 34vw; right: 6vw; top: 6vw; background: radial-gradient(circle, #22e0ff, transparent 60%); opacity: .3; animation: drift2 30s ease-in-out infinite; }
+
+.hero h1 span { background: linear-gradient(100deg, #a9ccff, #28e8ff 55%, #6ea0ff); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 0 30px rgba(40,232,255,0.35)); }
+.band-head h2, .h2 { text-shadow: 0 0 40px rgba(37,107,255,0.18); }
+.label { text-shadow: 0 0 20px rgba(37,107,255,0.5); }
+.facts dt { filter: drop-shadow(0 0 22px rgba(56,224,255,0.3)); }
+
+.glow-card:hover { box-shadow: 0 26px 80px rgba(0,0,0,0.55), 0 0 70px rgba(37,107,255,0.22), inset 0 1px 0 rgba(124,176,255,0.12); }
+.glow-card .cardglow { background: radial-gradient(240px circle at var(--mx,50%) var(--my,50%), #38e0ff, var(--accent) 30%, transparent 64%); }
+
+.btn-quiet:hover { border-color: var(--brand-2); box-shadow: 0 0 24px rgba(37,107,255,0.28); color: #fff; }
+.btn-primary:hover { box-shadow: 0 0 0 1px rgba(124,176,255,0.9), 0 16px 50px rgba(37,107,255,0.6), 0 0 60px rgba(37,107,255,0.35); }
+
+.nav a[aria-current="true"] { text-shadow: 0 0 16px rgba(56,224,255,0.6); }
+.nav a[aria-current="true"]::after { background: linear-gradient(90deg, var(--brand-2), #38e0ff); box-shadow: 0 0 12px rgba(56,224,255,0.7); height: 2px; }
+
+.tag.pass { box-shadow: 0 0 18px rgba(43,213,118,0.18); }
+.reticle circle { stroke: rgba(120,170,255,0.34); }
+.reticle line { stroke: rgba(120,170,255,0.6); }
+
+/* --- Hero 3D globe --------------------------------------------------- */
+.stage .globe { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.stage .reticle { z-index: 1; }
+.stage .evidence { z-index: 3; }
+
+/* --- Cinematic focus-in reveals (override the plain fade) ------------ */
+html.js body:not(.reduced) :is(
+  .hero .kicker, .hero h1, .hero .lede, .hero .ctas, .facts > div, .stage,
+  .problem .say, .proof > div, .band-head, .outcome, .control,
+  .req, .steps > li, .terminal, .edition, .faq details, .demo-points > li,
+  .demo .form, .foot-grid > div
+) { opacity: 0; transform: translateY(34px) scale(.985); filter: blur(10px);
+  transition: opacity .85s cubic-bezier(.22,.61,.36,1), transform .85s cubic-bezier(.22,.61,.36,1), filter .85s cubic-bezier(.22,.61,.36,1); }
+html.js body:not(.reduced) :is(
+  .hero .kicker, .hero h1, .hero .lede, .hero .ctas, .facts > div, .stage,
+  .problem .say, .proof > div, .band-head, .outcome, .control,
+  .req, .steps > li, .terminal, .edition, .faq details, .demo-points > li,
+  .demo .form, .foot-grid > div
+).in { opacity: 1; transform: none; filter: none; }
+
+/* section band labels animate a running bar */
+.band-head .label::after, .problem .label::after, .faq .label::after, .demo .label::after {
+  content: ""; display: block; width: 0; height: 2px; margin-top: 8px;
+  background: linear-gradient(90deg, var(--brand-2), #38e0ff); box-shadow: 0 0 12px rgba(56,224,255,0.6);
+  transition: width 1s cubic-bezier(.22,.61,.36,1) .2s; }
+.band-head.in .label::after, .in .label::after { width: 46px; }
+
+@media (prefers-reduced-motion: reduce) { .stage .globe { display: none; } .aurora .a4 { display: none; } }
+@media (max-width: 640px) { .stage .globe { display: none; } }

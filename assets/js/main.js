@@ -61,7 +61,7 @@
 
   // Aurora + a light that tracks the pointer
   var aurora = el('div', 'aurora'); aurora.setAttribute('aria-hidden', 'true');
-  aurora.innerHTML = '<i class="a1"></i><i class="a2"></i><i class="a3"></i>';
+  aurora.innerHTML = '<i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i>';
   body.insertBefore(aurora, body.firstChild);
   var pageSpot = el('div', 'page-spot'); pageSpot.setAttribute('aria-hidden', 'true'); body.appendChild(pageSpot);
   window.addEventListener('mousemove', function (e) { pageSpot.style.setProperty('--px', e.clientX + 'px'); pageSpot.style.setProperty('--py', e.clientY + 'px'); }, { passive: true });
@@ -132,6 +132,78 @@
           if (d < 138) { ctx.strokeStyle = 'rgba(80,150,255,' + (0.24 * (1 - d / 138)) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke(); }
         }
         ctx.fillStyle = 'rgba(130,175,255,0.72)'; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.2832); ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+    size(); window.addEventListener('resize', size); frame();
+  })();
+
+  /* ---- Hero 3D host-globe ------------------------------------------ */
+  (function () {
+    var stage = $('.stage');
+    if (!stage || window.matchMedia('(max-width: 640px)').matches) return;
+    var gc = el('canvas', 'globe'); gc.setAttribute('aria-hidden', 'true');
+    stage.insertBefore(gc, stage.firstChild);
+    var ctx = gc.getContext('2d');
+    var w, h, dpr, cx, cy, R;
+    var N = 168, pts = [], links = [];
+    // Fibonacci sphere
+    for (var i = 0; i < N; i++) {
+      var y = 1 - (i / (N - 1)) * 2, rr = Math.sqrt(1 - y * y), th = i * 2.399963229728653;
+      pts.push({ x: Math.cos(th) * rr, y: y, z: Math.sin(th) * rr, p: Math.random() * 6.28 });
+    }
+    // near-neighbour links, precomputed on the unit sphere
+    for (var a = 0; a < N; a++) for (var bb = a + 1; bb < N; bb++) {
+      var dx = pts[a].x - pts[bb].x, dy = pts[a].y - pts[bb].y, dz = pts[a].z - pts[bb].z;
+      if (dx * dx + dy * dy + dz * dz < 0.14) links.push([a, bb]);
+    }
+    function size() {
+      dpr = Math.min(devicePixelRatio || 1, 2);
+      w = gc.clientWidth; h = gc.clientHeight; gc.width = w * dpr; gc.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); cx = w / 2; cy = h / 2; R = Math.min(w, h) * 0.42;
+    }
+    var rotY = 0, rotX = -0.35, tX = -0.35, tY = 0;
+    stage.addEventListener('pointermove', function (e) {
+      var r = stage.getBoundingClientRect();
+      tY = ((e.clientX - r.left) / r.width - 0.5) * 0.9;
+      tX = -0.35 + ((e.clientY - r.top) / r.height - 0.5) * 0.6;
+    });
+    stage.addEventListener('pointerleave', function () { tX = -0.35; tY = 0; });
+    var t = 0;
+    function proj(p) {
+      var cosY = Math.cos(rotY), sinY = Math.sin(rotY), cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      var x1 = p.x * cosY - p.z * sinY, z1 = p.x * sinY + p.z * cosY;
+      var y1 = p.y * cosX - z1 * sinX, z2 = p.y * sinX + z1 * cosX;
+      var per = 2.6 / (2.6 + z2); // perspective
+      return { sx: cx + x1 * R * per, sy: cy + y1 * R * per, z: z2, per: per };
+    }
+    function frame() {
+      rotY += 0.0018 + tY * 0.004;   // steady auto-spin, nudged by pointer x
+      rotX += (tX - rotX) * 0.04;    // ease tilt toward pointer y
+      t += 0.016;
+      ctx.clearRect(0, 0, w, h);
+      var P = new Array(N);
+      for (var i = 0; i < N; i++) P[i] = proj(pts[i]);
+      // links
+      for (var l = 0; l < links.length; l++) {
+        var A = P[links[l][0]], B = P[links[l][1]];
+        var depth = (A.z + B.z) / 2; var al = (0.5 - depth) * 0.28;
+        if (al <= 0) continue;
+        ctx.strokeStyle = 'rgba(80,170,255,' + al.toFixed(3) + ')'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(A.sx, A.sy); ctx.lineTo(B.sx, B.sy); ctx.stroke();
+      }
+      // points
+      for (var k = 0; k < N; k++) {
+        var pp = P[k], front = (0.6 - pp.z);
+        if (front <= 0) continue;
+        var pulse = 0.6 + 0.4 * Math.sin(t + pts[k].p);
+        var rad = (1.1 + pp.per * 1.4) * (0.7 + 0.3 * pulse);
+        var a2 = Math.min(front * 0.9, 0.9) * (0.6 + 0.4 * pulse);
+        ctx.fillStyle = 'rgba(150,200,255,' + a2.toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(pp.sx, pp.sy, rad, 0, 6.2832); ctx.fill();
+        if (pp.z < -0.3 && pulse > 0.9) { // bright active host near the front
+          ctx.fillStyle = 'rgba(90,230,255,0.9)'; ctx.beginPath(); ctx.arc(pp.sx, pp.sy, rad + 1.4, 0, 6.2832); ctx.fill();
+        }
       }
       requestAnimationFrame(frame);
     }
