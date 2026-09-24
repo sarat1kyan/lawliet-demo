@@ -1,0 +1,5 @@
+GSAP 3.13.0 - https://gsap.com
+Copyright 2025 GreenSock, Inc.
+Standard "No Charge" GreenSock License: free to use, including in commercial
+projects, under the terms at https://gsap.com/standard-license/ .
+Includes ScrollTrigger.

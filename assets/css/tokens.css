@@ -1,0 +1,113 @@
+/* Lawliet design tokens. Shared by the landing page and the docs.
+   Dark only, matte tinted glass, no shadows, no 3D. */
+:root {
+  color-scheme: dark;
+
+  --bg: #020304;
+  --ink: #eceef2;
+  --ink-strong: #ffffff;
+  --muted: #9ba1ab;
+  --muted-2: #80868f;
+
+  --line: rgba(255, 255, 255, 0.065);
+  --line-strong: rgba(255, 255, 255, 0.13);
+
+  --accent: #4f89f5;
+  --accent-fill: #1e5fe0;
+  --brand: #256bff;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --crit: #ef4444;
+  --crit-ink: #f87171;
+
+  --display: "Chakra Petch", system-ui, sans-serif;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --maxw: 1200px;
+  --gutter: clamp(20px, 5vw, 64px);
+
+  /* Fine grain used inside glass. Grayscale fractal noise, very low alpha. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  --grain-coarse: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.065'/%3E%3C/svg%3E");
+
+  --tint: linear-gradient(135deg, rgba(40,70,210,0.04), rgba(112,40,170,0.03) 55%, rgba(10,96,118,0.03));
+  --tint-rail: linear-gradient(180deg, rgba(18,30,120,0.13), rgba(58,16,96,0.12) 52%, rgba(4,58,74,0.11));
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { font-family: var(--display); color: var(--ink-strong); font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+::selection { background: rgba(79, 137, 245, 0.32); color: #fff; }
+[hidden] { display: none !important; }
+
+.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.mono { font-family: var(--mono); }
+.tnum { font-variant-numeric: tabular-nums; }
+
+.eyebrow {
+  font-family: var(--display); font-weight: 500; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.34em; color: var(--muted);
+  padding-left: 0.34em;
+}
+
+/* Glass surfaces */
+.glass {
+  background-color: rgba(6, 7, 12, 0.80);
+  background-image: var(--grain), var(--tint);
+  -webkit-backdrop-filter: blur(56px) saturate(1.15);
+  backdrop-filter: blur(56px) saturate(1.15);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.glass-rail {
+  background-color: rgba(2, 2, 5, 0.93);
+  background-image: var(--grain-coarse), var(--tint-rail);
+  -webkit-backdrop-filter: blur(56px) saturate(1.15);
+  backdrop-filter: blur(56px) saturate(1.15);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+/* A pane inside a pane is a tint, not a second sheet of glass. */
+.subpane { background: rgba(92, 118, 255, 0.035); border: 1px solid var(--line); border-radius: 3px; }
+
+/* Buttons: small panes of tinted glass. No movement, no glow, no shadow. */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 40px; padding: 0 18px; border-radius: 3px; cursor: pointer;
+  font-family: var(--display); font-weight: 600; font-size: 13px; letter-spacing: 0.04em;
+  border: 1px solid var(--line-strong); color: var(--ink);
+  background-color: rgba(255, 255, 255, 0.035); background-image: var(--grain);
+  -webkit-backdrop-filter: blur(12px) saturate(1.35); backdrop-filter: blur(12px) saturate(1.35);
+  transition: background-color .18s ease, border-color .18s ease;
+}
+.btn:hover { background-color: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.24); }
+.btn-primary {
+  color: #fff; border-color: rgba(120, 165, 255, 0.52);
+  background-color: rgba(46, 98, 255, 0.22);
+  background-image: var(--grain), linear-gradient(120deg, rgba(110,160,255,0.13), rgba(60,110,255,0.05) 60%, rgba(40,150,210,0.08));
+}
+.btn-primary:hover { background-color: rgba(46, 98, 255, 0.30); border-color: rgba(120, 165, 255, 0.70); }
+.btn-primary:active { background-color: rgba(46, 98, 255, 0.38); }
+@media (hover: none) { .btn { height: 44px; } }
+
+.skip { position: absolute; left: -9999px; }
+.skip:focus { left: 16px; top: 12px; z-index: 200; background: var(--accent-fill); color: #fff; padding: 8px 12px; border-radius: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; }
+}
