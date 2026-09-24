@@ -10,6 +10,25 @@
   var $ = function (s, c) { return (c || doc).querySelector(s); };
   var $$ = function (s, c) { return [].slice.call((c || doc).querySelectorAll(s)); };
 
+  /* ---- Preloader: hold the first frame until the page is ready ------- */
+  var preload = doc.getElementById('preload');
+  var preloadDone = false;
+  function hidePreload() {
+    if (preloadDone || !preload) { return; }
+    preloadDone = true;
+    preload.classList.add('done');
+    setTimeout(function () { if (preload && preload.parentNode) { preload.parentNode.removeChild(preload); } root.classList.add('ready'); }, 520);
+  }
+  function readyThenHide() {
+    var go = function () { requestAnimationFrame(function () { requestAnimationFrame(hidePreload); }); };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { go(); return; }
+    var fontsReady = doc.fonts && doc.fonts.ready ? doc.fonts.ready.catch(function () {}) : Promise.resolve();
+    fontsReady.then(go);
+  }
+  if (doc.readyState === 'complete') { readyThenHide(); }
+  else { window.addEventListener('load', readyThenHide); }
+  setTimeout(hidePreload, 4500); // hard fallback
+
   /* ---- Header state -------------------------------------------------- */
   var head = $('.site-head');
   var onScroll = function () { if (head) head.classList.toggle('scrolled', window.scrollY > 8); };
@@ -47,6 +66,31 @@
         .then(function (res) { if (!res.ok) throw new Error('status ' + res.status); form.hidden = true; sent.hidden = false; sent.focus(); })
         .catch(function () { submit.disabled = false; submit.textContent = 'Request a demo'; if (err) { err.textContent = 'That did not send. Try again, or write to info@justlawliet.net.'; err.hidden = false; } });
     });
+  })();
+
+  /* ---- Platform outcomes: dot controls for the mobile carousel ------ */
+  (function () {
+    var wrap = $('#platform .outcomes');
+    if (!wrap) { return; }
+    var cards = $$('.outcome', wrap);
+    if (cards.length < 2) { return; }
+    var dots = doc.createElement('div'); dots.className = 'outcomes-dots';
+    cards.forEach(function (c, i) {
+      var btn = doc.createElement('button'); btn.type = 'button'; btn.setAttribute('aria-label', 'Outcome ' + (i + 1));
+      if (i === 0) { btn.className = 'on'; }
+      btn.addEventListener('click', function () { c.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); });
+      dots.appendChild(btn);
+    });
+    wrap.parentNode.insertBefore(dots, wrap.nextSibling);
+    var dotEls = $$('button', dots);
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (ents) {
+        ents.forEach(function (e) {
+          if (e.isIntersecting) { var i = cards.indexOf(e.target); dotEls.forEach(function (d, di) { d.classList.toggle('on', di === i); }); }
+        });
+      }, { root: wrap, threshold: 0.6 });
+      cards.forEach(function (c) { io.observe(c); });
+    }
   })();
 
   if (reduce) { return; } // static page below this line

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>document.documentElement.classList.add('js')</script>
-<title>Lawliet | Compliance you can prove, on infrastructure you own</title>
+<title>Lawliet | Hardened by design</title>
 <meta name="description" content="Lawliet is a Hardened by Design platform. Continuous control assessment, drift detection and auditor-grade evidence across every host, from one console that runs on your own servers, fully offline.">
 <meta name="theme-color" content="#06080d">
 <link rel="canonical" href="https://justlawliet.net/">
@@ -22,9 +22,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/css/styles.css?v=2">
+<style>
+#preload{position:fixed;inset:0;z-index:9999;background:#06080d;display:flex;align-items:center;justify-content:center;transition:opacity .5s ease;animation:plsafe .6s ease 5s forwards}
+#preload.done{opacity:0;pointer-events:none;animation:none}
+#preload .pl{position:relative;width:58px;height:58px;display:grid;place-items:center}
+#preload .pl svg{width:40px;height:40px;filter:drop-shadow(0 0 14px rgba(56,140,255,.65));animation:plpulse 1.6s ease-in-out infinite}
+#preload .ring{position:absolute;inset:0;border:2px solid rgba(120,165,255,.16);border-top-color:#3aa0ff;border-radius:50%;animation:plspin .9s linear infinite}
+@keyframes plspin{to{transform:rotate(360deg)}}
+@keyframes plpulse{50%{opacity:.55}}
+@keyframes plsafe{to{opacity:0;visibility:hidden}}
+</style>
+<noscript><style>#preload{display:none}</style></noscript>
+<link rel="stylesheet" href="assets/css/styles.css?v=3">
 </head>
 <body>
+<div id="preload" aria-hidden="true"><div class="pl"><span class="ring"></span><svg viewBox="0 0 100 100"><path d="M44 8 L56 12 L52 60 L44 66 Z" fill="#8fbfff"/><path d="M44 66 L52 60 L88 74 L70 80 Z" fill="#5c96ff"/><path d="M44 66 L48 58 L40 80 L30 78 Z" fill="#1e5fe0"/></svg></div></div>
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="site-head" id="top">
@@ -63,7 +75,7 @@
       </div>
       <dl class="facts">
         <div><dt>19</dt><dd>frameworks and benchmarks mapped</dd></div>
-        <div><dt>0</dt><dd>inbound ports on monitored hosts</dd></div>
+        <div><dt>4-eyes</dt><dd>approval on every sensitive action</dd></div>
         <div><dt>12</dt><dd>network discovery techniques</dd></div>
         <div><dt>Offline</dt><dd>licensing and updates, air-gapped ready</dd></div>
       </dl>
@@ -224,7 +236,7 @@
           <tr><th scope="row">Software</th><td>Docker Engine 24 or newer with Compose</td></tr>
           <tr><th scope="row">Network</th><td>443/tcp for the console and agents, 5514 for syslog. Nothing inbound on monitored hosts.</td></tr>
           <tr><th scope="row">Internet</th><td>Not required. Installation, licensing and updates all work air-gapped.</td></tr>
-          <tr><th scope="row">Agents</th><td>Ubuntu 22.04 and 24.04, Debian 11 and 12, RHEL and Rocky 8 and 9. Windows and macOS in early access.</td></tr>
+          <tr><th scope="row">Agents</th><td>Ubuntu 22.04 and 24.04, Debian 11 and 12, RHEL and Rocky 8 and 9, Windows 10 and 11, Windows Server 2019 and 2022, and macOS.</td></tr>
         </tbody>
       </table>
       <div>
@@ -312,7 +324,7 @@
       <details><summary>What happens when a licence expires?</summary><p>The platform pauses. Sign-in, two-factor and the licence page stay available so a renewal can be entered, and your data is untouched.</p></details>
       <details><summary>How are updates delivered?</summary><p>As a new signed bundle. <code>./lawliet update</code> backs up the database first and stops if that fails, keeps the previous version beside the new one and runs the migrations.</p></details>
       <details><summary>Can we keep our existing SIEM?</summary><p>Yes. Lawliet forwards events as CEF, LEEF, RFC 5424 or JSON over syslog or HTTPS, including Splunk HEC, Microsoft Sentinel and Sumo Logic.</p></details>
-      <details><summary>Which systems can it monitor?</summary><p>Linux hosts through the agent today, with Windows and macOS agents in early access. Network devices through discovery and syslog, and firewalls through rule-set import.</p></details>
+      <details><summary>Which systems can it monitor?</summary><p>Linux, Windows 10 and 11, Windows Server 2019 and 2022, and macOS, all through the agent. Network devices through discovery and syslog, and firewalls through rule-set import.</p></details>
       <details><summary>Is it multi-tenant?</summary><p>No, by design. Each deployment serves one organisation, which keeps data separation simple for on-premises use. Service providers run one deployment per customer.</p></details>
     </div>
   </div>
@@ -374,6 +386,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=2" defer></script>
+<script src="assets/js/main.js?v=3" defer></script>
 </body>
 </html>

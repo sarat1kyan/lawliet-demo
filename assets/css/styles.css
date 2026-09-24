@@ -666,3 +666,24 @@ html.js body:not(.reduced) :is(
   .deck-dots { position: static; margin-top: 20px; }
   .deck-cap { position: static; margin-top: 10px; }
 }
+
+/* ==========================================================================
+ * Platform outcomes: swipeable carousel with dots on mobile only.
+ * ====================================================================== */
+.outcomes-dots { display: none; }
+.outcomes-dots button { width: 26px; height: 5px; border: 0; padding: 0; cursor: pointer; background: var(--line-2); border-radius: 3px; transition: background .2s, width .2s, box-shadow .2s; }
+.outcomes-dots button:hover { background: var(--muted); }
+.outcomes-dots button.on { width: 34px; background: linear-gradient(90deg, var(--brand-2), #38e0ff); box-shadow: 0 0 12px rgba(56,224,255,0.6); }
+
+@media (max-width: 640px) {
+  .outcomes {
+    display: flex; grid-template-columns: none; gap: 12px;
+    overflow-x: auto; overflow-y: visible; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; background: transparent; border: 0; border-radius: 0;
+    scrollbar-width: none; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); padding-bottom: 4px;
+  }
+  .outcomes::-webkit-scrollbar { display: none; }
+  .outcome { flex: 0 0 84%; scroll-snap-align: center; border: 1px solid var(--line); border-radius: 3px;
+    opacity: 1 !important; transform: none !important; filter: none !important; }
+  .outcomes-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+}
