@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platform modules | Lawliet documentation</title>
+<meta name="description" content="What each Lawliet module does.">
+<meta name="theme-color" content="#06080d">
+<link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="docs">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="lockup" href="../" aria-label="Lawliet home">
+      <img class="mark" src="../assets/img/mark.png" alt="" width="34" height="34">
+      <img class="word" src="../assets/img/wordmark.png" alt="Lawliet" width="144" height="12">
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="../#platform">Platform</a>
+      <a href="../#security">Security</a>
+      <a href="../#editions">Editions</a>
+      <a href="./" aria-current="page">Docs</a>
+    </nav>
+    <div class="head-cta"><a class="btn btn-primary btn-sm" href="../#demo">Book a demo</a></div>
+    <button class="menu-btn" type="button" id="menuBtn" aria-controls="nav" aria-expanded="false">Menu</button>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <aside class="docs-nav" aria-label="Documentation">
+      <div><p>Start here</p><ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="getting-started.html">Getting started</a></li>
+        <li><a href="installation-guide.html">Installation guide (printable)</a></li>
+      </ul></div>
+      <div><p>Using Lawliet</p><ul>
+        <li><a href="platform.html" aria-current="page">Platform modules</a></li>
+        <li><a href="agents.html">Agents</a></li>
+        <li><a href="security.html">Security model</a></li>
+      </ul></div>
+      <div><p>Running it</p><ul>
+        <li><a href="licensing.html">Licensing and editions</a></li>
+        <li><a href="operations.html">Operations and updates</a></li>
+      </ul></div>
+  </aside>
+  <main class="doc" id="main">
+
+    <h1>Platform modules</h1>
+    <p class="intro">Every module writes to the same evidence store, review queue and audit trail. Which modules are available depends on your <a href="licensing.html">edition</a>.</p>
+
+    <h2 id="compliance">Continuous compliance</h2>
+    <p>Scans run on a schedule or on demand, across the whole estate, one host or a chosen set. Each score decomposes into per-control, per-host results with timestamps. A host that could not be reached counts as <strong>not assessed</strong>, so a partial scan reports a lower score rather than a perfect one.</p>
+    <p>Between scans, drift detection compares each result with the last one and records every control that changed. Drift that needs attention goes to the review queue.</p>
+    <h3>Frameworks and benchmarks</h3>
+    <div class="table"><table>
+      <thead><tr><th>Group</th><th>Content</th></tr></thead>
+      <tbody>
+        <tr><td>Standards</td><td>CIS Controls v8, NIST SP 800-53 Rev. 5, NIST CSF, ISO/IEC 27001:2022, ISO/IEC 27701, PCI DSS v4.0, SOC 2 Type II, HIPAA Security Rule, GDPR technical controls, CMMC 2.0</td></tr>
+        <tr><td>Linux benchmarks</td><td>CIS Linux, CIS RHEL and CentOS, CIS Debian and Ubuntu, CIS Arch Linux, DISA STIG Linux</td></tr>
+        <tr><td>Windows benchmarks</td><td>CIS Windows 10 and 11, CIS Windows Server 2019 and 2022, DISA STIG Windows Server</td></tr>
+        <tr><td>macOS benchmarks</td><td>CIS macOS</td></tr>
+      </tbody>
+    </table></div>
+    <p>Automated checks for the standards run on Linux hosts.</p>
+
+    <h2 id="reports">Scheduled reports</h2>
+    <p>Dated reports per framework over a period. A framework that was not scanned in that period is shown as not assessed, never left out.</p>
+
+    <h2 id="evidence">Evidence bundles</h2>
+    <p>Collect evidence across scans, drift, remediation and attestations into one bundle, and export it as JSON or a standalone HTML report. Secrets are redacted, and the SHA-256 of every referenced artefact is recorded alongside it.</p>
+
+    <h2 id="hardening">Hardening</h2>
+    <p>Remediation runs on the host through the agent, with approval before and rollback after. A control is marked compliant only when a re-check passes, never because a fix was attempted. Changes to critical assets need extra approval.</p>
+
+    <h2 id="siem">SIEM</h2>
+    <p>Receives syslog (RFC 5424 and RFC 3164), CEF, LEEF and JSON. Detection rules come in five kinds: threshold, sequence, first seen, went quiet and spike. Events can be forwarded to your own SIEM; see <a href="operations.html#forwarding">forwarding</a>.</p>
+
+    <h2 id="fim">File integrity monitoring</h2>
+    <p>Agents watch the paths you choose and report every addition, change and deletion with the old and new hash, in a hash-chained history per file. Events link to the compliance controls they affect and have an analyst workflow.</p>
+
+    <h2 id="dlp">Data loss prevention</h2>
+    <p>Detects credentials and personal data, blocks inline where content is inspected, and stores findings redacted. Incidents move through an analyst workflow from new to closed.</p>
+
+    <h2 id="defence">Active defence</h2>
+    <p>Quarantine a file, kill a process, block an IP, isolate a host, disable a user or reset credentials, on Linux, Windows and macOS. Each action is a signed command. The console shows it as dispatched until the agent confirms it ran.</p>
+
+    <h2 id="forensics">Digital forensics</h2>
+    <p>Cases with chain of custody. Uploaded artefacts get YARA scanning and static analysis: strings, entropy and extraction of IP addresses, domains, URLs, email addresses and file hashes.</p>
+
+    <h2 id="network">Network discovery</h2>
+    <p>Twelve techniques: ARP, routing table, ICMP, TCP connect, service banners, TLS certificates, reverse DNS, mDNS, SSDP, NetBIOS, SNMP system description and MAC vendor lookup. Switches, printers and appliances are identified rather than listed as unknown.</p>
+
+    <h2 id="firewall">Firewall governance</h2>
+    <p>Full rule parsing for Cisco ASA and iptables, and policy parsing for FortiGate. Rule sets are checked for any-any rules, duplicates and shadowed rules. Configurations can be fetched over SSH from ASA, FortiGate, PAN-OS and Junos.</p>
+
+    <h2 id="queue">Review queue</h2>
+    <p>One deduplicated queue of what needs a decision, across compliance, FIM, DLP, forensics, hardening, firewall and intelligence. Every decision is recorded. Nothing is remediated automatically.</p>
+
+    <h2 id="assets">Asset intelligence and audit trail</h2>
+    <p>An inventory of every managed host with its criticality, which feeds risk scoring and gates critical hardening. The audit trail records every action, who took it and who approved it, and can be filtered and exported.</p>
+    <nav class="doc-next" aria-label="Next and previous">
+      <a href="getting-started.html"><small>Previous</small><b>Getting started</b></a>
+      <a href="agents.html" style="text-align:right"><small>Next</small><b>Agents</b></a>
+    </nav>
+  </main>
+</div>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-base" style="margin-top:0;border-top:0;padding-top:0"><span>&copy; <span id="year">2026</span> Lawliet. All rights reserved.</span><span><a href="mailto:support@justlawliet.net">support@justlawliet.net</a></span></div>
+  </div>
+</footer>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

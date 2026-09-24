@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Getting started | Lawliet documentation</title>
+<meta name="description" content="Requirements, installation, first sign-in, activation and enrolling hosts.">
+<meta name="theme-color" content="#06080d">
+<link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="docs">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="lockup" href="../" aria-label="Lawliet home">
+      <img class="mark" src="../assets/img/mark.png" alt="" width="34" height="34">
+      <img class="word" src="../assets/img/wordmark.png" alt="Lawliet" width="144" height="12">
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="../#platform">Platform</a>
+      <a href="../#security">Security</a>
+      <a href="../#editions">Editions</a>
+      <a href="./" aria-current="page">Docs</a>
+    </nav>
+    <div class="head-cta"><a class="btn btn-primary btn-sm" href="../#demo">Book a demo</a></div>
+    <button class="menu-btn" type="button" id="menuBtn" aria-controls="nav" aria-expanded="false">Menu</button>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <aside class="docs-nav" aria-label="Documentation">
+      <div><p>Start here</p><ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="getting-started.html" aria-current="page">Getting started</a></li>
+        <li><a href="installation-guide.html">Installation guide (printable)</a></li>
+      </ul></div>
+      <div><p>Using Lawliet</p><ul>
+        <li><a href="platform.html">Platform modules</a></li>
+        <li><a href="agents.html">Agents</a></li>
+        <li><a href="security.html">Security model</a></li>
+      </ul></div>
+      <div><p>Running it</p><ul>
+        <li><a href="licensing.html">Licensing and editions</a></li>
+        <li><a href="operations.html">Operations and updates</a></li>
+      </ul></div>
+  </aside>
+  <main class="doc" id="main">
+
+    <h1>Getting started</h1>
+    <p class="intro">From a bundle to a running, activated platform with its first hosts reporting. Plan for about twenty minutes.</p>
+
+    <h2 id="requirements">Requirements</h2>
+    <div class="table"><table>
+      <thead><tr><th>You need</th><th>Details</th></tr></thead>
+      <tbody>
+        <tr><td>A Linux server</td><td>Any current 64-bit distribution: Ubuntu, Debian, RHEL, Rocky or Alma. Intel/AMD or ARM.</td></tr>
+        <tr><td>Size</td><td>4 CPU cores, 8 GB RAM and 40 GB free disk for a small estate. Give it more as the number of hosts grows.</td></tr>
+        <tr><td>Docker</td><td>Docker Engine 24 or newer with the Compose plugin, usable by the account you install with.</td></tr>
+        <tr><td>Tools</td><td><code>bash</code>, <code>curl</code> and <code>tar</code>. <code>openssl</code> only if the installer is to create a self-signed certificate.</td></tr>
+        <tr><td>Internet</td><td>Not required. Lawliet installs and runs air-gapped.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 id="network">Network</h2>
+    <div class="table"><table>
+      <thead><tr><th>Port</th><th>Direction</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>443/tcp</code></td><td>Users and agents to the server</td><td>Console, API and agent heartbeats</td></tr>
+        <tr><td><code>80/tcp</code></td><td>Optional</td><td>Redirects to HTTPS</td></tr>
+        <tr><td><code>5514/udp</code>, <code>5514/tcp</code></td><td>Devices to the server</td><td>Syslog from network devices and servers</td></tr>
+        <tr><td><code>123/udp</code></td><td>Both ends</td><td>Time sync. Signed commands are refused when clocks drift too far.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Monitored hosts open no port at all. Every connection starts at the agent.</p>
+
+    <h2 id="install">Install</h2>
+    <p>Copy the bundle to the server, check its SHA-256 against the one we sent, then:</p>
+    <pre><code>tar xzf lawliet-docker-*.tar.gz
+cd lawliet-*/
+./lawliet install</code></pre>
+    <p>The installer checks the machine, asks a few questions (the address users will reach, and how to handle the certificate), generates every secret, starts the stack and verifies the API, the console and the database schema. It ends by printing the console address, a one-time administrator password and the installation fingerprint.</p>
+
+    <h2 id="sign-in">First sign-in</h2>
+    <ol>
+      <li>Open the console address and sign in with the one-time password.</li>
+      <li>Choose your own password: at least 12 characters, common passwords refused.</li>
+      <li>Set up two-factor authentication with any TOTP app, and save the ten recovery codes.</li>
+    </ol>
+
+    <h2 id="activate">Activate</h2>
+    <p>Until a licence is installed, the console opens on its activation screen. It shows the installation fingerprint, which is also printed by <code>./lawliet licence</code> on the server.</p>
+    <ol>
+      <li>Send the fingerprint to us. It identifies this installation and nothing else: no host name, address or data.</li>
+      <li>Paste the licence key you receive into the activation screen, or run <code>./lawliet licence &lt;key-file&gt;</code> on the server.</li>
+    </ol>
+    <div class="note"><p>The licence is checked on your server. Nothing is sent anywhere, and the key works on this installation only.</p></div>
+
+    <h2 id="hosts">Enrol your hosts</h2>
+    <p>On the server, <code>./lawliet token</code> prints a ready-to-run install command for Linux, Windows and macOS, with the server address and enrolment token filled in. The same commands are under <strong>Environment</strong>, <strong>Install agent</strong> in the console.</p>
+    <pre><code># Linux, as root
+curl -sSL https://your-server/api/v1/agents/download/linux | sudo bash -s -- \
+  --server https://your-server --token &lt;enrolment-token&gt;</code></pre>
+    <p>Within a minute the host appears under <strong>Environment</strong>. See <a href="agents.html">Agents</a> for the other platforms and for self-signed certificates.</p>
+
+    <h2 id="team">Add your team</h2>
+    <p>Create an account for each person under <strong>Settings</strong>, <strong>Users</strong>, and give each a role. Every new user sets their own password and enrols two-factor at first sign-in. If you use the security officer roles, see <a href="security.html#dual-control">dual control</a>.</p>
+    <nav class="doc-next" aria-label="Next and previous">
+      <a href="index.html"><small>Previous</small><b>Overview</b></a>
+      <a href="platform.html" style="text-align:right"><small>Next</small><b>Platform modules</b></a>
+    </nav>
+  </main>
+</div>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-base" style="margin-top:0;border-top:0;padding-top:0"><span>&copy; <span id="year">2026</span> Lawliet. All rights reserved.</span><span><a href="mailto:support@justlawliet.net">support@justlawliet.net</a></span></div>
+  </div>
+</footer>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

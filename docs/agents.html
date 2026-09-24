@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agents | Lawliet documentation</title>
+<meta name="description" content="Supported systems, enrolment and what Lawliet agents collect.">
+<meta name="theme-color" content="#06080d">
+<link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="docs">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="lockup" href="../" aria-label="Lawliet home">
+      <img class="mark" src="../assets/img/mark.png" alt="" width="34" height="34">
+      <img class="word" src="../assets/img/wordmark.png" alt="Lawliet" width="144" height="12">
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="../#platform">Platform</a>
+      <a href="../#security">Security</a>
+      <a href="../#editions">Editions</a>
+      <a href="./" aria-current="page">Docs</a>
+    </nav>
+    <div class="head-cta"><a class="btn btn-primary btn-sm" href="../#demo">Book a demo</a></div>
+    <button class="menu-btn" type="button" id="menuBtn" aria-controls="nav" aria-expanded="false">Menu</button>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <aside class="docs-nav" aria-label="Documentation">
+      <div><p>Start here</p><ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="getting-started.html">Getting started</a></li>
+        <li><a href="installation-guide.html">Installation guide (printable)</a></li>
+      </ul></div>
+      <div><p>Using Lawliet</p><ul>
+        <li><a href="platform.html">Platform modules</a></li>
+        <li><a href="agents.html" aria-current="page">Agents</a></li>
+        <li><a href="security.html">Security model</a></li>
+      </ul></div>
+      <div><p>Running it</p><ul>
+        <li><a href="licensing.html">Licensing and editions</a></li>
+        <li><a href="operations.html">Operations and updates</a></li>
+      </ul></div>
+  </aside>
+  <main class="doc" id="main">
+
+    <h1>Agents</h1>
+    <p class="intro">A small service on each monitored host. It connects out to your Lawliet server on a heartbeat and never listens on a port.</p>
+
+    <h2 id="platforms">Supported systems</h2>
+    <div class="table"><table>
+      <thead><tr><th>Platform</th><th>Runs as</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Linux: Ubuntu 22.04 and 24.04, Debian 11 and 12, RHEL and Rocky 8 and 9</td><td>systemd service</td><td>Field-tested</td></tr>
+        <tr><td>Windows</td><td>Scheduled task as SYSTEM</td><td>Early access</td></tr>
+        <tr><td>macOS</td><td>launchd service</td><td>Early access</td></tr>
+      </tbody>
+    </table></div>
+    <p>The Linux agent needs Python 3.10 or newer.</p>
+
+    <h2 id="collects">What an agent does</h2>
+    <ul>
+      <li>Runs compliance checks when a scan asks for them.</li>
+      <li>Watches the paths you choose for file integrity changes.</li>
+      <li>Reports data loss prevention findings, stored redacted.</li>
+      <li>Sends host metrics, processes and connections for the inventory.</li>
+      <li>Carries out signed commands: remediation and containment.</li>
+    </ul>
+
+    <h2 id="enrol">Enrolling a host</h2>
+    <p>Run <code>./lawliet token</code> on the server, or open <strong>Environment</strong>, <strong>Install agent</strong> in the console, and copy the command for the platform.</p>
+    <pre><code># Linux, as root
+curl -sSL https://your-server/api/v1/agents/download/linux | sudo bash -s -- \
+  --server https://your-server --token &lt;enrolment-token&gt;
+
+# Windows, PowerShell as Administrator
+Invoke-WebRequest https://your-server/api/v1/agents/download/windows -OutFile install.ps1
+.\install.ps1 -Server https://your-server -Token &lt;enrolment-token&gt;
+
+# macOS
+curl -sSL https://your-server/api/v1/agents/download/macos | sudo bash -s -- \
+  --server https://your-server --token &lt;enrolment-token&gt;</code></pre>
+    <div class="note"><p>Using a self-signed certificate? Each host has to trust it. <code>./lawliet tls --export</code> writes the certificate to copy to your hosts.</p></div>
+
+    <h2 id="commands">How commands reach a host</h2>
+    <p>Commands wait in a queue on the server. On its next heartbeat the agent collects them, checks each one's HMAC-SHA256 signature and timestamp, and runs it. A command older than ten minutes, or more than a minute in the future, is refused. This is why time sync matters on both ends.</p>
+
+    <h2 id="upgrades">Agent upgrades</h2>
+    <p>Agents can upgrade themselves to a release signed with an Ed25519 key that we hold offline. An agent refuses any release without a valid signature. Automatic upgrade is off by default.</p>
+    <nav class="doc-next" aria-label="Next and previous">
+      <a href="platform.html"><small>Previous</small><b>Platform modules</b></a>
+      <a href="security.html" style="text-align:right"><small>Next</small><b>Security model</b></a>
+    </nav>
+  </main>
+</div>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-base" style="margin-top:0;border-top:0;padding-top:0"><span>&copy; <span id="year">2026</span> Lawliet. All rights reserved.</span><span><a href="mailto:support@justlawliet.net">support@justlawliet.net</a></span></div>
+  </div>
+</footer>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

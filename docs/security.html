@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Security model | Lawliet documentation</title>
+<meta name="description" content="How Lawliet protects the hosts it watches and the actions it can take.">
+<meta name="theme-color" content="#06080d">
+<link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="docs">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="lockup" href="../" aria-label="Lawliet home">
+      <img class="mark" src="../assets/img/mark.png" alt="" width="34" height="34">
+      <img class="word" src="../assets/img/wordmark.png" alt="Lawliet" width="144" height="12">
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="../#platform">Platform</a>
+      <a href="../#security">Security</a>
+      <a href="../#editions">Editions</a>
+      <a href="./" aria-current="page">Docs</a>
+    </nav>
+    <div class="head-cta"><a class="btn btn-primary btn-sm" href="../#demo">Book a demo</a></div>
+    <button class="menu-btn" type="button" id="menuBtn" aria-controls="nav" aria-expanded="false">Menu</button>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <aside class="docs-nav" aria-label="Documentation">
+      <div><p>Start here</p><ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="getting-started.html">Getting started</a></li>
+        <li><a href="installation-guide.html">Installation guide (printable)</a></li>
+      </ul></div>
+      <div><p>Using Lawliet</p><ul>
+        <li><a href="platform.html">Platform modules</a></li>
+        <li><a href="agents.html">Agents</a></li>
+        <li><a href="security.html" aria-current="page">Security model</a></li>
+      </ul></div>
+      <div><p>Running it</p><ul>
+        <li><a href="licensing.html">Licensing and editions</a></li>
+        <li><a href="operations.html">Operations and updates</a></li>
+      </ul></div>
+  </aside>
+  <main class="doc" id="main">
+
+    <h1>Security model</h1>
+    <p class="intro">A platform that can change every host it watches is a target. These are the controls that stand between that capability and someone misusing it.</p>
+
+    <h2 id="agents">Pull-only agents</h2>
+    <p>Nothing connects to a monitored host. Agents open no listening port and reach the server on a heartbeat, which also means laptops behind NAT and hosts in segmented networks work without firewall exceptions towards them.</p>
+
+    <h2 id="commands">Signed commands</h2>
+    <p>Every command is signed with HMAC-SHA256 using the agent's own token, and carries a timestamp. Agents refuse a command that is older than ten minutes or more than a minute in the future, so a captured command cannot be replayed later.</p>
+
+    <h2 id="roles">Roles and permissions</h2>
+    <p>Seven built-in roles: Super administrator, Left Security Officer, Right Security Officer, Administrator, Analyst, Auditor and Viewer. You can create your own roles and give individual users extra grants or denials. When a grant and a denial meet, the denial wins.</p>
+
+    <h2 id="dual-control">Dual control</h2>
+    <p>Critical actions wait for a second person to approve them. By default this covers changes to users and roles, the approval policy itself, containment, remediation, firewall pushes, deleting agents, licences, platform updates, API keys and agent releases.</p>
+    <p>The Left and Right Security Officers approve each other's requests, and nobody can approve their own. Pending requests appear under <strong>Approvals</strong>. Which actions need approval, and who approves whom, is set under <strong>Settings</strong>, <strong>Access control</strong>, <strong>Dual control</strong>.</p>
+
+    <h2 id="sign-in">Sign-in</h2>
+    <ul>
+      <li>Two-factor authentication (TOTP) is required by default, with ten single-use recovery codes.</li>
+      <li>The installation's first administrator must replace the one-time password before anything else opens.</li>
+      <li>Passwords shorter than 12 characters, or well known, are refused.</li>
+      <li>Single sign-on with OIDC is available; local sign-in remains for break-glass access.</li>
+    </ul>
+
+    <h2 id="api-keys">API keys</h2>
+    <p>Service accounts use API keys with one of three scopes: read-only, run scans or ingest. Keys are stored only as SHA-256 hashes.</p>
+
+    <h2 id="audit">Audit trail</h2>
+    <p>Every action is recorded with the user, the time and, for critical actions, the approver. Audit records are kept for two years by default.</p>
+
+    <h2 id="delivery">Delivery and updates</h2>
+    <ul>
+      <li>Each bundle carries a signed manifest of every file in it.</li>
+      <li>The server application ships compiled to native code for Intel/AMD and ARM.</li>
+      <li>Licences are RSA-4096 signed and verified on your server, with no licence server and no telemetry.</li>
+      <li>Agent releases are signed with a separate Ed25519 key held offline.</li>
+    </ul>
+
+    <h2 id="data">Where your data lives</h2>
+    <p>On your server, in PostgreSQL and Redis on the internal container network. Neither is published on a host port. Nothing is sent to us.</p>
+
+    <h2 id="disclosure">Reporting a vulnerability</h2>
+    <p>Write to <a href="mailto:security@justlawliet.net">security@justlawliet.net</a>.</p>
+    <nav class="doc-next" aria-label="Next and previous">
+      <a href="agents.html"><small>Previous</small><b>Agents</b></a>
+      <a href="licensing.html" style="text-align:right"><small>Next</small><b>Licensing and editions</b></a>
+    </nav>
+  </main>
+</div>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-base" style="margin-top:0;border-top:0;padding-top:0"><span>&copy; <span id="year">2026</span> Lawliet. All rights reserved.</span><span><a href="mailto:support@justlawliet.net">support@justlawliet.net</a></span></div>
+  </div>
+</footer>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

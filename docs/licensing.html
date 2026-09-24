@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Licensing and editions | Lawliet documentation</title>
+<meta name="description" content="Lawliet editions, offline activation, renewals and expiry.">
+<meta name="theme-color" content="#06080d">
+<link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="docs">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="lockup" href="../" aria-label="Lawliet home">
+      <img class="mark" src="../assets/img/mark.png" alt="" width="34" height="34">
+      <img class="word" src="../assets/img/wordmark.png" alt="Lawliet" width="144" height="12">
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="../#platform">Platform</a>
+      <a href="../#security">Security</a>
+      <a href="../#editions">Editions</a>
+      <a href="./" aria-current="page">Docs</a>
+    </nav>
+    <div class="head-cta"><a class="btn btn-primary btn-sm" href="../#demo">Book a demo</a></div>
+    <button class="menu-btn" type="button" id="menuBtn" aria-controls="nav" aria-expanded="false">Menu</button>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <aside class="docs-nav" aria-label="Documentation">
+      <div><p>Start here</p><ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="getting-started.html">Getting started</a></li>
+        <li><a href="installation-guide.html">Installation guide (printable)</a></li>
+      </ul></div>
+      <div><p>Using Lawliet</p><ul>
+        <li><a href="platform.html">Platform modules</a></li>
+        <li><a href="agents.html">Agents</a></li>
+        <li><a href="security.html">Security model</a></li>
+      </ul></div>
+      <div><p>Running it</p><ul>
+        <li><a href="licensing.html" aria-current="page">Licensing and editions</a></li>
+        <li><a href="operations.html">Operations and updates</a></li>
+      </ul></div>
+  </aside>
+  <main class="doc" id="main">
+
+    <h1>Licensing and editions</h1>
+    <p class="intro">Lawliet licences are verified on your own server. There is no licence server, no check-in and no internet needed, at activation or afterwards.</p>
+
+    <h2 id="editions">Editions</h2>
+    <div class="table"><table>
+      <thead><tr><th>Edition</th><th>Agents</th><th>Includes</th></tr></thead>
+      <tbody>
+        <tr><td>Starter</td><td>Up to 25</td><td>Continuous compliance and drift, evidence bundles and reports, hardening, review queue, network discovery, log collection</td></tr>
+        <tr><td>Professional</td><td>Up to 100</td><td>Starter, plus firewall governance, data loss prevention and file integrity monitoring</td></tr>
+        <tr><td>Enterprise</td><td>Unlimited</td><td>Professional, plus digital forensics, active defence and SIEM forwarding</td></tr>
+        <tr><td>Evaluation</td><td>Up to 5</td><td>30 days, every module except SIEM forwarding, with demo data</td></tr>
+      </tbody>
+    </table></div>
+    <p>Every edition includes role-based access, dual control, two-factor sign-in, the audit trail and signed updates.</p>
+
+    <h2 id="activation">Activation</h2>
+    <p>Bundles ship without a licence. The licence is issued to the installation you create:</p>
+    <ol>
+      <li>The installer prints the installation fingerprint: 32 characters that identify this installation and nothing else.</li>
+      <li>You send it to us by any channel.</li>
+      <li>We return a licence key bound to that fingerprint.</li>
+      <li>You paste it into the console's activation screen, or run <code>./lawliet licence &lt;key-file&gt;</code>.</li>
+    </ol>
+    <p>A bound key refuses to activate on any other installation, so a copied bundle or key is useless elsewhere.</p>
+
+    <h2 id="renewal">Renewal</h2>
+    <p>A renewed key is entered the same way, under <strong>Settings</strong>, <strong>Licence</strong>, or with <code>./lawliet licence</code>. It takes effect immediately and stays in place across restarts and updates. A key older than the one in use is refused.</p>
+
+    <h2 id="expiry">When a licence expires</h2>
+    <p>The platform pauses: the console and API refuse requests until a valid licence is installed. Sign-in, two-factor, the licence page and pending approvals stay available so a renewal can be entered. Your data is untouched.</p>
+
+    <h2 id="reinstall">Reinstalling or moving servers</h2>
+    <p>The fingerprint belongs to the installation's configuration volume. A restore of a backup onto the same installation keeps it. A fresh installation on a new server has a new fingerprint and needs a new key; ask us before you move.</p>
+    <nav class="doc-next" aria-label="Next and previous">
+      <a href="security.html"><small>Previous</small><b>Security model</b></a>
+      <a href="operations.html" style="text-align:right"><small>Next</small><b>Operations and updates</b></a>
+    </nav>
+  </main>
+</div>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-base" style="margin-top:0;border-top:0;padding-top:0"><span>&copy; <span id="year">2026</span> Lawliet. All rights reserved.</span><span><a href="mailto:support@justlawliet.net">support@justlawliet.net</a></span></div>
+  </div>
+</footer>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

@@ -2,109 +2,63 @@
 
 <img src="assets/img/banner.png" alt="Lawliet" width="640">
 
-### The demo site for Lawliet
-
-A single-page, zero-build landing page for **[Lawliet](https://github.com/sarat1kyan/lawliet)**,
-the self-hosted compliance and security operations platform. Import this repository into
-Netlify and it deploys as-is, demo booking form included.
-
-[![build](https://img.shields.io/badge/build-none%20required-4f89f5?style=flat-square)](#deploy-to-netlify)
-[![license](https://img.shields.io/badge/license-MIT-4f89f5?style=flat-square)](LICENSE)
-
-<br>
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/sarat1kyan/lawliet-demo)
+### The Lawliet website and public documentation
 
 </div>
 
----
+This repository is the public face of **Lawliet**, the self-hosted compliance and security
+operations platform: the landing page at the root and the customer documentation under
+`docs/`. It is plain HTML, one stylesheet and one small script. There is no framework, no
+build step and nothing to install.
 
-## What this is
+The product itself is not in this repository.
 
-This repository is the marketing / demo front for the Lawliet product. It is deliberately
-plain: hand-written HTML, one CSS file, one JS file, no framework, no build step, no
-dependencies to install. That keeps it fast, auditable, and trivial to host anywhere that
-serves static files.
+## Contents
 
-The product itself lives in a separate repository and is not included here.
+| Path | What it is |
+|------|------------|
+| `index.html` | Landing page, with the demo request form |
+| `docs/` | Public documentation: getting started, modules, agents, security, licensing, operations |
+| `docs/installation-guide.html` | The printable installation guide customers receive with a bundle |
+| `thanks.html` | Shown after the demo form is posted without JavaScript |
+| `404.html` | Not-found page |
+| `assets/css/styles.css` | All styles, for the landing page and the docs |
+| `assets/js/main.js` | Header state, mobile menu and the form post |
+| `assets/img/` | Brand mark, wordmark, social banner and icons |
+| `tools/generate_docs.py` | Writes the docs pages; edit content there, then run it |
+| `netlify.toml` | Headers, caching and redirects |
 
-## Deploy to Netlify
-
-Three ways, all zero-config.
-
-**One click**
-
-Use the **Deploy to Netlify** button above. It opens `app.netlify.com`, clones this
-repository into your account, and deploys it. Nothing to configure.
-
-**Import an existing repo (app.netlify.com)**
-
-1. Go to `https://app.netlify.com` and sign in.
-2. **Add new site -> Import an existing project -> Deploy with GitHub**, then pick
-   `lawliet-demo`.
-3. Leave the build command empty and the publish directory as the repository root. The
-   included `netlify.toml` already sets `publish = "."`, so just click **Deploy**.
-4. Netlify serves `index.html`, picks up the demo form, and redeploys on every push to
-   `main`.
-
-**From the CLI**
-
-```bash
-npm i -g netlify-cli
-netlify deploy --prod --dir .
-```
-
-## The demo booking form
-
-The **Book a demo** form uses [Netlify Forms](https://docs.netlify.com/forms/setup/). It
-works with no backend: on deploy, Netlify detects the form from the static HTML
-(`data-netlify="true"` plus the hidden `form-name` field) and captures every submission.
-
-- Read submissions in the Netlify dashboard under **Forms -> demo-request**.
-- Turn on email or Slack notifications there to get pinged on each request.
-- A honeypot field (`company-website`) is wired up to drop bots silently.
-
-No API keys, no third-party service, nothing to rotate.
-
-## Local preview
-
-No tooling required. Any static file server works:
+## Run it locally
 
 ```bash
 python3 -m http.server 8080
-# then open http://localhost:8080
 ```
 
-Note: the demo form only records submissions once deployed on Netlify. Locally it will
-post and show the success state without persisting anything, which is expected.
+Then open http://localhost:8080.
 
-## Structure
+## Edit the documentation
 
-```
-index.html            the whole landing page
-404.html              styled not-found page
-netlify.toml          publish dir, headers, redirects
-robots.txt
-assets/
-  css/styles.css      design system and layout
-  js/main.js          nav, reveals, counters, heartbeat terminal, form submit
-  img/                brand mark, banner, favicons
+The pages in `docs/` share a header and navigation, so they are generated:
+
+```bash
+python3 tools/generate_docs.py
 ```
 
-## Design
+Edit the page text in `tools/generate_docs.py`, run it, and commit the generated HTML.
+`docs/installation-guide.html` is the exception: it is copied from the product
+repository's `docs/getting-started/installation-guide.html` and updated from there.
 
-Mirrors the Lawliet console: graphite surfaces, a single electric-blue accent, blade-sharp
-corners, and mono type for signal text. Fonts are Space Grotesk, Inter and JetBrains Mono,
-loaded from Google Fonts. Respects `prefers-reduced-motion` and `prefers-color-scheme`.
+Every claim on the site must be true of the shipped product. Check a statement against the
+product documentation or code before changing it.
 
-## Customizing
+## Deploy
 
-- **Copy and sections**: all in `index.html`, top to bottom in reading order.
-- **Colors, spacing, type**: the tokens at the top of `assets/css/styles.css`.
-- **Links**: repository and docs links point at `github.com/sarat1kyan/lawliet`.
-- **Form fields**: edit the `<form>` in `index.html`; Netlify picks up new fields on the
-  next deploy automatically.
+Import the repository into Netlify. It deploys as-is: `netlify.toml` sets the publish
+directory, security headers and redirects. The demo form is registered by Netlify from the
+static HTML and needs no configuration; submissions appear under the site's Forms tab.
 
-## License
+## Brand assets
 
-MIT. See [LICENSE](LICENSE).
+`assets/img/mark.png`, `wordmark.png` and `banner.png` are the brand kit's own files. The
+icons are generated from the mark on the brand background (`#06080D`); the 16 and 32 pixel
+icons are cropped to the glyph so it stays legible. Do not redraw the mark.

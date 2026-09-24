@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Operations and updates | Lawliet documentation</title>
+<meta name="description" content="Day-to-day commands, backups, updates, retention and SIEM forwarding.">
+<meta name="theme-color" content="#06080d">
+<link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="docs">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="lockup" href="../" aria-label="Lawliet home">
+      <img class="mark" src="../assets/img/mark.png" alt="" width="34" height="34">
+      <img class="word" src="../assets/img/wordmark.png" alt="Lawliet" width="144" height="12">
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="../#platform">Platform</a>
+      <a href="../#security">Security</a>
+      <a href="../#editions">Editions</a>
+      <a href="./" aria-current="page">Docs</a>
+    </nav>
+    <div class="head-cta"><a class="btn btn-primary btn-sm" href="../#demo">Book a demo</a></div>
+    <button class="menu-btn" type="button" id="menuBtn" aria-controls="nav" aria-expanded="false">Menu</button>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <aside class="docs-nav" aria-label="Documentation">
+      <div><p>Start here</p><ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="getting-started.html">Getting started</a></li>
+        <li><a href="installation-guide.html">Installation guide (printable)</a></li>
+      </ul></div>
+      <div><p>Using Lawliet</p><ul>
+        <li><a href="platform.html">Platform modules</a></li>
+        <li><a href="agents.html">Agents</a></li>
+        <li><a href="security.html">Security model</a></li>
+      </ul></div>
+      <div><p>Running it</p><ul>
+        <li><a href="licensing.html">Licensing and editions</a></li>
+        <li><a href="operations.html" aria-current="page">Operations and updates</a></li>
+      </ul></div>
+  </aside>
+  <main class="doc" id="main">
+
+    <h1>Operations and updates</h1>
+    <p class="intro">Everything is done with <code>./lawliet</code> from the deployment folder. <code>./lawliet help</code> lists it all.</p>
+
+    <h2 id="commands">Day-to-day commands</h2>
+    <div class="table"><table>
+      <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td><code>./lawliet status</code></td><td>Health, licence, version and connected hosts</td></tr>
+        <tr><td><code>./lawliet backup</code></td><td>A database backup into <code>./backups</code>. HTTPS installations also take one daily.</td></tr>
+        <tr><td><code>./lawliet restore &lt;file&gt;</code></td><td>Restores a backup and restarts. Asks before replacing anything.</td></tr>
+        <tr><td><code>./lawliet update &lt;bundle&gt;</code></td><td>Upgrades to a newer bundle. See below.</td></tr>
+        <tr><td><code>./lawliet restart</code></td><td>Restarts and waits until healthy. Data is never touched.</td></tr>
+        <tr><td><code>./lawliet logs backend -f</code></td><td>Follows a service's logs</td></tr>
+        <tr><td><code>./lawliet passwd</code></td><td>Resets the administrator password</td></tr>
+        <tr><td><code>./lawliet tls</code></td><td>Shows or replaces the certificate</td></tr>
+        <tr><td><code>./lawliet licence</code></td><td>Shows the licence and the installation fingerprint, or installs a key</td></tr>
+        <tr><td><code>./lawliet token</code></td><td>Prints the agent install commands</td></tr>
+        <tr><td><code>./lawliet doctor</code></td><td>Collects a diagnostics file for support, with no passwords and no data</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 id="updates">Updates</h2>
+    <p>Updates arrive as a new signed bundle. Copy it to the server and, from the current deployment folder:</p>
+    <pre><code>./lawliet update lawliet-docker-&lt;version&gt;-&lt;organisation&gt;.tar.gz</code></pre>
+    <p>It backs up the database first and stops if the backup fails, installs the new version beside the current one, runs the database migrations, and checks the schema and version before it finishes. Your licence and settings carry over.</p>
+
+    <h2 id="retention">Retention</h2>
+    <p>Each kind of record has its own retention period, and 0 keeps it forever. The defaults are 180 days for file integrity events, 365 days for data loss prevention incidents, and 730 days for compliance results and the audit trail.</p>
+
+    <h2 id="syslog">Receiving syslog</h2>
+    <p>Point network devices and servers at the Lawliet server on port 5514, UDP or TCP. Accepted formats are RFC 5424, RFC 3164, CEF, LEEF and JSON.</p>
+
+    <h2 id="forwarding">Forwarding to your SIEM</h2>
+    <p>Lawliet can forward events as CEF, LEEF, RFC 5424 or JSON, over syslog (UDP, TCP or TLS) or HTTPS. HTTPS forwarding works with Splunk HEC, Microsoft Sentinel and Sumo Logic.</p>
+    <nav class="doc-next" aria-label="Next and previous">
+      <a href="licensing.html"><small>Previous</small><b>Licensing and editions</b></a>
+      <span></span>
+    </nav>
+  </main>
+</div>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-base" style="margin-top:0;border-top:0;padding-top:0"><span>&copy; <span id="year">2026</span> Lawliet. All rights reserved.</span><span><a href="mailto:support@justlawliet.net">support@justlawliet.net</a></span></div>
+  </div>
+</footer>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>
