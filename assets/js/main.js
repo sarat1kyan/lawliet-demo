@@ -224,7 +224,9 @@
         + '<div class="ev-foot"><span>Zone DMZ / Internal</span><code>12 discovery techniques</code></div>';
     }
     function next() { go(idx + 1); }
-    function rearm() { clearInterval(timer); timer = setInterval(next, 5200); }
+    // Auto-advance on pointer devices only. On touch it stays put so the page
+    // never reflows and jumps while someone is reading; dots still switch it.
+    function rearm() { clearInterval(timer); if (touch) { return; } timer = setInterval(next, 5200); }
     if (!reduce) rearm();
     stage.addEventListener('mouseenter', function () { clearInterval(timer); });
     stage.addEventListener('mouseleave', function () { if (!reduce) rearm(); });
