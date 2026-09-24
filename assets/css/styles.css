@@ -10,9 +10,9 @@
   --panel-3: #131a2b;
   --line: rgba(146, 168, 210, 0.12);
   --line-2: rgba(146, 168, 210, 0.22);
-  --ink: #e8edf7;
-  --ink-2: #c4ccdb;
-  --muted: #8e9bb3;
+  --ink: #eef2fb;
+  --ink-2: #d7deee;
+  --muted: #a2aec6;
   --brand: #256bff;
   --brand-2: #3d83ff;
   --accent: #72a0ff;
@@ -23,8 +23,8 @@
   --display: "Chakra Petch", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --wrap: 1180px;
-  --gutter: 24px;
+  --wrap: 1320px;
+  --gutter: 40px;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -544,3 +544,73 @@ html.js body:not(.reduced) :is(
 
 @media (prefers-reduced-motion: reduce) { .stage .globe { display: none; } .aurora .a4 { display: none; } }
 @media (max-width: 640px) { .stage .globe { display: none; } }
+
+/* ==========================================================================
+ * Readability, layout width, and the rotating exhibit deck.
+ * ====================================================================== */
+
+/* Aurora pulled off the text column and calmed so copy stays legible */
+.aurora .a1 { left: 26vw; top: -20vw; opacity: .34; }
+.aurora .a2 { opacity: .26; }
+.aurora .a3 { opacity: .2; }
+.aurora .a4 { opacity: .22; }
+.page-spot { background: radial-gradient(560px circle at var(--px,50%) var(--py,16%), rgba(70,140,255,0.07), transparent 62%); }
+
+/* Left-side scrim so the hero copy never sits on light blue */
+.hero::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(6,8,13,0.72) 0%, rgba(6,8,13,0.30) 36%, rgba(6,8,13,0) 56%); }
+.hero .wrap { z-index: 1; }
+.hero .lede { color: var(--ink-2); text-shadow: 0 1px 20px rgba(6,8,13,0.6); }
+.kicker { color: #aeb9d1; }
+.facts dd { color: #99a6c0; }
+.band-head p, .problem .say em { color: #aab6ce; }
+
+/* Wider on large screens so it stops reading as a centered column */
+@media (min-width: 1500px) { :root { --wrap: 1440px; } }
+@media (min-width: 1800px) { :root { --wrap: 1520px; } }
+
+/* ---- Exhibit deck: the hero HUD cycles through modules -------------- */
+.deck { position: relative; width: min(94%, 496px); min-height: 470px; }
+.deck .evidence { position: absolute; inset: 0; width: auto; opacity: 0; visibility: hidden;
+  transition: opacity .6s var(--ease), transform .6s var(--ease); transform: translateY(10px) scale(.98); animation: none; }
+.deck .evidence.active { opacity: 1; visibility: visible; transform: none; }
+.deck-dots { position: absolute; left: 0; right: 0; bottom: -34px; display: flex; gap: 8px; justify-content: center; z-index: 4; }
+.deck-dots button { width: 22px; height: 4px; border: 0; padding: 0; cursor: pointer; background: var(--line-2); transition: background .2s, box-shadow .2s; }
+.deck-dots button.on { background: linear-gradient(90deg, var(--brand-2), #38e0ff); box-shadow: 0 0 12px rgba(56,224,255,0.6); }
+
+/* Shared bits reused across exhibits */
+.tag.info { color: #6fb4ff; background: rgba(37,107,255,0.12); border-color: rgba(114,160,255,0.3); border-left-color: #6fb4ff; }
+.ex-note { padding: 11px 16px; color: var(--muted); font-size: 12.5px; border-bottom: 1px solid var(--line); }
+.ex-note b { color: var(--ink); }
+
+/* Network topology mini-map */
+.topo { padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.topo svg { width: 100%; height: 188px; display: block; }
+.topo .lnk { stroke: rgba(114,160,255,0.35); stroke-width: 1; }
+.topo .nd { stroke: rgba(6,8,13,0.9); stroke-width: 1.5; }
+.topo .nd.ok { fill: var(--ok); } .topo .nd.warn { fill: var(--warn); } .topo .nd.crit { fill: var(--fail); } .topo .nd.core { fill: #38e0ff; }
+.topo text { fill: var(--muted); font: 10px var(--mono); }
+.topo-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 12px 16px 2px; }
+.topo-legend span { display: inline-flex; align-items: center; gap: 6px; font: 11.5px var(--mono); color: var(--muted); }
+.topo-legend i { width: 8px; height: 8px; border-radius: 50%; }
+
+/* SIEM sparkline */
+.spark { display: flex; align-items: flex-end; gap: 3px; height: 40px; padding: 12px 16px 6px; }
+.spark i { flex: 1; background: linear-gradient(180deg, #38e0ff, rgba(37,107,255,0.35)); border-radius: 1px 1px 0 0; min-height: 3px; }
+.entropy { height: 6px; margin: 2px 16px 0; background: var(--panel-3); border-radius: 2px; overflow: hidden; }
+.entropy i { display: block; height: 100%; background: linear-gradient(90deg, var(--warn), var(--fail)); }
+
+@media (max-width: 1040px) { .deck { margin-inline: auto; } }
+@media (max-width: 640px) {
+  .deck { min-height: 0; width: 100%; }
+  .deck .evidence { position: relative; display: none; opacity: 1; visibility: visible; transform: none; }
+  .deck .evidence.active { display: block; }
+  .deck-dots { position: static; margin-top: 18px; }
+}
+
+/* Even out exhibit heights: fill the card, pin the footer, centre the body */
+.deck .evidence { display: flex; flex-direction: column; }
+.deck .evidence .ev-foot { margin-top: auto; }
+.deck .evidence .ev-rows { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+.deck .evidence .topo { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+.deck .evidence .topo svg { height: auto; flex: 1; min-height: 176px; max-height: 220px; }

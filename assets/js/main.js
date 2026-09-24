@@ -66,8 +66,83 @@
   var pageSpot = el('div', 'page-spot'); pageSpot.setAttribute('aria-hidden', 'true'); body.appendChild(pageSpot);
   window.addEventListener('mousemove', function (e) { pageSpot.style.setProperty('--px', e.clientX + 'px'); pageSpot.style.setProperty('--py', e.clientY + 'px'); }, { passive: true });
 
-  // Scan sweep across the hero evidence card
-  var ev = $('.evidence'); if (ev) { var sl = el('span', 'scanline'); sl.setAttribute('aria-hidden', 'true'); ev.appendChild(sl); }
+  // Hero HUD becomes a deck that cycles through several live-looking modules
+  (function () {
+    var first = $('.evidence'); if (!first) return;
+    var stage = first.parentNode;
+    var deck = el('div', 'deck'); deck.style.zIndex = '3';
+    stage.insertBefore(deck, first); deck.appendChild(first); first.classList.add('active');
+
+    var panels = [
+      // Network topology
+      '<div class="ev-head"><div><b>Network topology</b><small>142 devices, 3 unmanaged</small></div><span class="example">Example</span></div>'
+      + '<div class="topo"><svg viewBox="0 0 464 188" aria-hidden="true">'
+      + '<line class="lnk" x1="232" y1="96" x2="120" y2="48"/><line class="lnk" x1="232" y1="96" x2="344" y2="48"/>'
+      + '<line class="lnk" x1="120" y1="48" x2="60" y2="120"/><line class="lnk" x1="120" y1="48" x2="96" y2="150"/>'
+      + '<line class="lnk" x1="344" y1="48" x2="404" y2="70"/><line class="lnk" x1="344" y1="48" x2="392" y2="126"/>'
+      + '<line class="lnk" x1="232" y1="96" x2="300" y2="150"/><line class="lnk" x1="232" y1="96" x2="176" y2="150"/>'
+      + '<line class="lnk" x1="232" y1="96" x2="256" y2="150"/>'
+      + '<circle class="nd core" cx="232" cy="96" r="8"/><circle class="nd ok" cx="120" cy="48" r="6"/><circle class="nd ok" cx="344" cy="48" r="6"/>'
+      + '<circle class="nd ok" cx="60" cy="120" r="5"/><circle class="nd ok" cx="96" cy="150" r="5"/><circle class="nd ok" cx="404" cy="70" r="5"/>'
+      + '<circle class="nd crit" cx="392" cy="126" r="6"/><circle class="nd warn" cx="300" cy="150" r="5"/><circle class="nd ok" cx="176" cy="150" r="5"/><circle class="nd ok" cx="256" cy="150" r="5"/>'
+      + '<text x="232" y="82" text-anchor="middle">core-sw</text><text x="344" y="40" text-anchor="middle">fw-01</text><text x="392" y="146" text-anchor="middle">iot?</text>'
+      + '</svg></div>'
+      + '<div class="topo-legend"><span><i style="background:#38e0ff"></i>Core</span><span><i style="background:var(--ok)"></i>Managed</span><span><i style="background:var(--warn)"></i>Attention</span><span><i style="background:var(--fail)"></i>Unmanaged</span></div>'
+      + '<div class="ev-foot"><span>Zone DMZ / Internal</span><code>12 discovery techniques</code></div>',
+
+      // Digital forensics
+      '<div class="ev-head"><div><b>Forensic case CASE-0231</b><small>Chain of custody, 6 items</small></div><span class="example">Example</span></div>'
+      + '<div class="ex-note">Acquired from <b>db-prod-01</b> at 02:14 UTC, sealed on collection</div>'
+      + '<ul class="ev-rows">'
+      + '<li><span class="id">YARA</span><span class="what"><b>APT_webshell match</b><small>/var/www/upload/x.php</small></span><span class="tag fail">Hit</span></li>'
+      + '<li><span class="id">ENTROPY</span><span class="what"><b>Packed binary suspected</b><small>/tmp/.k  7.98 / 8.00</small></span><span class="tag na">Review</span></li>'
+      + '<li><span class="id">STRINGS</span><span class="what"><b>base64 payload decoded</b><small>runs /bin/sh -i</small></span><span class="tag fail">Flag</span></li>'
+      + '<li><span class="id">IOC</span><span class="what"><b>3 indicators extracted</b><small>2 IPv4, 1 SHA-256</small></span><span class="tag info">Tagged</span></li>'
+      + '</ul><div class="ev-foot"><span>Custody sealed</span><code>sha256 7b91f0...e4</code></div>',
+
+      // SIEM
+      '<div class="ev-head"><div><b>SIEM, live</b><small>syslog, CEF, LEEF and JSON</small></div><span class="example">Example</span></div>'
+      + '<div class="spark">' + Array.apply(null, Array(26)).map(function (_, i) { var hs = [30,44,22,60,38,72,48,90,54,40,66,34,80,50,62,46,88,42,58,70,36,64,52,76,44,60]; return '<i style="height:' + hs[i] + '%"></i>'; }).join('') + '</div>'
+      + '<ul class="ev-rows">'
+      + '<li><span class="id">14:02</span><span class="what"><b>Impossible travel</b><small>jokafor: US then SG in 6m</small></span><span class="tag fail">Critical</span></li>'
+      + '<li><span class="id">14:01</span><span class="what"><b>SSH brute force</b><small>bastion-02  240 fails / 1m</small></span><span class="tag na">High</span></li>'
+      + '<li><span class="id">13:59</span><span class="what"><b>New admin role granted</b><small>svc-deploy by root</small></span><span class="tag info">Info</span></li>'
+      + '</ul><div class="ev-foot"><span>Forwarding to Splunk HEC</span><code>37 rules active</code></div>',
+
+      // FIM
+      '<div class="ev-head"><div><b>File integrity</b><small>hash-chained, 128 events / 24h</small></div><span class="example">Example</span></div>'
+      + '<div class="ex-note">Watching <b>/etc</b>, <b>/usr/bin</b> and <b>/etc/ssh</b> on 38 hosts</div>'
+      + '<ul class="ev-rows">'
+      + '<li><span class="id">MOD</span><span class="what"><b>/etc/ssh/sshd_config</b><small>db-prod-01  PermitRootLogin added</small></span><span class="tag fail">Change</span></li>'
+      + '<li><span class="id">REPL</span><span class="what"><b>/usr/bin/curl replaced</b><small>web-02  hash mismatch</small></span><span class="tag fail">Alert</span></li>'
+      + '<li><span class="id">ADD</span><span class="what"><b>/etc/cron.d/.hidden</b><small>app-07  new file</small></span><span class="tag na">Review</span></li>'
+      + '<li><span class="id">LINK</span><span class="what"><b>Mapped to control 5.2.10</b><small>compliance posture updated</small></span><span class="tag info">Mapped</span></li>'
+      + '</ul><div class="ev-foot"><span>Chain verified</span><code>prev 4f1c9e07</code></div>'
+    ];
+    panels.forEach(function (html) { var d = el('div', 'evidence'); d.innerHTML = html; deck.appendChild(d); });
+
+    var cards = $$('.evidence', deck);
+    cards.forEach(function (c) { var s = el('span', 'scanline'); s.setAttribute('aria-hidden', 'true'); c.appendChild(s); });
+
+    var dots = el('div', 'deck-dots');
+    var titles = ['Compliance scan', 'Network topology', 'Digital forensics', 'SIEM', 'File integrity'];
+    cards.forEach(function (_, i) { var btn = el('button'); btn.type = 'button'; btn.setAttribute('aria-label', titles[i] || ('Example ' + (i + 1))); if (i === 0) btn.className = 'on'; btn.addEventListener('click', function () { go(i, true); }); dots.appendChild(btn); });
+    deck.appendChild(dots);
+    var dotEls = $$('button', dots);
+
+    var idx = 0, timer = 0;
+    function go(n, manual) {
+      idx = (n + cards.length) % cards.length;
+      cards.forEach(function (c, i) { c.classList.toggle('active', i === idx); });
+      dotEls.forEach(function (d, i) { d.classList.toggle('on', i === idx); });
+      if (manual) rearm();
+    }
+    function next() { go(idx + 1); }
+    function rearm() { clearInterval(timer); timer = setInterval(next, 5200); }
+    if (!reduce) rearm();
+    stage.addEventListener('mouseenter', function () { clearInterval(timer); });
+    stage.addEventListener('mouseleave', function () { if (!reduce) rearm(); });
+  })();
 
   window.addEventListener('scroll', function () {
     var h = root.scrollHeight - root.clientHeight;
