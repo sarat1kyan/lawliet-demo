@@ -222,6 +222,7 @@ BODY["platform.html"] = ("Platform modules", "What each Lawliet module does.", "
 
     <h2 id="siem">SIEM</h2>
     <p>Receives syslog (RFC 5424 and RFC 3164), CEF, LEEF and JSON. Detection rules come in five kinds: threshold, sequence, first seen, went quiet and spike. Events can be forwarded to your own SIEM; see <a href="operations.html#forwarding">forwarding</a>.</p>
+    <p>Log collection and detection are in the Professional and Enterprise editions. Forwarding to an external SIEM is Enterprise.</p>
 
     <h2 id="fim">File integrity monitoring</h2>
     <p>Agents watch the paths you choose and report every addition, change and deletion with the old and new hash, in a hash-chained history per file. Events link to the compliance controls they affect and have an analyst workflow.</p>
@@ -348,8 +349,8 @@ BODY["licensing.html"] = ("Licensing and editions", "Lawliet editions, offline a
     <div class="table"><table>
       <thead><tr><th>Edition</th><th>Agents</th><th>Includes</th></tr></thead>
       <tbody>
-        <tr><td>Starter</td><td>Up to 25</td><td>Continuous compliance and drift, evidence bundles and reports, hardening, review queue, network discovery, log collection</td></tr>
-        <tr><td>Professional</td><td>Up to 100</td><td>Starter, plus firewall governance, data loss prevention and file integrity monitoring</td></tr>
+        <tr><td>Starter</td><td>Up to 25</td><td>Continuous compliance and drift, evidence bundles and reports, hardening, review queue, network discovery, audit trail</td></tr>
+        <tr><td>Professional</td><td>Up to 100</td><td>Starter, plus log collection and detection (SIEM), firewall governance, data loss prevention and file integrity monitoring</td></tr>
         <tr><td>Enterprise</td><td>Unlimited</td><td>Professional, plus digital forensics, active defence and SIEM forwarding</td></tr>
         <tr><td>Evaluation</td><td>Up to 5</td><td>30 days, every module except SIEM forwarding, with demo data</td></tr>
       </tbody>
