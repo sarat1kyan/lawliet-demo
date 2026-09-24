@@ -5,20 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Page not found | Lawliet</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#06080d">
+<meta name="theme-color" content="#020304">
 <link rel="icon" href="/assets/img/favicon.ico" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/css/styles.css?v=5">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=6">
+<style>
+  .mini { min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 24px; }
+  .mini .m { width: 120px; height: 120px; margin: 0 auto 26px; }
+  .mini .reticle-line { stroke: var(--line-strong); fill: none; }
+  .mini .reticle-tick { stroke: var(--accent); }
+  .mini .reticle-l { fill: var(--ink-strong); }
+  .mini h1 { font-size: clamp(30px, 6vw, 52px); }
+  .mini p { color: var(--muted); margin: 14px auto 26px; max-width: 44ch; }
+  .mini .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .code { font-family: var(--mono); font-size: 12px; letter-spacing: 0.24em; color: var(--muted-2); text-transform: uppercase; }
+</style>
 </head>
 <body>
-<main class="hero" id="main" style="min-height:100vh;display:grid;align-items:center">
-  <div class="wrap" style="display:block;max-width:720px">
-    <a class="lockup" href="/" aria-label="Lawliet home" style="margin-bottom:40px"><img class="mark" src="/assets/img/mark.png" alt="" width="34" height="34"><img class="word" src="/assets/img/wordmark.png" alt="Lawliet" width="144" height="12"></a>
-    <h1>Not assessed.</h1>
-    <p class="lede">There is no page at this address. It may have moved when the documentation was reorganised.</p>
-    <div class="ctas"><a class="btn btn-primary" href="/">Go to the home page</a><a class="btn btn-quiet" href="/docs/">Documentation</a></div>
+<main class="mini">
+  <div>
+    <svg class="m" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <circle class="reticle-line" cx="50" cy="50" r="40" stroke-width="2"/>
+      <path class="reticle-tick" d="M50 4v10M50 86v10M4 50h10M86 50h10" stroke-width="2"/>
+      <path class="reticle-l" d="M64 40h6v22h14v6H64z"/>
+    </svg>
+    <div class="code">HTTP 404</div>
+    <h1>Off target.</h1>
+    <p>There is no page at this address. It may have moved when the docs were reorganised.</p>
+    <div class="ctas">
+      <a class="btn btn-primary" href="/">Home</a>
+      <a class="btn" href="/docs/">Documentation</a>
+    </div>
   </div>
 </main>
 </body>

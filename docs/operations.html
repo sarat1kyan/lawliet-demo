@@ -5,34 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Operations and updates | Lawliet documentation</title>
 <meta name="description" content="Day-to-day commands, backups, updates, retention and SIEM forwarding.">
-<meta name="theme-color" content="#06080d">
+<meta name="theme-color" content="#020304">
 <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
 <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="../assets/css/styles.css?v=5">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=6">
+<link rel="stylesheet" href="../assets/css/docs.css?v=6">
 </head>
-<body class="docs">
+<body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site-head">
-  <div class="wrap">
-    <a class="lockup" href="../" aria-label="Lawliet home">
-      <img class="mark" src="../assets/img/mark.png" alt="" width="34" height="34">
-      <img class="word" src="../assets/img/wordmark.png" alt="Lawliet" width="144" height="12">
-    </a>
-    <nav class="nav" id="nav" aria-label="Main">
-      <a href="../#platform">Platform</a>
-      <a href="../#security">Security</a>
-      <a href="../#editions">Editions</a>
-      <a href="./" aria-current="page">Docs</a>
-    </nav>
-    <div class="head-cta"><a class="btn btn-primary btn-sm" href="../#demo">Book a demo</a></div>
-    <button class="menu-btn" type="button" id="menuBtn" aria-controls="nav" aria-expanded="false">Menu</button>
+<header class="hdr">
+  <a class="lockup" href="../" aria-label="Lawliet home"><svg class="mark" viewBox="0 0 100 100" fill="none" aria-hidden="true"><circle class="reticle-line" cx="50" cy="50" r="40" stroke-width="2"/><path class="reticle-tick" d="M50 4v10M50 86v10M4 50h10M86 50h10" stroke-width="2"/><path class="reticle-l" d="M42 30h6v34h20v6H42z"/></svg><span class="word">LAWLIET</span></a>
+  <nav class="nav" aria-label="Primary">
+    <a href="../#platform">Platform</a>
+    <a href="../#security">Security</a>
+    <a href="../#editions">Editions</a>
+    <a href="./" aria-current="true">Docs</a>
+  </nav>
+  <div class="hdr-cta">
+    <a class="btn btn-primary" href="../#demo">Book a demo</a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   </div>
 </header>
-<div class="wrap docs-layout">
+<div class="sheet glass-rail" id="sheet" aria-hidden="true"><div class="sheet-inner">
+  <a href="../#platform">Platform</a><a href="../#security">Security</a><a href="../#editions">Editions</a><a href="./">Docs</a>
+  <a class="btn btn-primary" href="../#demo">Book a demo</a>
+</div></div>
+<div class="docs-layout">
   <aside class="docs-nav" aria-label="Documentation">
       <div><p>Start here</p><ul>
         <li><a href="index.html">Overview</a></li>
@@ -92,10 +94,8 @@
   </main>
 </div>
 <footer class="site-foot">
-  <div class="wrap">
-    <div class="foot-base" style="margin-top:0;border-top:0;padding-top:0"><span>&copy; <span id="year">2026</span> Lawliet. All rights reserved.</span><span><a href="mailto:support@justlawliet.net">support@justlawliet.net</a></span></div>
-  </div>
+  <div class="foot-base"><span>Lawliet. Self-hosted security and compliance.</span><span><a href="mailto:info@justlawliet.net">info@justlawliet.net</a></span></div>
 </footer>
-<script src="../assets/js/main.js?v=5" defer></script>
+<script src="../assets/js/docs.js?v=6" defer></script>
 </body>
 </html>

@@ -5,20 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Request received | Lawliet</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#06080d">
+<meta name="theme-color" content="#020304">
 <link rel="icon" href="/assets/img/favicon.ico" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/css/styles.css?v=5">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=6">
+<style>
+  .mini { min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 24px; }
+  .mini .m { width: 120px; height: 120px; margin: 0 auto 26px; }
+  .mini .reticle-line { stroke: var(--line-strong); fill: none; }
+  .mini .reticle-tick { stroke: var(--accent); }
+  .mini .reticle-l { fill: var(--ink-strong); }
+  .mini h1 { font-size: clamp(28px, 5vw, 44px); }
+  .mini p { color: var(--muted); margin: 14px auto 26px; max-width: 46ch; }
+</style>
 </head>
 <body>
-<main class="hero" id="main" style="min-height:100vh;display:grid;align-items:center">
-  <div class="wrap" style="display:block;max-width:720px">
-    <a class="lockup" href="/" aria-label="Lawliet home" style="margin-bottom:40px"><img class="mark" src="/assets/img/mark.png" alt="" width="34" height="34"><img class="word" src="/assets/img/wordmark.png" alt="Lawliet" width="144" height="12"></a>
+<main class="mini">
+  <div>
+    <svg class="m" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <circle class="reticle-line" cx="50" cy="50" r="40" stroke-width="2"/>
+      <path class="reticle-tick" d="M50 4v10M50 86v10M4 50h10M86 50h10" stroke-width="2"/>
+      <path class="reticle-l" d="M42 30h6v34h20v6H42z"/>
+    </svg>
     <h1>Request received.</h1>
-    <p class="lede">Thank you. We will reply to the address you gave, usually within one working day.</p>
-    <div class="ctas"><a class="btn btn-primary" href="/docs/">Read the documentation</a><a class="btn btn-quiet" href="/">Back to the home page</a></div>
+    <p>Thank you. We will reply to the address you gave, usually within one working day.</p>
+    <a class="btn btn-primary" href="/">Back to home</a>
   </div>
 </main>
 </body>
