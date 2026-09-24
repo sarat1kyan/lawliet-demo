@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Overview | Lawliet documentation</title>
+<meta name="description" content="What Lawliet is, how it is delivered and where to start.">
+<meta name="theme-color" content="#06080d">
+<link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="docs">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="lockup" href="../" aria-label="Lawliet home">
+      <img class="mark" src="../assets/img/mark.png" alt="" width="34" height="34">
+      <img class="word" src="../assets/img/wordmark.png" alt="Lawliet" width="144" height="12">
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="../#platform">Platform</a>
+      <a href="../#security">Security</a>
+      <a href="../#editions">Editions</a>
+      <a href="./" aria-current="page">Docs</a>
+    </nav>
+    <div class="head-cta"><a class="btn btn-primary btn-sm" href="../#demo">Book a demo</a></div>
+    <button class="menu-btn" type="button" id="menuBtn" aria-controls="nav" aria-expanded="false">Menu</button>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <aside class="docs-nav" aria-label="Documentation">
+      <div><p>Start here</p><ul>
+        <li><a href="index.html" aria-current="page">Overview</a></li>
+        <li><a href="getting-started.html">Getting started</a></li>
+        <li><a href="installation-guide.html">Installation guide (printable)</a></li>
+      </ul></div>
+      <div><p>Using Lawliet</p><ul>
+        <li><a href="platform.html">Platform modules</a></li>
+        <li><a href="agents.html">Agents</a></li>
+        <li><a href="security.html">Security model</a></li>
+      </ul></div>
+      <div><p>Running it</p><ul>
+        <li><a href="licensing.html">Licensing and editions</a></li>
+        <li><a href="operations.html">Operations and updates</a></li>
+      </ul></div>
+  </aside>
+  <main class="doc" id="main">
+
+    <h1>Lawliet documentation</h1>
+    <p class="intro">Lawliet is a self-hosted compliance and security operations platform. It runs on one Linux server you control, watches your hosts through small pull-only agents, and keeps every result, and the evidence behind it, on that server.</p>
+
+    <div class="doc-cards">
+      <a href="getting-started.html"><b>Getting started</b><span>Requirements, installation, activation and your first hosts.</span></a>
+      <a href="platform.html"><b>Platform modules</b><span>What each module does, from compliance to forensics.</span></a>
+      <a href="security.html"><b>Security model</b><span>Agents, signed commands, roles, four-eyes approval and two-factor.</span></a>
+      <a href="licensing.html"><b>Licensing and editions</b><span>Editions, offline activation, renewals and expiry.</span></a>
+      <a href="agents.html"><b>Agents</b><span>Supported systems, what agents collect and how they are enrolled.</span></a>
+      <a href="operations.html"><b>Operations and updates</b><span>Backups, updates, retention and forwarding to your SIEM.</span></a>
+    </div>
+
+    <h2>How it is delivered</h2>
+    <p>You receive a signed bundle built for your organisation. It installs with one command, carries no licence, and runs without internet access. When the installer finishes it prints this installation's fingerprint; send it to us and we return a licence that works on that installation only.</p>
+    <ol>
+      <li><strong>Install</strong> the bundle on a Linux server with Docker.</li>
+      <li><strong>Sign in</strong>, set your own password and enrol two-factor.</li>
+      <li><strong>Activate</strong> with the licence issued for your fingerprint.</li>
+      <li><strong>Enrol your hosts</strong> and schedule the first scans.</li>
+    </ol>
+    <div class="note"><p>Operators installing a bundle can follow the <a href="installation-guide.html">printable installation guide</a>, which walks through every step with checkboxes and troubleshooting.</p></div>
+
+    <h2>Getting help</h2>
+    <p>Write to <a href="mailto:support@justlawliet.net">support@justlawliet.net</a>. On the server, <code>./lawliet doctor</code> collects a diagnostics file for us; it holds no passwords and no data. Security issues go to <a href="mailto:security@justlawliet.net">security@justlawliet.net</a>.</p>
+    <nav class="doc-next" aria-label="Next and previous">
+      <span></span>
+      <a href="getting-started.html" style="text-align:right"><small>Next</small><b>Getting started</b></a>
+    </nav>
+  </main>
+</div>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-base" style="margin-top:0;border-top:0;padding-top:0"><span>&copy; <span id="year">2026</span> Lawliet. All rights reserved.</span><span><a href="mailto:support@justlawliet.net">support@justlawliet.net</a></span></div>
+  </div>
+</footer>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

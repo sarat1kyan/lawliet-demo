@@ -1,0 +1,11 @@
+{
+  "name": "Lawliet",
+  "short_name": "Lawliet",
+  "icons": [
+    { "src": "/assets/img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/img/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#06080d",
+  "background_color": "#06080d",
+  "display": "standalone"
+}
