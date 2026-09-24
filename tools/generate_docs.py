@@ -373,6 +373,16 @@ BODY["licensing.html"] = ("Licensing and editions", "Lawliet editions, offline a
     <h2 id="expiry">When a licence expires</h2>
     <p>The platform pauses: the console and API refuse requests until a valid licence is installed. Sign-in, two-factor, the licence page and pending approvals stay available so a renewal can be entered. Your data is untouched.</p>
 
+    <h2 id="engagements">One-time engagements</h2>
+    <p>A single job, such as a compliance assessment with hardening, a network map or a firewall review, runs on an <strong>engagement licence</strong>. It carries only the modules that job needs and a host limit, for a fixed work window.</p>
+    <ol>
+      <li><strong>Work window.</strong> The job's modules work normally. The console shows the engagement's reference and the days left.</li>
+      <li><strong>Close-out.</strong> The platform turns read-only. You can still export evidence bundles and generate reports.</li>
+      <li><strong>Decommission.</strong> Under <strong>Settings</strong>, <strong>Licence</strong>, <em>Decommission all agents</em> tells every agent to remove itself from its host. Under dual control it needs a second approver.</li>
+      <li><strong>Expiry.</strong> At the end of close-out the licence expires. <code>./lawliet uninstall</code> removes the server.</li>
+    </ol>
+    <p>A host that will not check in again can be cleaned by hand: <code>sudo bash install_linux.sh --uninstall</code>, <code>sudo bash install_macos.sh --uninstall</code>, or <code>install_windows.ps1 -Uninstall</code>.</p>
+
     <h2 id="reinstall">Reinstalling or moving servers</h2>
     <p>The fingerprint belongs to the installation's configuration volume. A restore of a backup onto the same installation keeps it. A fresh installation on a new server has a new fingerprint and needs a new key; ask us before you move.</p>
 """)
