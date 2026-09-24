@@ -330,7 +330,7 @@ body { background: transparent; }
   background: linear-gradient(90deg, var(--brand), var(--accent)); box-shadow: 0 0 12px rgba(37,107,255,0.5); }
 
 /* Custom cursor (pointer devices only) */
-.cur-dot, .cur-ring { position: fixed; top: 0; left: 0; z-index: 70; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; will-change: transform; }
+.cur-dot, .cur-ring { position: fixed; top: 0; left: 0; z-index: 70; border-radius: 50%; pointer-events: none; will-change: transform; }
 .cur-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: var(--accent); }
 .cur-ring { width: 32px; height: 32px; margin: -16px 0 0 -16px; border: 1px solid rgba(114,160,255,0.6);
   transition: width .2s, height .2s, background .2s, border-color .2s, opacity .2s; }

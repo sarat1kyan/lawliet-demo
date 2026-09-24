@@ -13,11 +13,15 @@
   /* ---- Preloader: hold the first frame until the page is ready ------- */
   var preload = doc.getElementById('preload');
   var preloadDone = false;
+  var preloadStart = Date.now();
   function hidePreload() {
     if (preloadDone || !preload) { return; }
     preloadDone = true;
-    preload.classList.add('done');
-    setTimeout(function () { if (preload && preload.parentNode) { preload.parentNode.removeChild(preload); } root.classList.add('ready'); }, 520);
+    var wait = Math.max(0, 760 - (Date.now() - preloadStart)); // keep it up long enough to warm the canvas
+    setTimeout(function () {
+      preload.classList.add('done');
+      setTimeout(function () { if (preload && preload.parentNode) { preload.parentNode.removeChild(preload); } root.classList.add('ready'); }, 520);
+    }, wait);
   }
   function readyThenHide() {
     var go = function () { requestAnimationFrame(function () { requestAnimationFrame(hidePreload); }); };
@@ -103,10 +107,7 @@
   body.insertBefore(Object.assign(el('div', 'bg-grain'), { ariaHidden: 'true' }), body.firstChild);
   var progress = el('div', 'scroll-progress'); progress.setAttribute('aria-hidden', 'true'); body.appendChild(progress);
 
-  // Aurora + a light that tracks the pointer
-  var aurora = el('div', 'aurora'); aurora.setAttribute('aria-hidden', 'true');
-  aurora.innerHTML = '<i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i>';
-  body.insertBefore(aurora, body.firstChild);
+  // A light that tracks the pointer (the aurora is drawn in the canvas below)
   var pageSpot = el('div', 'page-spot'); pageSpot.setAttribute('aria-hidden', 'true'); body.appendChild(pageSpot);
   window.addEventListener('mousemove', function (e) { pageSpot.style.setProperty('--px', e.clientX + 'px'); pageSpot.style.setProperty('--py', e.clientY + 'px'); }, { passive: true });
 
@@ -267,21 +268,52 @@
     });
   }
 
-  /* ---- Background node field --------------------------------------- */
+  /* ---- Background: aurora glow + node field, all drawn in canvas ------
+     Drawn in-canvas (not CSS blend/blur) so it renders identically in every
+     browser, including Safari, where mix-blend-mode + large blur looked wrong. */
   (function () {
     var ctx = canvas.getContext('2d');
-    var w, h, dpr, nodes = [], count, mouse = { x: -999, y: -999 }, shift = 0;
+    var w, h, dpr, nodes = [], count, mouse = { x: -999, y: -999 }, shift = 0, t = 0;
+    var au = doc.createElement('canvas'), actx = au.getContext('2d');
+    // Soft drifting colour fields (unit coordinates, coloured for the brand)
+    var blobs = [
+      { x: 0.24, y: 0.00, r: 0.60, c: '30,95,224',  a: 0.055, s: 0.20, p: 0.0 },
+      { x: 0.86, y: 0.10, r: 0.52, c: '18,176,255', a: 0.060, s: 0.16, p: 2.1 },
+      { x: 0.52, y: 0.66, r: 0.54, c: '91,75,255',  a: 0.050, s: 0.13, p: 4.2 },
+      { x: 0.72, y: 0.30, r: 0.42, c: '34,224,255', a: 0.050, s: 0.18, p: 1.0 }
+    ];
     function size() {
       dpr = Math.min(devicePixelRatio || 1, 2); w = canvas.clientWidth; h = canvas.clientHeight;
       canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      au.width = Math.max(2, Math.round(w / 6)); au.height = Math.max(2, Math.round(h / 6));
       count = Math.max(30, Math.min(84, Math.round(w * h / 21000))); nodes = [];
       for (var i = 0; i < count; i++) nodes.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.24, vy: (Math.random() - 0.5) * 0.24, r: Math.random() * 1.5 + 0.6 });
     }
     window.addEventListener('mousemove', function (e) { mouse.x = e.clientX; mouse.y = e.clientY; });
     window.addEventListener('mouseout', function () { mouse.x = -999; mouse.y = -999; });
     window.addEventListener('scroll', function () { shift = window.scrollY * 0.02; }, { passive: true });
+    function drawAurora() {
+      var aw = au.width, ah = au.height, big = Math.max(aw, ah), tt = t * 0.01;
+      actx.clearRect(0, 0, aw, ah);
+      actx.globalCompositeOperation = 'lighter';
+      for (var i = 0; i < blobs.length; i++) {
+        var b = blobs[i];
+        var cx = (b.x + Math.sin(tt * b.s + b.p) * b.a) * aw;
+        var cy = (b.y + Math.cos(tt * b.s * 0.9 + b.p) * b.a) * ah;
+        var rad = b.r * big;
+        var g = actx.createRadialGradient(cx, cy, 0, cx, cy, rad);
+        g.addColorStop(0, 'rgba(' + b.c + ',0.55)');
+        g.addColorStop(0.5, 'rgba(' + b.c + ',0.13)');
+        g.addColorStop(1, 'rgba(' + b.c + ',0)');
+        actx.fillStyle = g; actx.fillRect(0, 0, aw, ah);
+      }
+      actx.globalCompositeOperation = 'source-over';
+    }
     function frame() {
+      t++;
       ctx.clearRect(0, 0, w, h);
+      drawAurora();
+      ctx.globalAlpha = 0.55; ctx.imageSmoothingEnabled = true; ctx.drawImage(au, 0, 0, w, h); ctx.globalAlpha = 1;
       for (var i = 0; i < nodes.length; i++) {
         var n = nodes[i]; n.x += n.vx; n.y += n.vy;
         if (n.x < 0 || n.x > w) n.vx *= -1; if (n.y < 0 || n.y > h) n.vy *= -1;
@@ -289,9 +321,9 @@
         if (md < 150) { n.x += ddx / md * 0.7; n.y += ddy / md * 0.7; }
         for (var j = i + 1; j < nodes.length; j++) {
           var m = nodes[j], dx = n.x - m.x, dy = n.y - m.y, d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 138) { ctx.strokeStyle = 'rgba(80,150,255,' + (0.24 * (1 - d / 138)) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke(); }
+          if (d < 138) { ctx.strokeStyle = 'rgba(90,160,255,' + (0.22 * (1 - d / 138)) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke(); }
         }
-        ctx.fillStyle = 'rgba(130,175,255,0.72)'; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = 'rgba(140,185,255,0.7)'; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.2832); ctx.fill();
       }
       requestAnimationFrame(frame);
     }
