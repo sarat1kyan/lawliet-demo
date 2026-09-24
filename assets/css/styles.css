@@ -396,3 +396,92 @@ html.js body:not(.reduced) :is(
   .cur-dot, .cur-ring { display: none; }
   .frameworks.mq .mq-track { animation: none; }
 }
+
+/* ==========================================================================
+ * Cinematic layer. Depth, light and glass, layered over the motion layer.
+ * Additive and reduced-motion aware. Content and docs untouched.
+ * ====================================================================== */
+@property --ang { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+/* Drifting aurora, deep behind everything */
+.aurora { position: fixed; inset: 0; z-index: -4; overflow: hidden; pointer-events: none; }
+.aurora i { position: absolute; display: block; border-radius: 50%; filter: blur(90px); mix-blend-mode: screen; will-change: transform; }
+.aurora .a1 { width: 54vw; height: 54vw; left: -10vw; top: -14vw; background: radial-gradient(circle, #1e5fe0, transparent 62%); opacity: .5; animation: drift1 28s ease-in-out infinite; }
+.aurora .a2 { width: 48vw; height: 48vw; right: -12vw; top: 0; background: radial-gradient(circle, #12b0ff, transparent 62%); opacity: .34; animation: drift2 34s ease-in-out infinite; }
+.aurora .a3 { width: 42vw; height: 42vw; left: 24vw; top: 42vw; background: radial-gradient(circle, #5b4bff, transparent 62%); opacity: .28; animation: drift3 40s ease-in-out infinite; }
+@keyframes drift1 { 50% { transform: translate(9vw, 10vw) scale(1.15); } }
+@keyframes drift2 { 50% { transform: translate(-11vw, 9vw) scale(1.12); } }
+@keyframes drift3 { 50% { transform: translate(7vw, -9vw) scale(1.22); } }
+
+/* A soft light that follows the pointer across the whole page */
+.page-spot { position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(600px circle at var(--px, 50%) var(--py, 16%), rgba(70,140,255,0.10), transparent 62%); }
+
+/* Vignette to focus the frame */
+body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(130% 90% at 50% 0%, transparent 55%, rgba(2,4,9,0.55) 100%); }
+
+/* Glass on the key panels so the light shows through them */
+.evidence, .form, .outcome, .edition { backdrop-filter: blur(12px) saturate(1.25); -webkit-backdrop-filter: blur(12px) saturate(1.25); }
+.outcome { background: rgba(14,19,33,0.55); }
+.edition { background: rgba(12,16,26,0.58); }
+.edition.featured { background: linear-gradient(180deg, rgba(37,107,255,0.16), rgba(12,16,26,0.58) 62%); }
+.evidence { background: linear-gradient(180deg, rgba(19,26,43,0.74), rgba(10,14,24,0.74)); overflow: hidden; }
+.form { background: rgba(12,16,26,0.6); }
+
+/* Cursor-tracking glow border (a .cardglow child is added by JS) */
+.glow-card { position: relative; }
+.glow-card .cardglow { position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none; opacity: 0; transition: opacity .35s;
+  background: radial-gradient(230px circle at var(--mx, 50%) var(--my, 50%), var(--accent), transparent 62%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; }
+.glow-card:hover .cardglow { opacity: .95; }
+.glow-card:hover { box-shadow: 0 26px 70px rgba(0,0,0,0.5), 0 0 54px rgba(37,107,255,0.12); }
+
+/* Headlines pick up light */
+.hero h1 { text-shadow: 0 0 44px rgba(37,107,255,0.22); }
+.hero h1 span { background: linear-gradient(100deg, #8fbaff, #38e0ff); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 26px rgba(56,224,255,0.22)); }
+.band-head h2, .h2, .problem .say { background: linear-gradient(180deg, #ffffff, #bcc8e8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.problem .say em { -webkit-text-fill-color: var(--muted); }
+.facts dt { filter: drop-shadow(0 0 18px rgba(56,224,255,0.18)); }
+.kicker .live { animation: livePulse 2.4s ease-in-out infinite; }
+@keyframes livePulse { 0%,100% { box-shadow: 0 0 0 0 var(--ok-dim); } 50% { box-shadow: 0 0 0 7px rgba(43,213,118,0); } }
+
+/* Hero primary CTA breathes */
+.hero .ctas .btn-primary { animation: ctaPulse 3.6s ease-in-out infinite; }
+@keyframes ctaPulse {
+  0%,100% { box-shadow: 0 0 0 1px rgba(114,160,255,0.4), 0 10px 30px rgba(37,107,255,0.32); }
+  50% { box-shadow: 0 0 0 1px rgba(124,176,255,0.75), 0 16px 46px rgba(37,107,255,0.55), 0 0 48px rgba(37,107,255,0.28); }
+}
+
+/* Featured edition gets a rotating gradient ring */
+.edition.featured::after { content: ""; position: absolute; inset: -1px; border-radius: 3px; padding: 1px; pointer-events: none; z-index: 1;
+  background: conic-gradient(from var(--ang), transparent 0 24%, var(--brand-2) 40%, #38e0ff 50%, transparent 66% 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; animation: angSpin 6s linear infinite; }
+@keyframes angSpin { to { --ang: 360deg; } }
+
+/* Evidence card: gentle float and a scan sweep */
+.evidence { animation: evFloat 7.5s ease-in-out infinite; }
+@keyframes evFloat { 50% { transform: translateY(-10px); } }
+.evidence .scanline { position: absolute; left: 0; right: 0; top: 0; height: 46px; pointer-events: none; z-index: 3;
+  background: linear-gradient(180deg, rgba(56,224,255,0.16), transparent); animation: evScan 4.6s ease-in-out infinite; }
+@keyframes evScan { 0% { transform: translateY(-10px); opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { transform: translateY(440px); opacity: 0; } }
+
+/* Frameworks pills glow a touch */
+.frameworks span { backdrop-filter: blur(6px); }
+.frameworks span:hover { box-shadow: 0 0 22px rgba(37,107,255,0.28); }
+
+/* Brighter reticle sweep as a cone */
+.reticle .sweep { opacity: .9; }
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora, .page-spot { display: none; }
+  .evidence { animation: none; }
+  .evidence .scanline, .edition.featured::after { animation: none; }
+  .hero .ctas .btn-primary { animation: none; }
+}
+@media (max-width: 640px) {
+  .aurora i { filter: blur(64px); }
+  .evidence { animation: none; }
+}

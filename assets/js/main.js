@@ -59,10 +59,35 @@
   body.insertBefore(Object.assign(el('div', 'bg-grain'), { ariaHidden: 'true' }), body.firstChild);
   var progress = el('div', 'scroll-progress'); progress.setAttribute('aria-hidden', 'true'); body.appendChild(progress);
 
+  // Aurora + a light that tracks the pointer
+  var aurora = el('div', 'aurora'); aurora.setAttribute('aria-hidden', 'true');
+  aurora.innerHTML = '<i class="a1"></i><i class="a2"></i><i class="a3"></i>';
+  body.insertBefore(aurora, body.firstChild);
+  var pageSpot = el('div', 'page-spot'); pageSpot.setAttribute('aria-hidden', 'true'); body.appendChild(pageSpot);
+  window.addEventListener('mousemove', function (e) { pageSpot.style.setProperty('--px', e.clientX + 'px'); pageSpot.style.setProperty('--py', e.clientY + 'px'); }, { passive: true });
+
+  // Scan sweep across the hero evidence card
+  var ev = $('.evidence'); if (ev) { var sl = el('span', 'scanline'); sl.setAttribute('aria-hidden', 'true'); ev.appendChild(sl); }
+
   window.addEventListener('scroll', function () {
     var h = root.scrollHeight - root.clientHeight;
     progress.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
   }, { passive: true });
+
+  // Cursor-tracking glow border on the key cards
+  $$('.outcome, .edition, .control, .evidence, .form').forEach(function (card) {
+    card.classList.add('glow-card');
+    var g = el('span', 'cardglow'); g.setAttribute('aria-hidden', 'true'); card.appendChild(g);
+    var raf = 0;
+    card.addEventListener('pointermove', function (e) {
+      if (raf) return;
+      raf = requestAnimationFrame(function () {
+        raf = 0; var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
+  });
 
   /* ---- Custom cursor + magnetic buttons ---------------------------- */
   if (!touch) {
@@ -89,7 +114,7 @@
     function size() {
       dpr = Math.min(devicePixelRatio || 1, 2); w = canvas.clientWidth; h = canvas.clientHeight;
       canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      count = Math.max(26, Math.min(70, Math.round(w * h / 26000))); nodes = [];
+      count = Math.max(30, Math.min(84, Math.round(w * h / 21000))); nodes = [];
       for (var i = 0; i < count; i++) nodes.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.24, vy: (Math.random() - 0.5) * 0.24, r: Math.random() * 1.5 + 0.6 });
     }
     window.addEventListener('mousemove', function (e) { mouse.x = e.clientX; mouse.y = e.clientY; });
@@ -104,9 +129,9 @@
         if (md < 150) { n.x += ddx / md * 0.7; n.y += ddy / md * 0.7; }
         for (var j = i + 1; j < nodes.length; j++) {
           var m = nodes[j], dx = n.x - m.x, dy = n.y - m.y, d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 130) { ctx.strokeStyle = 'rgba(60,131,255,' + (0.16 * (1 - d / 130)) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke(); }
+          if (d < 138) { ctx.strokeStyle = 'rgba(80,150,255,' + (0.24 * (1 - d / 138)) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke(); }
         }
-        ctx.fillStyle = 'rgba(114,160,255,0.55)'; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = 'rgba(130,175,255,0.72)'; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.2832); ctx.fill();
       }
       requestAnimationFrame(frame);
     }
