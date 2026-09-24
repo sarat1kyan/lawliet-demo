@@ -119,15 +119,17 @@
       + '<li><span class="id">LINK</span><span class="what"><b>Mapped to control 5.2.10</b><small>compliance posture updated</small></span><span class="tag info">Mapped</span></li>'
       + '</ul><div class="ev-foot"><span>Chain verified</span><code>prev 4f1c9e07</code></div>'
     ];
+    panels[0] = buildTopo();
     panels.forEach(function (html) { var d = el('div', 'evidence'); d.innerHTML = html; deck.appendChild(d); });
 
     var cards = $$('.evidence', deck);
     cards.forEach(function (c) { var s = el('span', 'scanline'); s.setAttribute('aria-hidden', 'true'); c.appendChild(s); });
 
-    var dots = el('div', 'deck-dots');
     var titles = ['Compliance scan', 'Network topology', 'Digital forensics', 'SIEM', 'File integrity'];
-    cards.forEach(function (_, i) { var btn = el('button'); btn.type = 'button'; btn.setAttribute('aria-label', titles[i] || ('Example ' + (i + 1))); if (i === 0) btn.className = 'on'; btn.addEventListener('click', function () { go(i, true); }); dots.appendChild(btn); });
+    var dots = el('div', 'deck-dots');
+    cards.forEach(function (_, i) { var btn = el('button'); btn.type = 'button'; btn.setAttribute('aria-label', titles[i]); if (i === 0) btn.className = 'on'; btn.addEventListener('click', function () { go(i, true); }); dots.appendChild(btn); });
     deck.appendChild(dots);
+    var cap = el('div', 'deck-cap'); cap.innerHTML = '<b>' + titles[0] + '</b>  1 / ' + cards.length; deck.appendChild(cap);
     var dotEls = $$('button', dots);
 
     var idx = 0, timer = 0;
@@ -135,7 +137,46 @@
       idx = (n + cards.length) % cards.length;
       cards.forEach(function (c, i) { c.classList.toggle('active', i === idx); });
       dotEls.forEach(function (d, i) { d.classList.toggle('on', i === idx); });
+      cap.innerHTML = '<b>' + titles[idx] + '</b>  ' + (idx + 1) + ' / ' + cards.length;
       if (manual) rearm();
+    }
+
+    function buildTopo() {
+      var n = {
+        core:   { x: 232, y: 104, t: 'core', l: 'core-sw' },
+        router: { x: 104, y: 60,  t: 'ok',   l: 'router' },
+        fw:     { x: 360, y: 54,  t: 'ok',   l: 'fw-01' },
+        sw:     { x: 150, y: 152, t: 'ok' },
+        srv:    { x: 300, y: 150, t: 'ok' },
+        nas:    { x: 232, y: 178, t: 'ok' },
+        laptop: { x: 60,  y: 120, t: 'ok' },
+        printer:{ x: 412, y: 122, t: 'warn' },
+        ap:     { x: 414, y: 62,  t: 'ok' },
+        iot:    { x: 402, y: 162, t: 'crit', l: 'iot?' }
+      };
+      var edges = [['core','router'],['core','fw'],['core','sw'],['core','srv'],['core','nas'],['router','laptop'],['fw','ap'],['fw','printer'],['fw','iot'],['sw','nas']];
+      var pulses = [['router','core'],['fw','core'],['srv','core']];
+      function curve(a, b, amt) {
+        var A = n[a], B = n[b]; var mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2;
+        var dx = B.x - A.x, dy = B.y - A.y; var len = Math.sqrt(dx * dx + dy * dy) || 1;
+        return 'M' + A.x + ' ' + A.y + ' Q' + (mx - dy / len * amt).toFixed(1) + ' ' + (my + dx / len * amt).toFixed(1) + ' ' + B.x + ' ' + B.y;
+      }
+      var s = '<svg viewBox="0 0 464 210" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true">';
+      edges.forEach(function (e) { s += '<path class="lnk" d="' + curve(e[0], e[1], 12) + '"/>'; });
+      pulses.forEach(function (e, i) { s += '<path id="tp' + i + '" d="' + curve(e[0], e[1], 12) + '" fill="none" stroke="none"/>'; });
+      s += '<circle class="ring" cx="232" cy="104" r="16"><animateTransform attributeName="transform" type="rotate" from="0 232 104" to="360 232 104" dur="9s" repeatCount="indefinite"/></circle>';
+      Object.keys(n).forEach(function (k) {
+        var nd = n[k], big = k === 'core', r = big ? 7 : 5;
+        s += '<circle class="halo ' + nd.t + '" cx="' + nd.x + '" cy="' + nd.y + '" r="' + (r + 7) + '"/>';
+        s += '<circle class="nd ' + nd.t + '" cx="' + nd.x + '" cy="' + nd.y + '" r="' + r + '"/>';
+        if (nd.l) { var ly = nd.y > 108 ? nd.y + 16 : nd.y - 11; s += '<text x="' + nd.x + '" y="' + ly + '" text-anchor="middle">' + nd.l + '</text>'; }
+      });
+      pulses.forEach(function (e, i) { s += '<circle class="pulse" r="2.4"><animateMotion dur="' + (2.2 + i * 0.5) + 's" begin="' + (i * 0.7) + 's" repeatCount="indefinite"><mpath xlink:href="#tp' + i + '" href="#tp' + i + '"/></animateMotion></circle>'; });
+      s += '</svg>';
+      return '<div class="ev-head"><div><b>Network topology</b><small>142 devices, 3 unmanaged</small></div><span class="example">Example</span></div>'
+        + '<div class="topo">' + s + '</div>'
+        + '<div class="topo-legend"><span><i style="background:#38e0ff"></i>Core</span><span><i style="background:#3ddc84"></i>Managed</span><span><i style="background:var(--warn)"></i>Attention</span><span><i style="background:var(--fail)"></i>Unmanaged</span></div>'
+        + '<div class="ev-foot"><span>Zone DMZ / Internal</span><code>12 discovery techniques</code></div>';
     }
     function next() { go(idx + 1); }
     function rearm() { clearInterval(timer); timer = setInterval(next, 5200); }

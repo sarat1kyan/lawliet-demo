@@ -176,13 +176,13 @@
     </div>
     <p class="fw-group">Standards</p>
     <div class="frameworks" aria-label="Standards">
-      <span>CIS Controls v8</span><span>NIST SP 800-53 Rev. 5</span><span>NIST CSF</span><span>ISO/IEC 27001:2022</span><span>ISO/IEC 27701</span>
-      <span>PCI DSS v4.0</span><span>SOC 2 Type II</span><span>HIPAA Security Rule</span><span>GDPR technical controls</span><span>CMMC 2.0</span>
+      <a href="https://www.cisecurity.org/controls/cis-controls-list" target="_blank" rel="noopener noreferrer">CIS Controls v8</a><a href="https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final" target="_blank" rel="noopener noreferrer">NIST SP 800-53 Rev. 5</a><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer">NIST CSF</a><a href="https://www.iso.org/standard/27001" target="_blank" rel="noopener noreferrer">ISO/IEC 27001:2022</a><a href="https://www.iso.org/standard/71670.html" target="_blank" rel="noopener noreferrer">ISO/IEC 27701</a>
+      <a href="https://www.pcisecuritystandards.org/" target="_blank" rel="noopener noreferrer">PCI DSS v4.0</a><a href="https://www.aicpa-cima.com/topic/audit-assurance/audit-and-assurance-greater-than-soc-2" target="_blank" rel="noopener noreferrer">SOC 2 Type II</a><a href="https://www.hhs.gov/hipaa/for-professionals/security/index.html" target="_blank" rel="noopener noreferrer">HIPAA Security Rule</a><a href="https://gdpr-info.eu/" target="_blank" rel="noopener noreferrer">GDPR technical controls</a><a href="https://dodcio.defense.gov/CMMC/" target="_blank" rel="noopener noreferrer">CMMC 2.0</a>
     </div>
     <p class="fw-group">Benchmarks</p>
     <div class="frameworks" aria-label="Benchmarks">
-      <span>CIS Ubuntu and Debian</span><span>CIS RHEL and CentOS</span><span>CIS Arch Linux</span><span>CIS Linux</span><span>DISA STIG Linux</span>
-      <span>CIS Windows 10 and 11</span><span>CIS Windows Server 2019 and 2022</span><span>DISA STIG Windows Server</span><span>CIS macOS</span>
+      <a href="https://www.cisecurity.org/benchmark/ubuntu_linux" target="_blank" rel="noopener noreferrer">CIS Ubuntu and Debian</a><a href="https://www.cisecurity.org/benchmark/red_hat_linux" target="_blank" rel="noopener noreferrer">CIS RHEL and CentOS</a><a href="https://www.cisecurity.org/cis-benchmarks" target="_blank" rel="noopener noreferrer">CIS Arch Linux</a><a href="https://www.cisecurity.org/cis-benchmarks" target="_blank" rel="noopener noreferrer">CIS Linux</a><a href="https://public.cyber.mil/stigs/downloads/" target="_blank" rel="noopener noreferrer">DISA STIG Linux</a>
+      <a href="https://www.cisecurity.org/benchmark/microsoft_windows_desktop" target="_blank" rel="noopener noreferrer">CIS Windows 10 and 11</a><a href="https://www.cisecurity.org/benchmark/microsoft_windows_server" target="_blank" rel="noopener noreferrer">CIS Windows Server 2019 and 2022</a><a href="https://public.cyber.mil/stigs/downloads/" target="_blank" rel="noopener noreferrer">DISA STIG Windows Server</a><a href="https://www.cisecurity.org/benchmark/apple_os" target="_blank" rel="noopener noreferrer">CIS macOS</a>
     </div>
     <p class="fw-note">Standards checks run on Linux hosts. Benchmarks run on the operating system they are written for.</p>
   </div>
@@ -326,9 +326,10 @@
       <h2 class="h2">See it on an estate like yours.</h2>
       <p class="fw-note" style="font-size:17px;margin-top:16px">Tell us what you have to prove and where it has to run. We will show you the platform against it.</p>
       <ul class="demo-points">
-        <li><span>1</span>A walkthrough against a scenario close to your environment.</li>
+        <li><span>1</span>A walkthrough against a scenario close to your own environment.</li>
         <li><span>2</span>A pilot on your own hardware, air-gapped if that is how you deploy.</li>
         <li><span>3</span>A straight answer on which of your frameworks are covered.</li>
+        <li><span>4</span>Run by the engineers who build and operate the platform, never a sales team, so every answer is hands-on and precise.</li>
       </ul>
       <p class="fw-note">Prefer email? <a href="mailto:info@justlawliet.net">info@justlawliet.net</a></p>
     </div>
@@ -343,7 +344,7 @@
         <div class="field"><label for="fleet">Hosts to monitor</label>
           <select id="fleet" name="fleet_size"><option value="">Choose a range</option><option>Under 25</option><option>25 to 100</option><option>100 to 500</option><option>More than 500</option></select></div>
         <div class="field"><label for="deploy">Where it would run</label>
-          <select id="deploy" name="deployment"><option value="">Choose one</option><option>On-premises</option><option>Air-gapped</option><option>Private cloud</option><option>Not decided yet</option></select></div>
+          <select id="deploy" name="deployment"><option value="">Choose one</option><option>On-premises or air-gapped</option><option>Private cloud</option><option>Not decided yet</option></select></div>
         <div class="field full"><label for="message">What do you need to prove?</label><textarea id="message" name="message" placeholder="Frameworks in scope, audit dates, the systems you run"></textarea></div>
         <p class="form-error" id="formError" role="alert" hidden></p>
         <div class="actions"><small>We usually reply within one working day.</small><button class="btn btn-primary" type="submit" id="formBtn">Request a demo</button></div>
