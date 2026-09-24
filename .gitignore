@@ -11,3 +11,4 @@ Thumbs.db
 # Node (only if you ever add tooling; the site itself needs none)
 node_modules/
 npm-debug.log*
+tools/check-out/

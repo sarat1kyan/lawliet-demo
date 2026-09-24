@@ -7,32 +7,32 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#020304">
 <link rel="icon" href="/assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/css/tokens.css?v=6">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=7">
 <style>
   .mini { min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 24px; }
-  .mini .m { width: 120px; height: 120px; margin: 0 auto 26px; }
-  .mini .reticle-line { stroke: var(--line-strong); fill: none; }
-  .mini .reticle-tick { stroke: var(--accent); }
-  .mini .reticle-l { fill: var(--ink-strong); }
-  .mini h1 { font-size: clamp(30px, 6vw, 52px); }
+  .mini .mk { position: relative; width: clamp(120px, 22vmin, 180px); margin: 0 auto 28px; }
+  .mini .mk img { width: 100%; height: auto; }
+  .mini .mk .cross { position: absolute; top: -8px; right: -18px; width: 34px; height: 34px; color: var(--rose-ink); }
+  .mini .code { font-family: var(--mono); font-size: 12px; letter-spacing: 0.24em; color: var(--muted-2); text-transform: uppercase; }
+  .mini h1 { font-size: clamp(30px, 6vw, 52px); margin-top: 10px; }
   .mini p { color: var(--muted); margin: 14px auto 26px; max-width: 44ch; }
   .mini .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .code { font-family: var(--mono); font-size: 12px; letter-spacing: 0.24em; color: var(--muted-2); text-transform: uppercase; }
 </style>
 </head>
 <body>
 <main class="mini">
   <div>
-    <svg class="m" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-      <circle class="reticle-line" cx="50" cy="50" r="40" stroke-width="2"/>
-      <path class="reticle-tick" d="M50 4v10M50 86v10M4 50h10M86 50h10" stroke-width="2"/>
-      <path class="reticle-l" d="M64 40h6v22h14v6H64z"/>
-    </svg>
+    <div class="mk">
+      <picture><source srcset="/assets/img/brand/mark-256.webp 1x, /assets/img/brand/mark-512.webp 2x" type="image/webp"><img src="/assets/img/brand/mark-256.png" width="180" height="180" alt="Lawliet"></picture>
+      <svg class="cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3v6M12 15v6M3 12h6M15 12h6"/><circle cx="12" cy="12" r="2"/></svg>
+    </div>
     <div class="code">HTTP 404</div>
-    <h1>Off target.</h1>
+    <h1>This page is not on the map.</h1>
     <p>There is no page at this address. It may have moved when the docs were reorganised.</p>
     <div class="ctas">
       <a class="btn btn-primary" href="/">Home</a>

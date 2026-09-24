@@ -17,14 +17,14 @@ PAGES = [
     ("platform.html", "Platform modules", "Using Lawliet"),
     ("agents.html", "Agents", "Using Lawliet"),
     ("security.html", "Security model", "Using Lawliet"),
-    ("licensing.html", "Licensing and editions", "Running it"),
+    ("licensing.html", "Licensing and suites", "Running it"),
     ("operations.html", "Operations and updates", "Running it"),
 ]
 
-MARK = ('<svg class="mark" viewBox="0 0 100 100" fill="none" aria-hidden="true">'
-        '<circle class="reticle-line" cx="50" cy="50" r="40" stroke-width="2"/>'
-        '<path class="reticle-tick" d="M50 4v10M50 86v10M4 50h10M86 50h10" stroke-width="2"/>'
-        '<path class="reticle-l" d="M42 30h6v34h20v6H42z"/></svg>')
+LOGO = ('<picture><source srcset="../assets/img/brand/mark-56.webp 1x, ../assets/img/brand/mark-112.webp 2x" type="image/webp">'
+        '<img class="mark" src="../assets/img/brand/mark-56.png" width="28" height="28" alt="Lawliet"></picture>'
+        '<picture class="word-pic"><source srcset="../assets/img/brand/wordmark-240.webp 1x, ../assets/img/brand/wordmark-480.webp 2x" type="image/webp">'
+        '<img class="word" src="../assets/img/brand/wordmark-240.png" width="240" height="20" alt="LAWLIET"></picture>')
 
 HEAD = """<!doctype html>
 <html lang="en">
@@ -40,17 +40,17 @@ HEAD = """<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=6">
-<link rel="stylesheet" href="../assets/css/docs.css?v=6">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=7">
+<link rel="stylesheet" href="../assets/css/docs.css?v=7">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="hdr">
-  <a class="lockup" href="../" aria-label="Lawliet home">""" + MARK + """<span class="word">LAWLIET</span></a>
+  <a class="lockup" href="../" aria-label="Lawliet home">""" + LOGO + """</a>
   <nav class="nav" aria-label="Primary">
     <a href="../#platform">Platform</a>
     <a href="../#security">Security</a>
-    <a href="../#editions">Editions</a>
+    <a href="../#pricing">Pricing</a>
     <a href="./" aria-current="true">Docs</a>
   </nav>
   <div class="hdr-cta">
@@ -59,7 +59,7 @@ HEAD = """<!doctype html>
   </div>
 </header>
 <div class="sheet glass-rail" id="sheet" aria-hidden="true"><div class="sheet-inner">
-  <a href="../#platform">Platform</a><a href="../#security">Security</a><a href="../#editions">Editions</a><a href="./">Docs</a>
+  <a href="../#platform">Platform</a><a href="../#security">Security</a><a href="../#pricing">Pricing</a><a href="./">Docs</a>
   <a class="btn btn-primary" href="../#demo">Book a demo</a>
 </div></div>
 <div class="docs-layout">
@@ -75,7 +75,7 @@ FOOT = """{nextlinks}
 <footer class="site-foot">
   <div class="foot-base"><span>Lawliet. Self-hosted security and compliance.</span><span><a href="mailto:info@justlawliet.net">info@justlawliet.net</a></span></div>
 </footer>
-<script src="../assets/js/docs.js?v=6" defer></script>
+<script src="../assets/js/docs.js?v=7" defer></script>
 </body>
 </html>
 """
@@ -117,7 +117,7 @@ BODY["index.html"] = ("Overview", "What Lawliet is, how it is delivered and wher
       <a href="getting-started.html"><b>Getting started</b><span>Requirements, installation, activation and your first hosts.</span></a>
       <a href="platform.html"><b>Platform modules</b><span>What each module does, from compliance to forensics.</span></a>
       <a href="security.html"><b>Security model</b><span>Agents, signed commands, roles, four-eyes approval and two-factor.</span></a>
-      <a href="licensing.html"><b>Licensing and editions</b><span>Editions, offline activation, renewals and expiry.</span></a>
+      <a href="licensing.html"><b>Licensing and suites</b><span>Suites, offline activation, renewals and expiry.</span></a>
       <a href="agents.html"><b>Agents</b><span>Supported systems, what agents collect and how they are enrolled.</span></a>
       <a href="operations.html"><b>Operations and updates</b><span>Backups, updates, retention and forwarding to your SIEM.</span></a>
     </div>
@@ -199,7 +199,7 @@ curl -sSL https://your-server/api/v1/agents/download/linux | sudo bash -s -- \\
 
 BODY["platform.html"] = ("Platform modules", "What each Lawliet module does.", """
     <h1>Platform modules</h1>
-    <p class="intro">Every module writes to the same evidence store, review queue and audit trail. Which modules are available depends on your <a href="licensing.html">edition</a>.</p>
+    <p class="intro">Every module writes to the same evidence store, review queue and audit trail. Which modules are available depends on your <a href="licensing.html">suite</a>.</p>
 
     <h2 id="compliance">Continuous compliance</h2>
     <p>Scans run on a schedule or on demand, across the whole estate, one host or a chosen set. Each score decomposes into per-control, per-host results with timestamps. A host that could not be reached counts as <strong>not assessed</strong>, so a partial scan reports a lower score rather than a perfect one.</p>
@@ -227,7 +227,7 @@ BODY["platform.html"] = ("Platform modules", "What each Lawliet module does.", "
 
     <h2 id="siem">SIEM</h2>
     <p>Receives syslog (RFC 5424 and RFC 3164), CEF, LEEF and JSON. Detection rules come in five kinds: threshold, sequence, first seen, went quiet and spike. Events can be forwarded to your own SIEM; see <a href="operations.html#forwarding">forwarding</a>.</p>
-    <p>Log collection and detection are in the Professional and Enterprise editions. Forwarding to an external SIEM is Enterprise.</p>
+    <p>Log collection and detection are in the Operate and Complete suites. Forwarding to an external SIEM is in every suite.</p>
 
     <h2 id="fim">File integrity monitoring</h2>
     <p>Agents watch the paths you choose and report every addition, change and deletion with the old and new hash, in a hash-chained history per file. Events link to the compliance controls they affect and have an analyst workflow.</p>
@@ -263,8 +263,8 @@ BODY["agents.html"] = ("Agents", "Supported systems, enrolment and what Lawliet 
       <thead><tr><th>Platform</th><th>Runs as</th><th>Status</th></tr></thead>
       <tbody>
         <tr><td>Linux: Ubuntu 22.04 and 24.04, Debian 11 and 12, RHEL and Rocky 8 and 9</td><td>systemd service</td><td>Field-tested</td></tr>
-        <tr><td>Windows</td><td>Scheduled task as SYSTEM</td><td>Early access</td></tr>
-        <tr><td>macOS</td><td>launchd service</td><td>Early access</td></tr>
+        <tr><td>Windows</td><td>Scheduled task as SYSTEM</td><td>Supported</td></tr>
+        <tr><td>macOS</td><td>launchd service</td><td>Supported</td></tr>
       </tbody>
     </table></div>
     <p>The Linux agent needs Python 3.10 or newer.</p>
@@ -346,21 +346,28 @@ BODY["security.html"] = ("Security model", "How Lawliet protects the hosts it wa
     <p>Write to <a href="mailto:security@justlawliet.net">security@justlawliet.net</a>.</p>
 """)
 
-BODY["licensing.html"] = ("Licensing and editions", "Lawliet editions, offline activation, renewals and expiry.", """
-    <h1>Licensing and editions</h1>
+BODY["licensing.html"] = ("Licensing and suites", "Lawliet suites, offline activation, renewals and expiry.", """
+    <h1>Licensing and suites</h1>
     <p class="intro">Lawliet licences are verified on your own server. There is no licence server, no check-in and no internet needed, at activation or afterwards.</p>
 
-    <h2 id="editions">Editions</h2>
+    <h2 id="suites">Suites</h2>
     <div class="table"><table>
-      <thead><tr><th>Edition</th><th>Agents</th><th>Includes</th></tr></thead>
+      <thead><tr><th>Suite</th><th>For</th><th>Includes</th></tr></thead>
       <tbody>
-        <tr><td>Starter</td><td>Up to 25</td><td>Continuous compliance and drift, evidence bundles and reports, hardening, review queue, network discovery, audit trail</td></tr>
-        <tr><td>Professional</td><td>Up to 100</td><td>Starter, plus log collection and detection (SIEM), firewall governance, data loss prevention and file integrity monitoring</td></tr>
-        <tr><td>Enterprise</td><td>Unlimited</td><td>Professional, plus digital forensics, active defence and SIEM forwarding</td></tr>
-        <tr><td>Evaluation</td><td>Up to 5</td><td>30 days, every module except SIEM forwarding, with demo data</td></tr>
+        <tr><td>Comply</td><td>Proving the estate is compliant and fixing what is not</td><td>Continuous compliance and drift, hardening with approval and rollback, scheduled reports, network discovery and topology, firewall rule-set review</td></tr>
+        <tr><td>Operate</td><td>Watching the estate every day and acting on it</td><td>Log collection, search and detection, file integrity monitoring, data loss prevention, alerts in one review queue</td></tr>
+        <tr><td>Complete</td><td>Watching, proving and investigating on the host</td><td>Everything in Comply and Operate, plus digital forensics and active defence</td></tr>
       </tbody>
     </table></div>
-    <p>Every edition includes role-based access, dual control, two-factor sign-in, the audit trail and signed updates.</p>
+    <p>Every suite includes the review queue, evidence bundles, SIEM forwarding, role-based access, four-eyes approval, two-factor sign-in, the audit trail, all updates and email support. Each suite is sized on its own for up to 30, 100, 500, 1,000 or 3,000 agents, or every host with a site licence.</p>
+
+    <h3 id="other-ways">Other ways to buy</h3>
+    <ul>
+      <li>30-day evaluation on your own hardware, 5 agents, demo data, free.</li>
+      <li>60-day pilot, up to 50 agents, on Complete; the fee is credited if you subscribe.</li>
+      <li>90-day run-it-yourself licence for one project, any suite; credited in full if you subscribe within 60 days.</li>
+      <li>Perpetual licence for air-gapped and public-sector sites, with maintenance.</li>
+    </ul>
 
     <h2 id="activation">Activation</h2>
     <p>Bundles ship without a licence. The licence is issued to the installation you create:</p>

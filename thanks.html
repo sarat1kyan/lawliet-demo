@@ -7,31 +7,31 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#020304">
 <link rel="icon" href="/assets/img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/css/tokens.css?v=6">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=7">
 <style>
   .mini { min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 24px; }
-  .mini .m { width: 120px; height: 120px; margin: 0 auto 26px; }
-  .mini .reticle-line { stroke: var(--line-strong); fill: none; }
-  .mini .reticle-tick { stroke: var(--accent); }
-  .mini .reticle-l { fill: var(--ink-strong); }
+  .mini .mk { width: clamp(110px, 20vmin, 160px); margin: 0 auto 26px; }
+  .mini .mk img { width: 100%; height: auto; }
   .mini h1 { font-size: clamp(28px, 5vw, 44px); }
   .mini p { color: var(--muted); margin: 14px auto 26px; max-width: 46ch; }
+  .mini .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 </style>
 </head>
 <body>
 <main class="mini">
   <div>
-    <svg class="m" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-      <circle class="reticle-line" cx="50" cy="50" r="40" stroke-width="2"/>
-      <path class="reticle-tick" d="M50 4v10M50 86v10M4 50h10M86 50h10" stroke-width="2"/>
-      <path class="reticle-l" d="M42 30h6v34h20v6H42z"/>
-    </svg>
+    <picture class="mk"><source srcset="/assets/img/brand/mark-256.webp 1x, /assets/img/brand/mark-512.webp 2x" type="image/webp"><img src="/assets/img/brand/mark-256.png" width="160" height="160" alt="Lawliet"></picture>
     <h1>Request received.</h1>
-    <p>Thank you. We will reply to the address you gave, usually within one working day.</p>
-    <a class="btn btn-primary" href="/">Back to home</a>
+    <p>Thank you. We usually reply within one working day.</p>
+    <div class="ctas">
+      <a class="btn btn-primary" href="/">Back to home</a>
+      <a class="btn" href="/docs/">Documentation</a>
+    </div>
   </div>
 </main>
 </body>
