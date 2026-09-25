@@ -164,8 +164,77 @@ for (const [w, h, name] of VIEWPORTS) {
   console.log(`${pass ? 'PASS' : 'FAIL'} ${key.padEnd(10)} ${name}${pass ? '' : '  -> ' + fails.join('; ')}`);
   await pg.close();
 }
+// ================= Releases page checks =================
+{
+  const origin = BASE.replace(/\/[^/]*$/, '');
+  const relURL = origin + '/docs/releases.html';
+  const data = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data', 'releases.json'), 'utf8'));
+  const N = data.releases.length;
+  const betaN = data.releases.filter(r => r.channel === 'beta').length;
+  const clickN = data.releases.filter(r => JSON.stringify(r).toLowerCase().includes('clickhouse')).length;
+  const fails = [];
+  const note = (c, m) => { if (!c) fails.push(m); };
+  const pg = await b.newPage({ viewport: { width: 1440, height: 900 } });
+  const errs = [];
+  pg.on('pageerror', e => errs.push(e.message));
+  pg.on('console', m => { if (m.type() === 'error' && !/ERR_CERT|fonts\.g/.test(m.text())) errs.push('C:' + m.text()); });
+  try {
+    await pg.goto(relURL, { waitUntil: 'load', timeout: 45000 });
+    await pg.waitForTimeout(700);
+    const rendered = await pg.$$eval('#relList .rel-entry', e => e.length);
+    note(rendered === N, `rendered ${rendered} != releases ${N}`);
+    note(await pg.$eval('#relList .rel-entry:first-child', e => e.open), 'first release not open');
+    note(await pg.$eval('#relList .rel-entry:first-child', e => !!e.querySelector('.rel-current-tag')), 'first release not marked current');
+    note(await pg.$$eval('#relIndex .rel-index-item', e => e.length) === N, 'version index count mismatch');
+
+    // deep link
+    await pg.goto(relURL + '#v1-3-0', { waitUntil: 'load' }); await pg.waitForTimeout(700);
+    const dl = await pg.$eval('#v1-3-0', e => ({ open: e.open, top: e.getBoundingClientRect().top }));
+    note(dl.open && dl.top < 500, 'deep link #v1-3-0 did not open and scroll');
+
+    // text filter
+    await pg.fill('#relSearch', 'ClickHouse'); await pg.waitForTimeout(250);
+    const shown = await pg.$$eval('#relList .rel-entry', els => els.filter(e => !e.hidden).length);
+    note(shown === clickN, `ClickHouse filter shown ${shown} != ${clickN}`);
+    // channel filter
+    await pg.fill('#relSearch', ''); await pg.selectOption('#relChannel', 'beta'); await pg.waitForTimeout(250);
+    const betaShown = await pg.$$eval('#relList .rel-entry', els => els.filter(e => !e.hidden).length);
+    note(betaShown === betaN, `beta filter shown ${betaShown} != ${betaN}`);
+    await pg.selectOption('#relChannel', 'all'); await pg.waitForTimeout(150);
+
+    // no horizontal overflow at three widths
+    for (const w of [360, 768, 1440]) {
+      await pg.setViewportSize({ width: w, height: 900 }); await pg.waitForTimeout(250);
+      const ov = await pg.evaluate(() => ({ sw: document.documentElement.scrollWidth, iw: window.innerWidth }));
+      note(ov.sw <= ov.iw + 1, `releases overflow at ${w} (${ov.sw}>${ov.iw})`);
+    }
+    note(errs.length === 0, `releases js errors: ${errs.slice(0, 2).join(' | ')}`);
+
+    // landing "What's new" link
+    const lp = await b.newPage({ viewport: { width: 1280, height: 900 } });
+    await lp.goto(BASE, { waitUntil: 'load' }); await lp.waitForTimeout(900);
+    const wn = await lp.$eval('#whatsNew', e => ({ hidden: e.hidden, text: e.textContent }));
+    note(!wn.hidden && wn.text === "What's new in v" + data.releases[0].version, `whats-new link wrong: ${JSON.stringify(wn)}`);
+    await lp.close();
+
+    // failure path: block the data file, expect the error state and no throw
+    const ep = await b.newPage({ viewport: { width: 1000, height: 800 } });
+    const epErrs = []; ep.on('pageerror', e => epErrs.push(e.message));
+    await ep.route('**/data/releases.json', r => r.abort());
+    await ep.goto(relURL, { waitUntil: 'load' }); await ep.waitForTimeout(600);
+    const est = await ep.$eval('#relStatus', e => e.classList.contains('rel-error') && e.textContent.length > 0);
+    note(est, 'error state not shown when data fetch fails');
+    note(epErrs.length === 0, `threw on failure path: ${epErrs.slice(0, 2).join(' | ')}`);
+    await ep.close();
+  } catch (e) { fails.push('EXC ' + e.message); }
+  const pass = fails.length === 0;
+  results.push({ key: 'releases', name: 'releases-page', pass, fails });
+  console.log(`${pass ? 'PASS' : 'FAIL'} ${'releases'.padEnd(10)} releases-page${pass ? '' : '  -> ' + fails.join('; ')}`);
+  await pg.close();
+}
+
 await b.close();
 
 const failed = results.filter(r => !r.pass);
-console.log(`\n${results.length - failed.length}/${results.length} viewports pass`);
+console.log(`\n${results.length - failed.length}/${results.length} checks pass`);
 process.exit(failed.length ? 1 : 0);
