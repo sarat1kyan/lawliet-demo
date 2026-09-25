@@ -233,6 +233,87 @@ for (const [w, h, name] of VIEWPORTS) {
   await pg.close();
 }
 
+// ================= Build your own checks =================
+{
+  const fails = [];
+  const note = (c, m) => { if (!c) fails.push(m); };
+  // reduced motion so the scroll-scene transforms do not inflate scrollWidth
+  const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+  const pg = await ctx.newPage();
+  const errs = [];
+  pg.on('pageerror', e => errs.push(e.message));
+  pg.on('console', m => { if (m.type() === 'error' && !/ERR_CERT|fonts\.g/.test(m.text())) errs.push('C:' + m.text()); });
+  const press = id => pg.$eval('[data-mod="' + id + '"]', e => e.getAttribute('aria-pressed'));
+  const dis = id => pg.$eval('[data-mod="' + id + '"]', e => e.getAttribute('aria-disabled'));
+  const pressed = () => pg.$$eval('.mod', els => els.filter(e => e.getAttribute('aria-pressed') === 'true').map(e => e.getAttribute('data-mod')).sort());
+  const click = async id => { await pg.click('[data-mod="' + id + '"]'); await pg.waitForTimeout(90); };
+  const same = (a, b2) => a.slice().sort().join(',') === b2.slice().sort().join(',');
+  try {
+    await pg.goto(BASE, { waitUntil: 'load' }); await pg.waitForTimeout(400);
+    // coupling: network -> firewall; firewall off -> both off
+    if (await press('network') !== 'true') await click('network');
+    note(await press('network') === 'true' && await press('firewall') === 'true', 'network did not pull in firewall');
+    await click('firewall');
+    note(await press('firewall') !== 'true' && await press('network') !== 'true', 'clearing firewall did not clear network');
+    // active defence prerequisite
+    for (const id of ['compliance', 'firewall', 'network']) { if (await press(id) === 'true') await click(id); }
+    note(await dis('defence') === 'true', 'active defence not disabled with no prerequisite');
+    await click('dlp');
+    note(await dis('defence') === 'false', 'active defence not enabled after DLP');
+    await click('defence');
+    note(await press('defence') === 'true', 'active defence did not select');
+    await click('dlp');
+    note(await press('defence') !== 'true' && await dis('defence') === 'true', 'active defence not cleared when last prerequisite cleared');
+    // Comply suggestion + choose
+    await pg.reload({ waitUntil: 'load' }); await pg.waitForTimeout(300);
+    await click('network'); // {compliance, firewall, network} = Comply
+    note((await pg.$eval('#buildSuggest', e => e.textContent)).indexOf('Comply') !== -1, 'Comply suggestion missing');
+    await pg.click('#buildSuggest .build-choose'); await pg.waitForTimeout(120);
+    note(same(await pressed(), ['compliance', 'firewall', 'network']), 'Choose Comply left wrong modules');
+    // Operate
+    await pg.reload({ waitUntil: 'load' }); await pg.waitForTimeout(300);
+    await click('compliance'); await click('firewall'); await click('logs');
+    note((await pg.$eval('#buildSuggest', e => e.textContent)).indexOf('Operate') !== -1, 'Operate suggestion missing');
+    await pg.click('#buildSuggest .build-choose'); await pg.waitForTimeout(120);
+    note(same(await pressed(), ['dlp', 'fim', 'logs']), 'Choose Operate left wrong modules');
+    // Complete on five modules
+    await pg.reload({ waitUntil: 'load' }); await pg.waitForTimeout(300);
+    for (const id of ['compliance', 'firewall', 'logs', 'dlp', 'forensics']) { if (await press(id) !== 'true') await click(id); }
+    note((await pg.$eval('#buildSuggest', e => e.textContent)).indexOf('Complete') !== -1, 'Complete suggestion missing on five modules');
+    // quote CTA fills the field and it is in the form data
+    await pg.reload({ waitUntil: 'load' }); await pg.waitForTimeout(300);
+    await click('network'); // compliance, firewall, network
+    await pg.selectOption('#buildSize', '500');
+    await pg.click('#buildQuote'); await pg.waitForTimeout(150);
+    const expected = 'Build your own, up to 500 agents: Compliance and hardening, Firewall governance, Network discovery and topology';
+    const bf = await pg.$eval('#buildField', e => e.value);
+    note(bf === expected, 'build field text wrong: ' + bf);
+    const fd = await pg.evaluate(() => new URLSearchParams(new FormData(document.getElementById('demoForm'))).get('build'));
+    note(fd === expected, 'build not in form data');
+    const fleet = await pg.$eval('#demoForm select[name="fleet_size"]', e => e.value);
+    note(fleet === 'Up to 500', 'fleet_size not set from build size: ' + fleet);
+    // build field empty when opened from elsewhere (fresh reload, no build click)
+    await pg.reload({ waitUntil: 'load' }); await pg.waitForTimeout(200);
+    note(await pg.$eval('#buildField', e => e.value) === '', 'build field not empty by default');
+    // no price anywhere on the page
+    const body = await pg.evaluate(() => document.body.innerText);
+    note(!/\$\s?\d|\d\s?(USD|EUR)|per agent a year/i.test(body), 'a price pattern appears on the page');
+    // no horizontal overflow at three widths with a selection active
+    for (const w of [360, 768, 1440]) {
+      await pg.setViewportSize({ width: w, height: 900 }); await pg.waitForTimeout(150);
+      await pg.evaluate(() => document.getElementById('build-panel').scrollIntoView());
+      await pg.waitForTimeout(120);
+      const ov = await pg.evaluate(() => ({ sw: document.documentElement.scrollWidth, iw: window.innerWidth }));
+      note(ov.sw <= ov.iw + 1, 'build overflow at ' + w + ' (' + ov.sw + '>' + ov.iw + ')');
+    }
+    note(errs.length === 0, 'build js errors: ' + errs.slice(0, 2).join(' | '));
+  } catch (e) { fails.push('EXC ' + e.message); }
+  const pass = fails.length === 0;
+  results.push({ key: 'build', name: 'build-your-own', pass, fails });
+  console.log(`${pass ? 'PASS' : 'FAIL'} ${'build'.padEnd(10)} build-your-own${pass ? '' : '  -> ' + fails.join('; ')}`);
+  await ctx.close();
+}
+
 await b.close();
 
 const failed = results.filter(r => !r.pass);
