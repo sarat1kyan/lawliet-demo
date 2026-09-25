@@ -32,7 +32,7 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
 <link rel="preload" as="image" href="/assets/img/brand/mark-512.webp" type="image/webp" imagesrcset="/assets/img/brand/mark-512.webp 1x, /assets/img/brand/mark-1024.webp 2x">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
 <link rel="stylesheet" href="/assets/css/tokens.css?v=7">
-<link rel="stylesheet" href="/assets/css/site.css?v=8">
+<link rel="stylesheet" href="/assets/css/site.css?v=9">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Lawliet","applicationCategory":"SecurityApplication","operatingSystem":"Linux, macOS, Windows","description":"Self-hosted security and compliance console. Compliance scanning with per-control evidence, hardening with approval and rollback, network discovery, firewall analysis, file integrity monitoring, data loss prevention, forensics and SIEM forwarding. Runs on your own servers, offline.","url":"https://justlawliet.net/"}
 </script>
@@ -427,8 +427,8 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
   <div class="wrap">
     <div class="sec-head" data-rv>
       <span class="eyebrow">Pricing</span>
-      <h2>Three suites. Any size.</h2>
-      <p class="lead">Every suite runs on your own servers and is quoted for your estate. No public prices.</p>
+      <h2>Three suites, or build your own.</h2>
+      <p class="lead">Every plan runs on your own servers and is quoted for your estate. A suite always costs less than buying its modules one by one, so a suite is the better value when it fits; build your own when you need less or a different mix. No public prices.</p>
     </div>
 
     <div class="suites">
@@ -467,28 +467,82 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
       </article>
     </div>
 
+    <p class="build-hint" data-rv>Need less, or a different mix? <a href="#build-panel">Build your own</a></p>
+
     <p class="includes" data-rv><b>Every suite includes:</b> review queue, evidence bundles, SIEM forwarding to Splunk, Sentinel and more, role-based access, four-eyes approval, two-factor sign-in, audit trail, all updates, and email support (next business day).</p>
     <p class="sizes-line" data-rv>Sized for up to 30, 100, 500, 1,000 or 3,000 agents, or every host with a site licence. Each suite is sized on its own.</p>
 
     <div class="matrix-wrap" data-rv>
       <table class="matrix">
-        <thead><tr><th scope="col">Module</th><th scope="col">Comply</th><th scope="col">Operate</th><th scope="col">Complete</th></tr></thead>
+        <thead><tr><th scope="col">Module</th><th scope="col">Comply</th><th scope="col">Operate</th><th scope="col">Complete</th><th scope="col">Build your own</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Compliance and drift</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">Hardening</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">Scheduled reports</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">Network discovery</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">Firewall review</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">Log collection and detection</th><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">File integrity monitoring</th><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">Data loss prevention</th><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">Forensics</th><td class="c"></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">Active defence</th><td class="c"></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">Review queue</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">Evidence bundles</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
-          <tr><th scope="row">SIEM forwarding</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
+          <tr><th scope="row">Compliance and drift</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c choose">choose</td></tr>
+          <tr><th scope="row">Hardening</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c choose">choose</td></tr>
+          <tr><th scope="row">Scheduled reports</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c choose">choose</td></tr>
+          <tr><th scope="row">Network discovery</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c choose">choose <sup>1</sup></td></tr>
+          <tr><th scope="row">Firewall review</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c choose">choose</td></tr>
+          <tr><th scope="row">Log collection and detection</th><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c choose">choose</td></tr>
+          <tr><th scope="row">File integrity monitoring</th><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c choose">choose</td></tr>
+          <tr><th scope="row">Data loss prevention</th><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c choose">choose</td></tr>
+          <tr><th scope="row">Forensics</th><td class="c"></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c choose">choose</td></tr>
+          <tr><th scope="row">Active defence</th><td class="c"></td><td class="c"></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c choose">choose <sup>2</sup></td></tr>
+          <tr><th scope="row">Review queue</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
+          <tr><th scope="row">Evidence bundles</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
+          <tr><th scope="row">SIEM forwarding</th><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td><td class="c yes"><svg><use href="#i-check"/></svg></td></tr>
         </tbody>
       </table>
+      <ol class="matrix-notes">
+        <li><sup>1</sup> Network discovery and topology is available only together with Firewall governance.</li>
+        <li><sup>2</sup> Active defence needs at least one of Forensics and hunting, Log collection and detection, Data loss prevention or File integrity monitoring.</li>
+      </ol>
+    </div>
+
+    <div class="build" id="build-panel" data-rv>
+      <div class="build-head">
+        <h3>Build your own</h3>
+        <p>Pick exactly the modules you need. Every build includes the same base as the suites, is sized with the same tiers, and its licence carries exactly the modules you choose. A suite always costs less than buying its modules one by one, so build your own when you need less, or a different mix.</p>
+      </div>
+      <div class="build-grid">
+        <div class="build-modules">
+          <fieldset class="build-group">
+            <legend>Compliance</legend>
+            <button type="button" class="mod" data-mod="compliance" aria-pressed="false"><span class="mod-name">Compliance and hardening</span><span class="mod-desc">Scans against CIS, NIST, ISO 27001, PCI DSS and more; drift; hardening with approval and rollback; scheduled reports and evidence.</span></button>
+            <button type="button" class="mod" data-mod="firewall" aria-pressed="false"><span class="mod-name">Firewall governance</span><span class="mod-desc">Rule-set review and optimisation for 14 firewall vendors; export for import; live apply with four-eyes approval; monitoring of connected firewalls. Includes a number of firewalls that grows with the size tier.</span></button>
+            <button type="button" class="mod" data-mod="network" aria-pressed="false"><span class="mod-name">Network discovery and topology</span><span class="mod-desc">Discovery across your segments, device inventory, topology.</span><span class="mod-rule">Available only together with Firewall governance.</span></button>
+          </fieldset>
+          <fieldset class="build-group">
+            <legend>Detection</legend>
+            <button type="button" class="mod" data-mod="logs" aria-pressed="false"><span class="mod-name">Log collection and detection</span><span class="mod-desc">Collection, search, Sigma and correlation rules, alerts, entity risk, dashboards.</span></button>
+            <button type="button" class="mod" data-mod="dlp" aria-pressed="false"><span class="mod-name">Data loss prevention</span><span class="mod-desc">Custom policies, data discovery and where-is-this-file, blocking of USB, uploads, print and email on Linux.</span></button>
+            <button type="button" class="mod" data-mod="fim" aria-pressed="false"><span class="mod-name">File integrity monitoring</span><span class="mod-desc">Custom policies, on-host baseline and verify, the process behind each change.</span></button>
+          </fieldset>
+          <fieldset class="build-group">
+            <legend>Response</legend>
+            <button type="button" class="mod" data-mod="forensics" aria-pressed="false"><span class="mod-name">Forensics and hunting</span><span class="mod-desc">Live response, triage and memory capture, case timeline, fleet IOC and YARA hunts.</span></button>
+            <button type="button" class="mod" data-mod="defence" aria-pressed="false" aria-disabled="true"><span class="mod-name">Active defence</span><span class="mod-desc">Isolate, block, quarantine, kill and disable on the host, each with undo and four-eyes approval.</span><span class="mod-rule">Needs at least one of Forensics and hunting, Log collection and detection, Data loss prevention or File integrity monitoring.</span></button>
+          </fieldset>
+        </div>
+        <aside class="build-summary" aria-live="polite">
+          <h4>Your build</h4>
+          <ul class="build-chosen" id="buildChosen"></ul>
+          <p class="build-note" id="buildNote" hidden></p>
+          <div class="build-size">
+            <label for="buildSize">Size</label>
+            <select id="buildSize">
+              <option value="30">Up to 30 agents</option>
+              <option value="100">Up to 100 agents</option>
+              <option value="500">Up to 500 agents</option>
+              <option value="1000">Up to 1,000 agents</option>
+              <option value="3000">Up to 3,000 agents</option>
+              <option value="site">Site licence, every host</option>
+            </select>
+          </div>
+          <p class="build-base">Every build includes review queue, evidence bundles, SIEM forwarding, role-based access, four-eyes approval, two-factor sign-in, audit trail, all updates and email support.</p>
+          <p class="build-min">Every build has a minimum size. For a very small selection a suite is usually the better fit.</p>
+          <div class="build-suggest" id="buildSuggest" hidden></div>
+          <a class="btn btn-primary" id="buildQuote" href="#demo">Ask for a quote for this build</a>
+        </aside>
+      </div>
     </div>
 
     <div class="other-buy" data-rv>
@@ -557,12 +611,13 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
       <div class="form-wrap booking-closed">
       <form class="form glass-rail" name="demo-request" method="POST" data-netlify="true" netlify-honeypot="company-website" id="demoForm" action="/thanks.html" novalidate inert>
         <input type="hidden" name="form-name" value="demo-request">
+        <input type="hidden" name="build" id="buildField" value="">
         <p class="hp"><label>Leave this empty: <input name="company-website" tabindex="-1" autocomplete="off"></label></p>
         <div class="field"><label for="name">Full name</label><input id="name" name="name" type="text" required autocomplete="name"><span class="err" id="err-name" aria-live="polite"></span></div>
         <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" required autocomplete="email"><span class="err" id="err-email" aria-live="polite"></span></div>
         <div class="field"><label for="company">Organisation</label><input id="company" name="company" type="text" required autocomplete="organization"><span class="err" id="err-company" aria-live="polite"></span></div>
         <div class="field"><label for="role">Role</label><input id="role" name="role" type="text" autocomplete="organization-title"></div>
-        <div class="field"><label for="fleet">Hosts to monitor</label><select id="fleet" name="fleet_size">
+        <div class="field"><label for="fleet-size">Hosts to monitor</label><select id="fleet-size" name="fleet_size">
           <option value="">Choose a range</option>
           <option>Up to 30</option><option>Up to 100</option><option>Up to 500</option><option>Up to 1,000</option><option>Up to 3,000</option><option>More than 3,000</option><option>Not sure yet</option>
         </select></div>
@@ -609,5 +664,6 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
 <script src="/assets/js/vendor/ScrollTrigger.min.js?v=7" defer></script>
 <script src="/assets/js/vendor/lenis.min.js?v=7" defer></script>
 <script src="/assets/js/main.js?v=9" defer></script>
+<script src="/assets/js/build.js?v=9" defer></script>
 </body>
 </html>
