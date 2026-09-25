@@ -4,6 +4,59 @@
   "updated": "2026-09-26",
   "releases": [
     {
+      "version": "1.5.0",
+      "date": "2026-09-26",
+      "channel": "stable",
+      "codename": null,
+      "title": "Proof of protection, response playbooks, attack stories and a module-wide audit",
+      "summary": "Every module was audited against known answers on real hosts and distributions, and eight features were built on what that proved: the console now shows, per host, that detection, file monitoring and DLP were proven to work minutes ago, and turns an alert into a contained, investigated incident behind four-eyes approval.",
+      "sections": [
+        {
+          "heading": "New",
+          "items": [
+            "Proof of protection: every 6 hours each host runs harmless known-answer drills. A marked log line must reach detections, a canary file must produce its file events, a canary secret must be detected (and refused on Linux with enforcement). The console shows 'proven N minutes ago' per host and module, or why not. Drill events never become incidents.",
+            "Starter detections: six rules enabled on every installation - brute force against a host, password spraying from one address, local account created, account added to an administrators group, repeated privilege escalation failures, a host that stopped sending logs. Edits and deletions stand.",
+            "Response playbooks: on a detection, DLP incident or hunt hit, open an investigation, collect live response, contain, add a review item and notify. Containment always goes through four-eyes approval, runs once approved and can be undone. Dry run shows what each step would do. Two examples ship switched off.",
+            "Attack stories: one timeline per host across detections, DLP, file monitoring, hunt hits and containment, ranked, with MITRE techniques and accounts, and one click to open an investigation from it.",
+            "Fix plan on every compliance scan: failing controls ranked by severity against effort, the score after each fix, and Start hardening for the selection (approval required, every change can be rolled back).",
+            "Exposure: what the internet can reach on each host, decided first-match through each firewall rule set, next to how hardened that host is.",
+            "Wall mode for the operations room, refreshing every 30 seconds and saying when it last did.",
+            "Approval notifications: a pending four-eyes request goes out on the configured webhook and email with a link."
+          ]
+        },
+        {
+          "heading": "Fixed",
+          "items": [
+            "Containment: Linux isolation let the host's own allow rules and all IPv6 through and blocked DNS for a server named by host name; Windows isolation lost to existing allow rules; macOS rules could be overridden; an action could be undone twice; a quarantine undo restored the wrong file. A block can no longer target loopback, the host's own address or the server.",
+            "Firewall: the iptables parser dropped negation, so applies could write inverted rules; negated addresses produced false shadow findings; concurrent applies of one plan both ran; an interrupted apply stayed stuck.",
+            "Compliance: many checks gave the same answer on every host or a wrong one on common distributions, and several remediations or rollbacks did not restore the host (one PCI remediation cut the host off from the server; ufw remediations could lock out SSH). Real scans reported every control as not remediable.",
+            "Detections and logs: one rule PostgreSQL rejected stopped all detection; every source now shares one event vocabulary (old names still match); regular expressions the store cannot run are refused at save; grouping, cooldown, count caps, entity risk and several parsers were corrected.",
+            "DLP: a restarted Linux agent left the host unprotected until the next scan; the password pattern flagged paths, variables and masks and missed JSON forms; system logs and the agent's own files were scanned by default.",
+            "File monitoring and forensics: a hash algorithm change reported every file modified; late results were dropped; evidence was filed under the host name the agent claimed; downloads were not re-hashed; IPv4-mapped IOCs never matched.",
+            "Authentication: login and 2FA guessing are rate limited; logout, disabling an account and SSO demotion now end sessions; refresh tokens rotate; reset links die with a password change; login timing no longer reveals usernames.",
+            "Dashboard 'Attention required' now counts open critical and high work and waiting approvals."
+          ]
+        }
+      ],
+      "fixed": [],
+      "verification": {
+        "proven": [
+          "On a real Debian 12 host enrolled with the console's own install command and upgraded to the new agent: all six proof-of-protection drills proven; the starter rules fired on a real brute force, password spray, new local account and administrators group change; DLP blocking was back one second after an agent restart.",
+          "A real password spray ran the SSH playbook from the scheduled detection sweep: the investigation was opened, auth logs collected and the block waited for a second signature.",
+          "Start hardening from a fix plan created an approval-gated hardening run; attack stories, exposure, fix plan and wall mode were checked in a browser at desktop and phone width.",
+          "Upgrade from 1.4.2 on PostgreSQL, and the full test suite on SQLite and PostgreSQL."
+        ],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "Database migrations run on start. Upgrade agents to 2.1.1 for the DLP, drill and isolation changes.",
+        "Six starter detection rules are enabled on the first start after the upgrade.",
+        "Refresh tokens rotate: password reset links sent before the upgrade stop working.",
+        "Some privilege controls in PCI, HIPAA, NIST and ISO 27701 now report partial rather than pass on a clean host, so scores on those frameworks change."
+      ]
+    },
+    {
       "version": "1.4.2",
       "date": "2026-09-26",
       "channel": "stable",
