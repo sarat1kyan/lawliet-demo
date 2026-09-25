@@ -32,7 +32,7 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
 <link rel="preload" as="image" href="/assets/img/brand/mark-512.webp" type="image/webp" imagesrcset="/assets/img/brand/mark-512.webp 1x, /assets/img/brand/mark-1024.webp 2x">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
 <link rel="stylesheet" href="/assets/css/tokens.css?v=7">
-<link rel="stylesheet" href="/assets/css/site.css?v=7">
+<link rel="stylesheet" href="/assets/css/site.css?v=8">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Lawliet","applicationCategory":"SecurityApplication","operatingSystem":"Linux, macOS, Windows","description":"Self-hosted security and compliance console. Compliance scanning with per-control evidence, hardening with approval and rollback, network discovery, firewall analysis, file integrity monitoring, data loss prevention, forensics and SIEM forwarding. Runs on your own servers, offline.","url":"https://justlawliet.net/"}
 </script>
@@ -90,13 +90,19 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
 <!-- ===== Scene 1: hero reticle zoom ===== -->
 <section class="hero" id="hero" aria-label="Lawliet">
   <div class="hero-console" id="heroConsole" aria-hidden="true">
-    <div class="fac glass">
-      <div class="fac-top"><span class="fac-title">Overview</span><span class="chip ex">Example</span></div>
-      <div class="fac-grid">
-        <svg class="fac-ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/><circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-dasharray="97.39" stroke-dashoffset="28.24" transform="rotate(-90 18 18)"/></svg>
-        <div class="fac-tiles"><span></span><span></span><span></span><span></span></div>
+    <div class="fac glass countdown">
+      <span class="cd-eyebrow">Launching</span>
+      <div class="cd-date">20.10.2026</div>
+      <div class="cd-clock" id="cdClock">
+        <div class="cd-cell"><b data-cd="d">--</b><span>days</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-cell"><b data-cd="h">--</b><span>hrs</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-cell"><b data-cd="m">--</b><span>min</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-cell"><b data-cd="s">--</b><span>sec</span></div>
       </div>
-      <div class="fac-rows"><span></span><span></span><span></span></div>
+      <p class="cd-note">Hardened by design. The full console goes live on launch day.</p>
     </div>
   </div>
   <div class="hero-cam" id="heroCam">
@@ -548,7 +554,8 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
       <p class="demo-mail">Prefer email? <a href="mailto:info@justlawliet.net">info@justlawliet.net</a></p>
     </div>
     <div class="demo-form-col" data-rv>
-      <form class="form glass-rail" name="demo-request" method="POST" data-netlify="true" netlify-honeypot="company-website" id="demoForm" action="/thanks.html" novalidate>
+      <div class="form-wrap booking-closed">
+      <form class="form glass-rail" name="demo-request" method="POST" data-netlify="true" netlify-honeypot="company-website" id="demoForm" action="/thanks.html" novalidate inert>
         <input type="hidden" name="form-name" value="demo-request">
         <p class="hp"><label>Leave this empty: <input name="company-website" tabindex="-1" autocomplete="off"></label></p>
         <div class="field"><label for="name">Full name</label><input id="name" name="name" type="text" required autocomplete="name"><span class="err" id="err-name" aria-live="polite"></span></div>
@@ -565,6 +572,12 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
         <div class="field full"><label for="message">What do you need to prove?</label><textarea id="message" name="message" rows="3"></textarea></div>
         <div class="actions"><small>We reply within one working day.</small><button class="btn btn-primary" type="submit" id="formBtn">Request a demo</button></div>
       </form>
+        <div class="form-veil">
+          <svg class="fv-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <b>Booking opens in one week</b>
+          <p>We are finishing the launch. Demo booking opens closer to the release - check back in about a week.</p>
+        </div>
+      </div>
       <div class="sent glass-rail" id="formSent" hidden tabindex="-1">
         <h3>Request received.</h3>
         <p>Thank you. We will reply to the address you gave, usually within one working day.</p>
@@ -595,6 +608,6 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
 <script src="/assets/js/vendor/gsap.min.js?v=7" defer></script>
 <script src="/assets/js/vendor/ScrollTrigger.min.js?v=7" defer></script>
 <script src="/assets/js/vendor/lenis.min.js?v=7" defer></script>
-<script src="/assets/js/main.js?v=7" defer></script>
+<script src="/assets/js/main.js?v=8" defer></script>
 </body>
 </html>

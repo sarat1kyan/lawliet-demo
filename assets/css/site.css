@@ -419,3 +419,22 @@
 @media (prefers-reduced-motion: reduce) {
   .scroll-hint { display: none; }
 }
+
+/* ================= Launch countdown (hero reveal) ================= */
+.countdown { align-items: flex-start; justify-content: center; gap: 14px; }
+.cd-eyebrow { font-family: var(--display); font-weight: 500; text-transform: uppercase; letter-spacing: 0.34em; padding-left: 0.34em; color: var(--muted); font-size: clamp(11px, 1.4vw, 14px); }
+.cd-date { font-family: var(--display); font-weight: 600; color: var(--ink-strong); font-size: clamp(30px, 5vw, 58px); line-height: 1; letter-spacing: 0.02em; }
+.cd-clock { display: flex; align-items: flex-start; gap: clamp(6px, 1.2vw, 16px); }
+.cd-cell { display: grid; justify-items: center; }
+.cd-cell b { font-family: var(--mono); font-weight: 500; font-size: clamp(22px, 3.6vw, 46px); color: var(--ink-strong); font-variant-numeric: tabular-nums; line-height: 1; }
+.cd-cell span { font-family: var(--display); font-size: clamp(10px, 1vw, 12px); text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-top: 7px; }
+.cd-sep { font-family: var(--mono); font-size: clamp(18px, 2.8vw, 36px); color: var(--muted-2); line-height: 1; }
+.cd-note { color: var(--muted); font-size: clamp(12px, 1.3vw, 15px); margin-top: 2px; max-width: 42ch; }
+
+/* ================= Booking closed veil ================= */
+.form-wrap { position: relative; }
+.booking-closed .form { opacity: 0.35; filter: grayscale(0.7); pointer-events: none; user-select: none; }
+.form-veil { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; text-align: center; gap: 10px; padding: 28px; border-radius: 4px; background: rgba(2, 3, 4, 0.55); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+.form-veil .fv-lock { width: 34px; height: 34px; color: var(--accent); }
+.form-veil b { font-family: var(--display); font-weight: 600; font-size: clamp(18px, 2vw, 24px); color: var(--ink-strong); }
+.form-veil p { color: var(--muted); font-size: 14px; max-width: 34ch; }
