@@ -4,6 +4,55 @@
   "updated": "2026-09-25",
   "releases": [
     {
+      "version": "1.4.1",
+      "date": "2026-09-25",
+      "channel": "stable",
+      "codename": null,
+      "title": "Build-your-own licences, and licence changes that reach the hosts",
+      "summary": "A licence can now carry exactly the modules a customer chose instead of a whole suite. Changing licence now takes effect on the hosts as well as on the screens: a module a new key drops stops running on the agents, and one it adds starts.",
+      "sections": [
+        {
+          "heading": "Licensing",
+          "items": [
+            "New build-your-own licence: the platform (dashboard, agents, review queue, evidence bundles, audit trail, SIEM forwarding) plus exactly the chosen modules, at the same sizes as the suites.",
+            "Two combinations are not sold and are refused when a key is activated: Network discovery without Firewall governance, and Active defence without one of Forensics, Log collection, DLP or FIM.",
+            "Settings, Licence lists the modules of the active build."
+          ]
+        },
+        {
+          "heading": "Licence changes on the hosts",
+          "items": [
+            "Activating a newer key applies it at once and after a restart: modules it adds open and modules it drops close. An older key is refused, so a licence cannot be rolled back.",
+            "Queued work of a module no longer licensed (scans, hunts, firewall reads, containment) is cancelled instead of delivered, with the reason, and that module's schedules do not run.",
+            "Agents receive no DLP or FIM policies for a module no longer licensed, so they release DLP blocking and device controls and stop watching FIM paths within five minutes.",
+            "DLP incidents, FIM events and topology still reported by hosts for such a module are accepted and not stored.",
+            "Containment done under an earlier licence can still be undone: with active defence dropped, the Defence page lists what is still in place on hosts with its undo, while new containment is refused."
+          ]
+        }
+      ],
+      "fixed": [
+        "After a licence dropped active defence, a blocked address or an isolated host could not be released from the console.",
+        "A licence of a type the platform did not recognise opened every module; it now opens only what it lists.",
+        "A licence carrying two suites was shown as only the first on Settings, and an engagement's phase was not shown there."
+      ],
+      "verification": {
+        "proven": [
+          "On a real Debian 12 host running the agent, with keys issued as for a customer: under Complete, curl was denied the protected file; after a build key without DLP the host released blocking within five minutes and file changes and DLP reports were no longer stored; a newer key with DLP and FIM brought blocking and file monitoring back within five minutes.",
+          "Work queued before a licence change was cancelled with its reason and never reached the host, while compliance checks under the new key ran and completed.",
+          "An older key was refused, and the licence in force survived a server restart.",
+          "An address blocked and a host isolated under Complete were both released after defence was dropped, from the API and from the console; new containment was refused.",
+          "Every route checked against each build tested, and the activation rules on all 256 module combinations."
+        ],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "Database migration 0060 runs on upgrade.",
+        "Build-your-own keys need 1.4.1; update before activating one.",
+        "No change for existing keys."
+      ]
+    },
+    {
       "version": "1.4.0",
       "date": "2026-09-25",
       "channel": "stable",
