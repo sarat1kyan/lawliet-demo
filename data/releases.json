@@ -1,0 +1,614 @@
+{
+  "schema": 1,
+  "product": "Lawliet",
+  "updated": "2026-09-25",
+  "releases": [
+    {
+      "version": "1.4.0",
+      "date": "2026-09-25",
+      "channel": "stable",
+      "codename": null,
+      "title": "Every module rebuilt and proven against real targets",
+      "summary": "This release answers one question for every module: is it really doing its job. Each module was rebuilt against a real target where one exists, and the notes say how each claim was proven. Licensing moves to three suites, the log platform gains ClickHouse, a pipe query language and Sigma rules, and firewall, DLP, FIM, forensics and active defence all gain real enforcement and undo.",
+      "sections": [
+        {
+          "heading": "Licensing",
+          "items": [
+            "Editions are replaced by three suites, each sized for 30, 100, 500, 1000 or 3000 hosts: Comply (compliance and hardening, network, firewall), Operate (log collection and detection, DLP, FIM) and Complete (everything, including forensics and active defence).",
+            "Agents, the dashboard, the audit trail and SIEM forwarding are included in every suite.",
+            "A licence can carry a second suite alongside the first, for example Comply for the whole estate plus Operate for 100 hosts."
+          ]
+        },
+        {
+          "heading": "SIEM and log collection",
+          "items": [
+            "Logs are stored in ClickHouse in the Docker deployment (new `clickhouse` service, partitioned by day with retention by TTL), or in the SQL database otherwise; both answer every query the same way.",
+            "Query language with pipes: `stats`, `where`, `top`, `timechart`, `table`, `sort`, `head` and `dedup`, with quoted wildcards, backslash escapes, CIDR of any length, regex and `date_hour`.",
+            "Built-in normalisers map Windows Security, Sysmon, PowerShell and Defender, auditd, Linux daemons, web servers, Squid, DNS servers and ten firewall families onto one field catalogue.",
+            "229 SigmaHQ rules ship ready to install (disabled by default), and a Sigma rule can be pasted in and translated.",
+            "New rule kinds (pipeline, distinct count, sequences of three or more steps, unusual hours), and rules gain exceptions, time-limited suppressions, ATT&CK ids, tags, and versions with restore.",
+            "A rule sandbox runs an unsaved rule against pasted log lines without touching live data.",
+            "Alerts are triaged in the review queue, escalate into investigations, and carry the users, hosts and addresses they concern.",
+            "Entity risk ranks users, hosts and addresses by severity, age and breadth of ATT&CK tactics; an ATT&CK coverage view ships with MITRE ATT&CK Enterprise 19.2.",
+            "The console is reorganised under Logs: Search, Dashboards (five built-in, copyable), Alerts, Rules, Sigma, Entities and ATT&CK, with saved searches.",
+            "SIEM forwarding now sends account lockout, API key issued, drift, defence outcome, agent registered, agent offline, review item and detection alert events."
+          ]
+        },
+        {
+          "heading": "Firewall",
+          "items": [
+            "Vendor-neutral policy engine: finds shadowed, redundant, generalised and correlated rules, exposure and hygiene issues; reads and writes fourteen vendor formats.",
+            "Rule-set optimisation with a proof of equivalence by packet probing, minimal diffs, and policy versions and baselines.",
+            "Live connectors with backup, safety net, change, verify and confirm: MikroTik, host firewalls through the agent (iptables and nftables), Junos, Cisco ASA, FortiGate, PAN-OS, Sophos SFOS, Check Point, SonicWall and Cisco FTD through FMC. Each uses the device's own safety net (for example Junos commit confirmed or ASA `reload in`), so a change that locks you out restores itself.",
+            "Applying a change to a device requires four-eyes approval.",
+            "Real-time monitoring of connected devices: drift from the approved policy, rule counters and loss of contact; rule hits are counted from firewall logs when a device keeps no counters.",
+            "Console rebuilt: devices, policy, findings, one-click or hand-picked optimisation with diff and proof, native export, four-eyes apply with live progress, versions and monitor."
+          ]
+        },
+        {
+          "heading": "DLP",
+          "items": [
+            "One content engine shared by the server and agents: keywords, regex, built-in detectors, exact file match, partial-document fingerprints, file type, name and size.",
+            "Text is extracted from docx, xlsx, pptx, PDF and zip files, with limits that stop archive bombs.",
+            "Policies gain per-channel actions, agent scope, exceptions and `egress_processes`.",
+            "Linux prevention: the kernel denies egress processes (browsers, mail clients, curl, rclone, sync clients) access to sensitive files, while ordinary tools can still read them.",
+            "Linux prevention: files written to removable media or network shares are scanned and quarantined; USB can be blocked, made read-only or allow-listed; matching print jobs are cancelled; uploads are blocked by destination domain; the clipboard is cleared. Every control is undone when its policy is removed.",
+            "Discovery scans (on demand and scheduled), a sensitive-data inventory, and \"where is this file\" by hash, name or fingerprint across the fleet."
+          ]
+        },
+        {
+          "heading": "FIM",
+          "items": [
+            "The agent honours every policy field: includes, excludes, patterns, recursion, event types, schedule, hashing and size cap.",
+            "Baseline and verify run on the host; permission and owner changes are their own events; the process that made a change is recorded (Linux audit, with labelled fallbacks).",
+            "Windows registry keys can be monitored, paths are validated per operating system, 13 policy templates ship, and a reviewed change can be accepted into the baseline."
+          ]
+        },
+        {
+          "heading": "Forensics",
+          "items": [
+            "Live response collectors: processes, connections, users and logins, persistence, modules, software, recent files, shell and browser history, authentication and event logs.",
+            "File collection and triage packages over resumable chunked upload, with end-to-end SHA-256 and chain of custody.",
+            "Memory capture where avml or winpmem is present, a super-timeline per case, and fleet IOC hunts by hash, name, address, domain, process, registry key or YARA rule, with results filed into the case and the review queue.",
+            "Case workspace with Live response, Artifacts, Timeline, Triage, Hunt and Response tabs."
+          ]
+        },
+        {
+          "heading": "Active defence",
+          "items": [
+            "Containment can be undone: release an isolation (the host's firewall state saved at isolation is restored exactly), unblock an address, re-enable an account.",
+            "A quarantined file can be restored with its mode and owner, and a configuration file rolled back to its hardening backup.",
+            "Agents refuse custom commands unless the server's signed policy allows them."
+          ]
+        },
+        {
+          "heading": "Compliance and hardening",
+          "items": [
+            "Every Linux check was run check, fix, check, rollback, check on Debian 12, Ubuntu 24.04 and Rocky 9, and every stored verdict matched running the check on the host.",
+            "Rollback now restores the exact bytes, mode and owner of every file a hardening step touched; steps run one at a time, and a failed rollback is reported as `rollback_failed`.",
+            "Evidence exports name the host of every result and carry per-item and whole-document SHA-256 with an installation HMAC; `POST /evidence/verify` names exactly what changed.",
+            "Offline agents, scheduled-scan regressions, failed scans and expiring attestations now send notifications."
+          ]
+        },
+        {
+          "heading": "Agents and console",
+          "items": [
+            "Agents on all three platforms use one named, signed task framework; unsupported commands are answered instead of ignored, and each command times out on its own deadline.",
+            "Console: notification bell, flat glass panels on a darker ground, sidebar hide and show, drawers no longer hidden under the header, a new sign-in page with a theme switch, and the sandbox moved under Settings."
+          ]
+        }
+      ],
+      "fixed": [
+        "Security: read routes in compliance, evidence, firewall, forensics, active defence, DLP and FIM required only a login; each now needs its view permission (built-in roles already hold them).",
+        "Security: live hardening created through the API skipped four-eyes approval; it is now held for approval like one created in the console.",
+        "Security: redacted network topology exports still contained every address; they are now redacted.",
+        "Hardening ran the first framework that shared a control id (33 ids collide across frameworks), so a PCI DSS control could run a CIS fix, or send PowerShell to a Linux host; it now uses the scan's own framework.",
+        "Rollback could leave a host weaker than before (a commented default could become `PermitRootLogin yes`), and some rollbacks did nothing while reporting success; `POST /compliance/rollback` now queues a real rollback.",
+        "37 compliance checks gave the same answer regardless of the host (always pass, always fail, or never passable after their own fix).",
+        "Scheduled reports never sent mail, password reset always failed, and 2FA and password changes were not written to the audit trail.",
+        "Backups did not include the encryption keys, so restoring onto a new host broke every 2FA sign-in.",
+        "The review queue and evidence export were tied to the compliance module, so Operate licences lost them.",
+        "DLP: the agent never blocked; channel, keyword and severity settings were ignored on the agent; incidents were filed under the wrong policy; `POST /dlp/scans` did nothing; a scoped policy reached the whole fleet; card numbers written with spaces were missed.",
+        "DLP on Linux: the guard could hang on the first secret written to a USB stick, and files matched only by alert policies were denied to egress processes.",
+        "DLP on Linux: repeated blocked opens are now all counted (one incident per path, process and channel per minute, with the file's SHA-256), the USB incident names the process, policy changes and discovery scans now take effect at the agent's next check-in instead of the next scan cycle; a disabled block policy no longer keeps denying; a USB stick mounted after start-up is watched straight away.",
+        "Active defence on macOS replaced the host's whole pf ruleset when containing; a new address block silently lifted an existing isolation.",
+        "SIEM: `NOT` over a missing value answered differently in the two log stores; ClickHouse queries lost backslashes and returned counts as text.",
+        "SIEM: log ingest slowed as more sources were added; spike alerts carried no evidence; several list pages returned an error on SQLite once data existed.",
+        "Demo policies no longer reach real agents."
+      ],
+      "verification": {
+        "proven": [
+          "Proven on a real target (the real agent on a Debian container or VM, driven through the API or the console): SIEM ingest, search, Sigma and correlation on both log stores.",
+          "Firewall optimisation and four-eyes apply on iptables and a MikroTik CHR, including lockouts that restored themselves.",
+          "DLP on a real Linux kernel: curl denied a sensitive file by the kernel while cat and vim could read it; exceptions; a secret copied to a USB stick quarantined; USB block and read-only; print cancel; destination blocking; discovery and fingerprint location.",
+          "FIM events with process attribution, and on-host verify.",
+          "Forensic collectors, triage and memory capture with matching hashes; IOC hunts with exact hits.",
+          "Containment and its undo on iptables and local accounts.",
+          "Every Linux compliance check on Debian 12, Ubuntu 24.04 and Rocky 9: 0 mismatches between stored verdicts and the host."
+        ],
+        "not_proven": [
+          "Proven only against recorded device formats: the commercial firewall connectors (Junos, ASA, FTD through FMC, FortiGate, PAN-OS, Sophos, Check Point, SonicWall).",
+          "Proven only with the operating system simulated: every Windows collector, registry and firewall call; macOS pf, FSEvents and root-only collectors."
+        ]
+      },
+      "not_included": [
+        "DLP enforcement on macOS and Windows (those agents report it as not implemented; discovery and \"where is this file\" work there).",
+        "A Windows minifilter driver."
+      ],
+      "upgrade": [
+        "A new `clickhouse` service and `clickhouse_data` volume are added to the Docker deployment; set `CLICKHOUSE_PASSWORD` in `.env` if the ClickHouse port is ever published.",
+        "Collected logs are not part of the nightly database backup.",
+        "Database migrations 0045 to 0059 run on upgrade.",
+        "Existing licence keys keep working and are shown with their suite equivalent; no reissue is needed.",
+        "Read routes in seven modules now need their view permission; built-in roles already hold them, but check custom roles.",
+        "Live hardening created through the API now waits for four-eyes approval."
+      ]
+    },
+    {
+      "version": "1.3.4",
+      "date": "2026-09-24",
+      "channel": "stable",
+      "codename": null,
+      "title": "Log collection in Professional, remote agent removal, matte glass console",
+      "summary": "Log collection and detection move from Enterprise into Professional, and agents can now be decommissioned remotely. The console gets a matte glass redesign in both themes, and deleting an agent now needs a second approval.",
+      "sections": [
+        {
+          "heading": "Licensing",
+          "items": [
+            "Log collection and detection (the log store, search, detection rules and agent log shipping) are now the `log_collection` feature, included in Professional, Enterprise and the evaluation licence; forwarding to an external SIEM stays in Enterprise.",
+            "Existing keys need no reissue: a key's features merge with its edition's defaults.",
+            "The audit trail and application log stay in every edition, and are now described that way.",
+            "The licence page lists the features in effect, not only those printed in the key.",
+            "A one-time engagement licence covers one job's modules and host limit for a work window, followed by a read-only close-out in which only evidence export, reports and decommissioning work."
+          ]
+        },
+        {
+          "heading": "Agents",
+          "items": [
+            "Agents can be decommissioned remotely: a signed `agent_uninstall` command makes the agent report back, then remove its service, files and configuration, and its token is revoked.",
+            "The installers gained `--uninstall` (Linux, macOS) and `-Uninstall` (Windows) for hosts that will not check in."
+          ]
+        },
+        {
+          "heading": "Console",
+          "items": [
+            "Matte glass redesign: dark graphite glass over a near-black ground, with heavy blur, fine grain, quiet hairlines and square corners; light mode is frosted glass over a neutral ground.",
+            "Text contrast was measured over the brightest and darkest ground in both themes, table headers stay solid, dialogs are near-opaque, and `prefers-reduced-transparency` turns the blur off.",
+            "`DEMO_DATA_ENABLED=true` lets a lab or training installation seed and clear the sandbox dataset on any licence; off by default."
+          ]
+        }
+      ],
+      "fixed": [
+        "Deleting an agent was listed as a critical action but never asked for a second signature; deleting and decommissioning both require approval now.",
+        "A syslog source kept storing events after a downgrade or licence expiry, where nobody could read them; its lines are now dropped and counted.",
+        "The evaluation licence could not open the log data the demo dataset seeds."
+      ],
+      "verification": {
+        "proven": [],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": []
+    },
+    {
+      "version": "1.3.3",
+      "date": "2026-09-23",
+      "channel": "stable",
+      "codename": null,
+      "title": "Agent self-upgrade and platform updates work, and `.env` settings apply",
+      "summary": "Agents can upgrade themselves and platform updates from the feed verify again. Settings in `.env` that the containers were not receiving now reach them.",
+      "sections": [],
+      "fixed": [
+        "Earlier bundles lacked what agents and the server need to verify a release, so agents refused every self-upgrade and the server refused every feed update; both now verify and apply.",
+        "The log retention windows set in `.env` were not passed to the containers; they are now.",
+        "`AGENT_AUTO_UPGRADE_ENABLED` set in `.env` was not passed to the containers; it is now.",
+        "In lab mode, the update feed settings were not passed to the containers; they are now.",
+        "The `.env` template offered syslog-over-TLS settings that the Docker deployment cannot use; they are replaced by a note."
+      ],
+      "verification": {
+        "proven": [],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": []
+    },
+    {
+      "version": "1.3.2",
+      "date": "2026-09-23",
+      "channel": "stable",
+      "codename": null,
+      "title": "Licensing an installation by its fingerprint, end to end",
+      "summary": "An installation can now be delivered without a licence and activated with one issued for it: the operator sends the installation fingerprint and receives a key bound to that installation. The first sign-in, the activation screen and the installer all support this flow.",
+      "sections": [
+        {
+          "heading": "Licensing",
+          "items": [
+            "With no licence, or an expired one, the console opens an activation screen after the first sign-in, showing the installation fingerprint with Copy and Email buttons and a field for the key.",
+            "The installer prints the installation fingerprint and the next steps when a bundle has no licence.",
+            "An expired licence is judged by its date and shown as expired, instead of as a missing module on every screen.",
+            "The installation guide, quick start and installation reference describe the fingerprint flow."
+          ]
+        }
+      ],
+      "fixed": [
+        "An installation without a licence could not complete its first sign-in: changing the one-time password and enrolling 2FA were blocked by the licence check. Those steps, logout and approvals are now allowed without a licence."
+      ],
+      "verification": {
+        "proven": [],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "If you plan to use an installation-bound licence on an installation set up from a bundle older than 1.3.2, ask for a current bundle first."
+      ]
+    },
+    {
+      "version": "1.3.1",
+      "date": "2026-09-23",
+      "channel": "stable",
+      "codename": null,
+      "title": "Licence renewals, recovery codes, syslog ports and guides fixed",
+      "summary": "Fixes found by following the installation guide exactly as a customer would, installing with `./lawliet install` and updating with `./lawliet update`. Licence renewals now survive a restart, recovery codes work at sign-in, and syslog devices can reach a Docker deployment.",
+      "sections": [
+        {
+          "heading": "Licensing",
+          "items": [
+            "The installation fingerprint is shown in Settings -> Platform and in `./lawliet status`.",
+            "A new key can be entered in Settings -> Platform, or with `./lawliet licence <key>`, which checks the key before changing `.env` and recreates the backend so it takes effect.",
+            "Activating a licence now needs the `manage_licence` permission and is a dual-controlled action."
+          ]
+        },
+        {
+          "heading": "Documentation",
+          "items": [
+            "The quick start, installation and production guides are rewritten for the `./lawliet` bundle install.",
+            "The bundle ships an illustrated step-by-step installation guide.",
+            "README corrections: a missing upgrading guide, a non-existent build field and a non-existent settings screen are no longer referenced.",
+            "The Windows agent is documented as a scheduled task, with its log in `%PROGRAMDATA%\\Lawliet`."
+          ]
+        }
+      ],
+      "fixed": [
+        "A renewed licence was replaced by the original one at the next restart; the most recently issued valid licence now wins, and activating an older key than the one in use is refused.",
+        "Recovery codes could not be entered at sign-in (the field took six characters); \"Lost your phone? Use a recovery code\" now switches the field.",
+        "No syslog port was published in the Docker deployment, so devices could not send logs; 5514/udp and 5514/tcp are now published.",
+        "Syslog over TLS is refused when a source is created in the Docker deployment, rather than accepted and never serving.",
+        "The rollback instructions after an update printed a plain `start`; rolling back needs `./lawliet start --build` and a restore, and the CLI now says so.",
+        "Lab mode ignored `METRICS_TOKEN` and `DATA_ENCRYPTION_KEY` set in `.env`.",
+        "`./lawliet token` and the console now add the insecure flag to the macOS and Windows enrolment commands in lab mode, as they already did for Linux."
+      ],
+      "verification": {
+        "proven": [],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": []
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-09-23",
+      "channel": "stable",
+      "codename": null,
+      "title": "First production release: roles, dual control and required 2FA",
+      "summary": "1.3.0 is the first production release. It adds roles with four-eyes approval for critical actions and makes 2FA required for local accounts, and it carries the results of a module-by-module audit of the whole console. The planned 1.2.0 beta was never released; its changes ship here.",
+      "sections": [
+        {
+          "heading": "Access control",
+          "items": [
+            "Seven built-in roles, custom roles, and per-user grants and denials over 49 permissions.",
+            "Dual control: critical actions (including changes to users, roles and the policy itself) answer `428 APPROVAL_REQUIRED` until a second officer approves the exact request; approvals are single use, time-limited and never self-approved.",
+            "Every local account enrols 2FA at first sign-in, with an enrolment screen (QR code, manual key, recovery codes)."
+          ]
+        },
+        {
+          "heading": "Platform and licensing",
+          "items": [
+            "The backend ships as compiled native code for x86_64 and aarch64.",
+            "An unlicensed module shows what it offers instead of a load error, and a licence can be bound to one installation.",
+            "Retired feature names in an older key are listed as unrecognised entitlements instead of being shown as licensed."
+          ]
+        },
+        {
+          "heading": "Modules",
+          "items": [
+            "Network risk is scored for every real host from its open ports, agent coverage and zone, with the reason for every point shown; an unprobed host shows no score rather than zero.",
+            "DLP incidents are scored by remaining exposure given what was done about them, and FIM changes by the sensitivity of the file changed.",
+            "Log search can be narrowed without writing a query: `+` and `-` on every value, severity chips, an absolute from/to time window, and recent queries.",
+            "Three new correlation kinds: `rare` (a value never seen before), `absence` (a stream that stopped) and `spike` (a subject above its own rate); rule preview runs the rule itself.",
+            "Firewall device connections (test, fetch, delete) and export are available in the console.",
+            "The fleet page shows CPU, memory and disk for each host.",
+            "`FORENSICS_UPLOAD_DIR` and `MEMORY_DUMP_DIR` let evidence be stored on a larger volume."
+          ]
+        }
+      ],
+      "fixed": [
+        "Security: firewall exports did not escape rule values taken from the uploaded configuration, so a crafted rule name could inject rules or directives into the exported file; every format now escapes.",
+        "Security: connections to firewall devices did not verify the device's identity; the host key is recorded at the first successful test and must match afterwards, and TLS verification is always on.",
+        "Applying a policy to FortiGate or Juniper replaced the device's entire configuration; those vendors are now refused and the exported file offered instead, and every apply is a dry run unless confirmed.",
+        "Firewall rule analysis misread real Cisco ASA configurations; vendor detection is now by syntax across eight formats, and unparsed lines are reported instead of guessed.",
+        "Log ingest throughput collapsed above 100,000 events.",
+        "Review queue items outlived the demo records they pointed at after the sandbox was cleared.",
+        "The platform update feed and the agent upgrade channel could order the same two versions differently.",
+        "Forensic evidence upload failed on installations outside Docker.",
+        "Editing a security officer on the Users screen demoted them to administrator, and 45 kinds of audit event were recorded under a generic `execute` name.",
+        "The DLP table now shows whether an incident was actually stopped, and the incidents count no longer stops at the page size.",
+        "Several display fixes: log volume chart dropped half its data; firewall issue counts disagreed; risk colours used the wrong scale; the compliance table dropped partial results; table headers scrolled away; discovery history showed no results.",
+        "The getting-started guide gave an agent installer URL that does not exist and omitted `--token`; a demo user could see every compliance framework."
+      ],
+      "verification": {
+        "proven": [],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "Every local account sets up 2FA at its next sign-in; until then only the enrolment screens are available. Set `REQUIRE_TWO_FACTOR=false` in `.env` to keep 2FA optional. SSO and API-key accounts are exempt.",
+        "Migration 0042 adds roles, the dual-control policy and approval requests; existing users get the role their old tier implies.",
+        "Dual control applies to the LSO and RSO roles, which nobody holds until you assign them, so nothing waits for approval on day one.",
+        "Existing agents upgrade to 1.3.0 automatically; 1.1.x installations see it as newer.",
+        "`POST /network/risk/recompute` rescores an existing topology without probing anything.",
+        "`POST /review-queue/prune-orphans` removes review items whose source record is gone; it is a dry run unless confirmed."
+      ]
+    },
+    {
+      "version": "1.1.5",
+      "date": "2026-09-19",
+      "channel": "beta",
+      "codename": null,
+      "title": "The Windows agent, run on Windows",
+      "summary": "The Windows agent was run on a real Windows host for the first time, and it had never worked. The Windows installer in 1.1.4 cannot succeed (error 1053), which is the reason this release exists; this release fixes it and the issues found behind it.",
+      "sections": [],
+      "fixed": [
+        "The Windows agent could never start: it was registered as a Windows service it could not satisfy. It now runs as a scheduled task at startup as SYSTEM, the upgrade removes the old service, and the installer confirms the agent process is running.",
+        "Windows compliance scans scored a correctly configured host at 0% because checks failed with PowerShell errors; the same host now scores correctly with evidence attached.",
+        "Windows DLP scanned only the empty SYSTEM profile, so it found nothing on any host; it now scans real user profiles.",
+        "Windows secret scans followed profile junctions into loops and never finished; they now finish in a fraction of a second.",
+        "macOS and Windows agents collected commands every 60 seconds instead of every 15 seconds like Linux, delaying containment actions by up to a minute.",
+        "The enrolment command shown in the console lacked the `--insecure` (or `-Insecure`) flag that the installer requires for a plain-HTTP server.",
+        "`./lawliet install` reported success after its own checks failed; it now tells an unreachable address apart from a broken deployment.",
+        "The Windows installer pointed to a log file nothing writes to, and agent errors went to a console a scheduled task does not have; both now use `%PROGRAMDATA%\\Lawliet`.",
+        "The install refusal for a conflicting deployment suggested a `docker rm` command that failed; it now works as printed."
+      ],
+      "verification": {
+        "proven": [
+          "Verified on Windows 11: enrolment, telemetry and host health; file integrity events for create, modify and delete with real paths; a planted credential detected without the secret being stored; a CIS benchmark reaching a verdict on every control with evidence.",
+          "Every containment action on Windows, confirmed by asking Windows afterwards: a file quarantined and kept as evidence, a process killed, a firewall rule read back, an account disabled, and a password expired."
+        ],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "No database migrations.",
+        "A Windows host installed on an earlier build has a service that cannot start; re-running the installer removes it and registers the scheduled task.",
+        "Agents pick up the scan-path and heartbeat changes through the signed upgrade channel."
+      ]
+    },
+    {
+      "version": "1.1.4",
+      "date": "2026-09-18",
+      "channel": "beta",
+      "codename": null,
+      "title": "Installer fixes, and DLP active on a fresh install",
+      "summary": "The shipped bundle was installed on a clean host exactly as a customer would, and every module was driven against planted answers. What failed were instructions the product gave that could not work; those are fixed, and DLP is now active from the first install.",
+      "sections": [
+        {
+          "heading": "Changes",
+          "items": [
+            "DLP secret scanning now covers the administrative home directory: `/root` on Linux, `/var/root` on macOS, and the Windows profile root.",
+            "A fresh installation seeds three enabled DLP policies (PII, PCI, credentials), so the policies shown in the console are the ones agents run.",
+            "Two deployments can run on one host under different `COMPOSE_PROJECT_NAME` values; container names now follow the project name."
+          ]
+        }
+      ],
+      "fixed": [
+        "A second deployment on the same host failed on a container name conflict, although it was documented as supported.",
+        "The installer suggested stopping another deployment to resolve a conflict, which could never satisfy its own check; it now explains the real options.",
+        "The enrolment command printed at install for a plain-HTTP deployment was refused by the agent installer; it now carries `--insecure` when, and only when, the deployment serves plain HTTP.",
+        "DLP detected nothing on a fresh install while agents reported it as enabled; agents with no active data types now say so."
+      ],
+      "verification": {
+        "proven": [
+          "Verified on the shipped bundle on a clean host: `./lawliet install` built both images and brought up four healthy services, and a real Linux agent enrolled.",
+          "Against planted answers: a CIS scan reaching a verdict on all 70 controls with the command behind each; file integrity create, modify and delete; a planted credential raised as an incident within 15 seconds and then quarantined from the console.",
+          "A hardening execution that waited for approval and cancelled cleanly; network discovery classifying a real host; planted shadowed and duplicate firewall rules both reported; a syslog line ingested with fields extracted; an evidence bundle export containing its scan."
+        ],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "No database migrations.",
+        "The DLP policies are seeded only into a database that has none, so an existing deployment is untouched.",
+        "Agents pick up the scan-path change through the signed upgrade channel."
+      ]
+    },
+    {
+      "version": "1.1.3",
+      "date": "2026-09-18",
+      "channel": "beta",
+      "codename": null,
+      "title": "Dependency advisories and update bundle checks",
+      "summary": "Fixes found while verifying the 1.1.2 build. 1.1.2 was never published, so 1.1.3 is the first release to carry its agent changes as well.",
+      "sections": [],
+      "fixed": [
+        "A bundled web library (tornado) carried three published advisories; it is updated to the fixed version.",
+        "An uploaded update bundle with a modified file could be accepted; every file is now checked against the signed manifest and a mismatch is refused with the file named.",
+        "The `./lawliet` banner was one column short of its border."
+      ],
+      "verification": {
+        "proven": [],
+        "not_proven": []
+      },
+      "not_included": [
+        "Known issue: one dependency advisory (ecdsa, PYSEC-2026-1325) has no upstream fix; it has been assessed as unreachable in this build."
+      ],
+      "upgrade": [
+        "No database migrations.",
+        "Agents pick up the 1.1.2 agent changes through the signed upgrade channel; until a host is upgraded it keeps the previous behaviour."
+      ]
+    },
+    {
+      "version": "1.1.2",
+      "date": "2026-09-18",
+      "channel": "beta",
+      "codename": null,
+      "title": "Host health, compliance evidence and bounded DLP reporting",
+      "summary": "Every agent capability was driven against a known answer on a real Linux host and a real Mac. This version was tagged but never published; its changes shipped in 1.1.3.",
+      "sections": [
+        {
+          "heading": "Changes",
+          "items": [
+            "Host CPU, memory and disk are shown as meters in Environment, amber above 75% and red above 90%, and returned by the agent API.",
+            "Compliance findings carry what the host reported; where a check prints only PASS or FAIL, the finding names the command that produced it."
+          ]
+        }
+      ],
+      "fixed": [
+        "Host health readings were collected on every heartbeat but never shown.",
+        "Compliance findings carried a verdict but no evidence; verdicts and scores are unchanged.",
+        "One DLP scan of an ordinary laptop could send over a thousand reports and resend unchanged files every cycle; reporting is now bounded per cycle and an unchanged file is reported once.",
+        "Quarantining a file on macOS failed with \"Permission denied\"; all three agents now use a platform-appropriate location with a fallback, and report where the file went.",
+        "A bundled web library (tornado) carried three published advisories; it is updated to the fixed version."
+      ],
+      "verification": {
+        "proven": [
+          "On real hosts, 21 of 21 checks on Linux and 21 of 21 on macOS: enrolment, telemetry and host health, capability reporting, real-time file integrity events, credential detection with the secret redacted, host log shipping with fields extracted, a full CIS benchmark scan with evidence, and a containment action confirmed on the host."
+        ],
+        "not_proven": [
+          "The Windows agent had not yet been run on Windows; its changes were covered only by cross-platform tests."
+        ]
+      },
+      "not_included": [],
+      "upgrade": [
+        "No database migrations.",
+        "Agents pick these changes up through the signed upgrade channel; until a host is upgraded it keeps the previous behaviour."
+      ]
+    },
+    {
+      "version": "1.1.1",
+      "date": "2026-09-05",
+      "channel": "beta",
+      "codename": null,
+      "title": "Containment on macOS and Windows, and agents can be deleted",
+      "summary": "Containment actions now run on macOS and Windows as well as Linux, and an agent can be deleted. Also fixes macOS capability and telemetry reporting, and log retention on busy estates.",
+      "sections": [
+        {
+          "heading": "Changes",
+          "items": [
+            "The macOS and Windows agents implement the full containment action set: quarantine file, kill process, block IP, isolate host, disable user and reset credentials (pf and pwpolicy on macOS; Windows Firewall and `net user` on Windows).",
+            "An action an agent does not implement is reported as a failure naming the action, instead of being ignored.",
+            "Log retention is bounded by time rather than a row ceiling, and publishes `lawliet_retention_backlog_rows` so an estate falling behind shows it before the disk fills."
+          ]
+        }
+      ],
+      "fixed": [
+        "Containment ran on Linux only: a macOS or Windows host given \"isolate host\" showed the command as dispatched and stayed connected.",
+        "macOS agents reported no capabilities, so a Mac with file integrity monitoring looked the same as one without.",
+        "A macOS agent not running as root reported no telemetry at all; each section is now collected independently and a failure affects only that section.",
+        "Deleting an agent returned an error with no message; it now returns 409 naming the records that keep it, suggests token rotation as the non-destructive alternative, and accepts `?purge=true` to remove the records too (audited).",
+        "Deleting an agent was refused on SQLite (standalone installs) but allowed on PostgreSQL; both now behave the same."
+      ],
+      "verification": {
+        "proven": [
+          "Verified on real macOS with the shipped agent: registration, heartbeat, capability reporting, real-time file integrity events, and a containment command dispatched from the console, executed on the host and reported back."
+        ],
+        "not_proven": [
+          "The macOS pf and pwpolicy paths need root and were not exercised against a live firewall.",
+          "The Windows agent had not been run on Windows."
+        ]
+      },
+      "not_included": [],
+      "upgrade": [
+        "No database migrations.",
+        "Agents pick up the changes through the signed upgrade channel; upgrade macOS and Windows agents before relying on containment on those platforms."
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "date": "2026-08-25",
+      "channel": "beta",
+      "codename": "muffin",
+      "title": "Lawliet becomes a SIEM: log collection and detection",
+      "summary": "Lawliet could already forward its findings to another SIEM; it can now be the one receiving. Syslog, HTTP shippers and the agents already on the estate feed a searchable log store, and standing correlation rules raise alerts into the review queue.",
+      "sections": [
+        {
+          "heading": "Log collection and detection",
+          "items": [
+            "Collect logs over syslog (UDP and TCP), from HTTP shippers, and from host logs through the installed agents.",
+            "Events are parsed, their fields extracted, stored and searchable.",
+            "Standing correlation rules watch the log store and raise alerts into the review queue.",
+            "Syslog over TLS (RFC 5425) for TCP sources, with the certificate set by `SYSLOG_TLS_CERT_FILE` and `SYSLOG_TLS_KEY_FILE`; a source that cannot load its certificate does not start and says so.",
+            "Volume-over-time and top-value charts from the same query as the search box; clicking a bar narrows the search.",
+            "A rule raises at most 25 alerts per evaluation and summarises the rest in one rollup alert, so a single scan cannot bury the review queue.",
+            "Console: Logs -> Search, Detections and Sources.",
+            "The demo sandbox seeds the log store with three sources, a week of events, rules and alerts; Clear removes them and never touches a real feed."
+          ]
+        },
+        {
+          "heading": "Updates and support",
+          "items": [
+            "Install an update from an uploaded file, verified against its signature, for air-gapped estates.",
+            "Build the diagnostics support bundle from the console, without SSH; it contains no secrets or customer records.",
+            "`SQL_ECHO` controls statement logging separately from debug mode (off by default)."
+          ]
+        }
+      ],
+      "fixed": [
+        "Audit records for some SIEM endpoints were lost on PostgreSQL.",
+        "Sequence rules could fail to fire against a batching source; deduplication dropped identical lines from different hosts; the first lines written to a newly empty log file were lost; the search page could crash.",
+        "A review queue update could roll back unrelated work in the same transaction.",
+        "Every page could scroll sideways at common widths.",
+        "An uploaded update bundle was checked only by its signed file list; its contents are now checked too, and a modified, removed or added file is refused with the file named.",
+        "`./lawliet doctor` reported a pristine installation as modified.",
+        "Server errors reached the browser as CORS errors, hiding the reason and request id.",
+        "Staging an uploaded update failed on installations outside Docker.",
+        "A licence set in `.env` on a standalone install was ignored.",
+        "Two tiles on the Logs page contradicted each other about disabled sources."
+      ],
+      "verification": {
+        "proven": [
+          "About 24,000 events per second sustained through the real write path against PostgreSQL, stable as the table grows to 100,000 rows.",
+          "The upgrade was rehearsed on PostgreSQL against a copy of a populated deployment in both directions; agents, users and scans came through untouched."
+        ],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "Four database migrations run on upgrade.",
+        "Downgrading past this release discards collected logs, and detection rules and alerts with them; the upgrade direction loses nothing.",
+        "Nothing to configure: with no log sources defined, no ports are opened and the new background tasks idle.",
+        "Set `RETENTION_LOG_EVENT_DAYS` before a deployment that must answer to an auditor; the default is 90 days."
+      ]
+    },
+    {
+      "version": "1.0.x",
+      "date": "2026-06-25",
+      "channel": "beta",
+      "codename": null,
+      "title": "Early releases",
+      "summary": "The 1.0.x beta releases established the platform: compliance, hardening, network, firewall, DLP, FIM, forensics and active defence, with the operator CLI and signed update channels that later releases build on.",
+      "sections": [
+        {
+          "heading": "Highlights",
+          "items": [
+            "The `./lawliet` operator CLI: install, status, backup and update.",
+            "A signed platform update channel: the console verifies and downloads an update, and the host applies it.",
+            "Signed agent self-upgrade.",
+            "Single sign-on and scheduled reporting.",
+            "A first-run checklist in the console.",
+            "SIEM forwarding of platform findings.",
+            "Network topology export as a shareable document.",
+            "Firewall compliance and remediation in the console.",
+            "Real active defence actions, and agent policies that refresh while the agent runs.",
+            "Working production deployment with TLS, and database upgrades that apply on update."
+          ]
+        }
+      ],
+      "fixed": [],
+      "verification": {
+        "proven": [],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": []
+    }
+  ]
+}
