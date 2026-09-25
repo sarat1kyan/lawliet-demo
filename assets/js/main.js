@@ -56,6 +56,25 @@
     });
   })();
 
+  /* ---- Launch countdown (revealed inside the hero zoom) ---- */
+  (function () {
+    var clock = $('#cdClock'); if (!clock) return;
+    var target = new Date(2026, 9, 20, 0, 0, 0).getTime(); // 20 Oct 2026, local
+    var c = { d: $('[data-cd="d"]', clock), h: $('[data-cd="h"]', clock), m: $('[data-cd="m"]', clock), s: $('[data-cd="s"]', clock) };
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    function tick() {
+      var diff = target - Date.now();
+      if (diff <= 0) { c.d.textContent = c.h.textContent = c.m.textContent = c.s.textContent = '00'; return; }
+      var t = Math.floor(diff / 1000);
+      var d = Math.floor(t / 86400); t -= d * 86400;
+      var h = Math.floor(t / 3600); t -= h * 3600;
+      var m = Math.floor(t / 60); t -= m * 60;
+      c.d.textContent = pad(d); c.h.textContent = pad(h); c.m.textContent = pad(m); c.s.textContent = pad(t);
+    }
+    tick();
+    setInterval(function () { if (!doc.hidden) tick(); }, 1000);
+  })();
+
   /* ---- Demo form (Netlify contract preserved) ---- */
   (function () {
     var form = $('#demoForm'); if (!form) return;
