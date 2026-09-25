@@ -1,8 +1,41 @@
 {
   "schema": 1,
   "product": "Lawliet",
-  "updated": "2026-09-25",
+  "updated": "2026-09-26",
   "releases": [
+    {
+      "version": "1.4.2",
+      "date": "2026-09-26",
+      "channel": "stable",
+      "codename": null,
+      "title": "Fixes from testing every module on a real host",
+      "summary": "A host was enrolled into a running installation and each module tested against it. This release fixes what that found: enrolment outside Docker, a firewall compliance check that always passed, DLP incident severity and repeated incidents, sandbox cleanup and approval wording.",
+      "sections": [
+        {
+          "heading": "Fixed",
+          "items": [
+            "Hosts could not be enrolled on an installation running outside Docker: the console's install command could not find its installer. Installers and agent programs are now served from either layout.",
+            "The CIS check 'firewall service is enabled and running' passed on every Linux host, even with no firewall running. It now matches the service state exactly and recognises nftables.",
+            "A block by a critical custom DLP policy was filed as a medium incident. An incident now takes the type and severity of the policy that raised it.",
+            "A file that keeps changing, such as a log, raised a new DLP incident on every scan. The existing incident is updated instead; a resolved one reopens, one marked as a false positive stays closed.",
+            "Clearing the sample data left some demo items in the review queue. They are now removed with the rest.",
+            "After an action was approved, the message implied it would run by itself. It now says the person who requested it runs it from Approvals."
+          ]
+        }
+      ],
+      "fixed": [],
+      "verification": {
+        "proven": [
+          "On a real Debian 12 host enrolled with the console's own install command: a CIS scan matched the host, a file change was recorded with the process that made it, curl was denied a protected file while other programs could read it, an SSH brute force raised an alert within seconds, live response collected verified evidence, an IOC hunt found exactly the planted file, and a block went through four-eyes approval to the host and was undone the same way.",
+          "Full test suite on SQLite and PostgreSQL."
+        ],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "No database migration. Existing licences and agents keep working."
+      ]
+    },
     {
       "version": "1.4.1",
       "date": "2026-09-25",
