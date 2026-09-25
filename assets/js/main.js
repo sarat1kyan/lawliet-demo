@@ -56,6 +56,21 @@
     });
   })();
 
+  /* ---- Quiet "What's new" link, version read from the release data ---- */
+  (function () {
+    var link = $('#whatsNew'); if (!link) return;
+    fetch('/data/releases.json', { cache: 'no-cache' })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (d) {
+        var v = d && d.releases && d.releases[0] && d.releases[0].version;
+        if (!v) return;
+        link.textContent = "What's new in v" + v;
+        var item = $('#whatsNewItem'); if (item) item.hidden = false;
+        link.hidden = false;
+      })
+      .catch(function () { /* leave hidden on failure - never a hardcoded version */ });
+  })();
+
   /* ---- Launch countdown (revealed inside the hero zoom) ---- */
   (function () {
     var clock = $('#cdClock'); if (!clock) return;

@@ -19,7 +19,13 @@ PAGES = [
     ("security.html", "Security model", "Using Lawliet"),
     ("licensing.html", "Licensing and suites", "Running it"),
     ("operations.html", "Operations and updates", "Running it"),
+    ("releases.html", "Releases", "Releases"),
 ]
+
+# Extra per-page scripts appended before the shared docs script.
+SCRIPTS = {
+    "releases.html": '<script src="../assets/js/releases.js?v=8" defer></script>',
+}
 
 LOGO = ('<picture><source srcset="../assets/img/brand/mark-56.webp 1x, ../assets/img/brand/mark-112.webp 2x" type="image/webp">'
         '<img class="mark" src="../assets/img/brand/mark-56.png" width="28" height="28" alt="Lawliet"></picture>'
@@ -40,8 +46,8 @@ HEAD = """<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=7">
-<link rel="stylesheet" href="../assets/css/docs.css?v=7">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../assets/css/docs.css?v=8">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -75,7 +81,8 @@ FOOT = """{nextlinks}
 <footer class="site-foot">
   <div class="foot-base"><span>Lawliet. Self-hosted security and compliance.</span><span><a href="mailto:info@justlawliet.net">info@justlawliet.net</a></span></div>
 </footer>
-<script src="../assets/js/docs.js?v=7" defer></script>
+<script src="../assets/js/docs.js?v=8" defer></script>
+{extra}
 </body>
 </html>
 """
@@ -120,6 +127,7 @@ BODY["index.html"] = ("Overview", "What Lawliet is, how it is delivered and wher
       <a href="licensing.html"><b>Licensing and suites</b><span>Suites, offline activation, renewals and expiry.</span></a>
       <a href="agents.html"><b>Agents</b><span>Supported systems, what agents collect and how they are enrolled.</span></a>
       <a href="operations.html"><b>Operations and updates</b><span>Backups, updates, retention and forwarding to your SIEM.</span></a>
+      <a href="releases.html"><b>Release notes</b><span>What changed in every version, newest first.</span></a>
     </div>
 
     <h2>How it is delivered</h2>
@@ -436,7 +444,35 @@ BODY["operations.html"] = ("Operations and updates", "Day-to-day commands, backu
     <p>Lawliet can forward events as CEF, LEEF, RFC 5424 or JSON, over syslog (UDP, TCP or TLS) or HTTPS. HTTPS forwarding works with Splunk HEC, Microsoft Sentinel and Sumo Logic.</p>
 """)
 
+BODY["releases.html"] = ("Releases", "Every Lawliet release, newest first, with what changed and how it was proven.", """
+    <h1>Releases</h1>
+    <p class="intro">Every Lawliet release, newest first. Each entry lists what changed in the release and how each claim was proven against a real target.</p>
+
+    <p class="rel-status" id="relStatus" role="status" aria-live="polite">Loading release notes...</p>
+
+    <div class="rel-current" id="relCurrent" hidden></div>
+
+    <div class="rel-controls" id="relControls" hidden>
+      <div class="rel-field">
+        <label for="relSearch">Filter</label>
+        <input id="relSearch" type="search" placeholder="Filter by text" autocomplete="off">
+      </div>
+      <div class="rel-field">
+        <label for="relChannel">Channel</label>
+        <select id="relChannel"><option value="all">All</option><option value="stable">Stable</option><option value="beta">Beta</option></select>
+      </div>
+      <button type="button" id="relExpand" class="rel-toggle">Expand all</button>
+      <span class="rel-count" id="relCount" aria-live="polite"></span>
+    </div>
+
+    <nav class="rel-index" id="relIndex" aria-label="All versions" hidden></nav>
+
+    <div class="rel-list" id="relList"></div>
+
+    <noscript><p class="rel-noscript">The release history is rendered from a data file and needs JavaScript. Enable JavaScript to see every version, or write to <a href="mailto:info@justlawliet.net">info@justlawliet.net</a> for the release notes.</p></noscript>
+""")
+
 for file, (title, desc, body) in BODY.items():
-    html = HEAD.format(title=title, desc=desc, sidenav=sidenav(file)) + body + FOOT.format(nextlinks=nextlinks(file))
+    html = HEAD.format(title=title, desc=desc, sidenav=sidenav(file)) + body + FOOT.format(nextlinks=nextlinks(file), extra=SCRIPTS.get(file, ""))
     (OUT / file).write_text(html, encoding="utf-8")
     print("wrote", file)

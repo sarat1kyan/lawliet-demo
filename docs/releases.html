@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Operations and updates | Lawliet documentation</title>
-<meta name="description" content="Day-to-day commands, backups, updates, retention and SIEM forwarding.">
+<title>Releases | Lawliet documentation</title>
+<meta name="description" content="Every Lawliet release, newest first, with what changed and how it was proven.">
 <meta name="theme-color" content="#020304">
 <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32x32.png">
@@ -48,51 +48,42 @@
       </ul></div>
       <div><p>Running it</p><ul>
         <li><a href="licensing.html">Licensing and suites</a></li>
-        <li><a href="operations.html" aria-current="page">Operations and updates</a></li>
+        <li><a href="operations.html">Operations and updates</a></li>
       </ul></div>
       <div><p>Releases</p><ul>
-        <li><a href="releases.html">Releases</a></li>
+        <li><a href="releases.html" aria-current="page">Releases</a></li>
       </ul></div>
   </aside>
   <main class="doc" id="main">
 
-    <h1>Operations and updates</h1>
-    <p class="intro">Everything is done with <code>./lawliet</code> from the deployment folder. <code>./lawliet help</code> lists it all.</p>
+    <h1>Releases</h1>
+    <p class="intro">Every Lawliet release, newest first. Each entry lists what changed in the release and how each claim was proven against a real target.</p>
 
-    <h2 id="commands">Day-to-day commands</h2>
-    <div class="table"><table>
-      <thead><tr><th>Command</th><th>What it does</th></tr></thead>
-      <tbody>
-        <tr><td><code>./lawliet status</code></td><td>Health, licence, version and connected hosts</td></tr>
-        <tr><td><code>./lawliet backup</code></td><td>A database backup into <code>./backups</code>. HTTPS installations also take one daily.</td></tr>
-        <tr><td><code>./lawliet restore &lt;file&gt;</code></td><td>Restores a backup and restarts. Asks before replacing anything.</td></tr>
-        <tr><td><code>./lawliet update &lt;bundle&gt;</code></td><td>Upgrades to a newer bundle. See below.</td></tr>
-        <tr><td><code>./lawliet restart</code></td><td>Restarts and waits until healthy. Data is never touched.</td></tr>
-        <tr><td><code>./lawliet logs backend -f</code></td><td>Follows a service's logs</td></tr>
-        <tr><td><code>./lawliet passwd</code></td><td>Resets the administrator password</td></tr>
-        <tr><td><code>./lawliet tls</code></td><td>Shows or replaces the certificate</td></tr>
-        <tr><td><code>./lawliet licence</code></td><td>Shows the licence and the installation fingerprint, or installs a key</td></tr>
-        <tr><td><code>./lawliet token</code></td><td>Prints the agent install commands</td></tr>
-        <tr><td><code>./lawliet doctor</code></td><td>Collects a diagnostics file for support, with no passwords and no data</td></tr>
-      </tbody>
-    </table></div>
+    <p class="rel-status" id="relStatus" role="status" aria-live="polite">Loading release notes...</p>
 
-    <h2 id="updates">Updates</h2>
-    <p>Updates arrive as a new signed bundle. Copy it to the server and, from the current deployment folder:</p>
-    <pre><code>./lawliet update lawliet-docker-&lt;version&gt;-&lt;organisation&gt;.tar.gz</code></pre>
-    <p>It backs up the database first and stops if the backup fails, installs the new version beside the current one, runs the database migrations, and checks the schema and version before it finishes. Your licence and settings carry over.</p>
+    <div class="rel-current" id="relCurrent" hidden></div>
 
-    <h2 id="retention">Retention</h2>
-    <p>Each kind of record has its own retention period, and 0 keeps it forever. The defaults are 180 days for file integrity events, 365 days for data loss prevention incidents, and 730 days for compliance results and the audit trail.</p>
+    <div class="rel-controls" id="relControls" hidden>
+      <div class="rel-field">
+        <label for="relSearch">Filter</label>
+        <input id="relSearch" type="search" placeholder="Filter by text" autocomplete="off">
+      </div>
+      <div class="rel-field">
+        <label for="relChannel">Channel</label>
+        <select id="relChannel"><option value="all">All</option><option value="stable">Stable</option><option value="beta">Beta</option></select>
+      </div>
+      <button type="button" id="relExpand" class="rel-toggle">Expand all</button>
+      <span class="rel-count" id="relCount" aria-live="polite"></span>
+    </div>
 
-    <h2 id="syslog">Receiving syslog</h2>
-    <p>Point network devices and servers at the Lawliet server on port 5514, UDP or TCP. Accepted formats are RFC 5424, RFC 3164, CEF, LEEF and JSON.</p>
+    <nav class="rel-index" id="relIndex" aria-label="All versions" hidden></nav>
 
-    <h2 id="forwarding">Forwarding to your SIEM</h2>
-    <p>Lawliet can forward events as CEF, LEEF, RFC 5424 or JSON, over syslog (UDP, TCP or TLS) or HTTPS. HTTPS forwarding works with Splunk HEC, Microsoft Sentinel and Sumo Logic.</p>
+    <div class="rel-list" id="relList"></div>
+
+    <noscript><p class="rel-noscript">The release history is rendered from a data file and needs JavaScript. Enable JavaScript to see every version, or write to <a href="mailto:info@justlawliet.net">info@justlawliet.net</a> for the release notes.</p></noscript>
     <nav class="doc-next" aria-label="Next and previous">
-      <a href="licensing.html"><small>Previous</small><b>Licensing and suites</b></a>
-      <a href="releases.html" style="text-align:right"><small>Next</small><b>Releases</b></a>
+      <a href="operations.html"><small>Previous</small><b>Operations and updates</b></a>
+      <span></span>
     </nav>
   </main>
 </div>
@@ -100,6 +91,6 @@
   <div class="foot-base"><span>Lawliet. Self-hosted security and compliance.</span><span><a href="mailto:info@justlawliet.net">info@justlawliet.net</a></span></div>
 </footer>
 <script src="../assets/js/docs.js?v=8" defer></script>
-
+<script src="../assets/js/releases.js?v=8" defer></script>
 </body>
 </html>
