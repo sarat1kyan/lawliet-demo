@@ -1,8 +1,58 @@
 {
   "schema": 1,
   "product": "Lawliet",
-  "updated": "2026-09-26",
+  "updated": "2026-09-27",
   "releases": [
+    {
+      "version": "1.5.3",
+      "date": "2026-09-27",
+      "channel": "stable",
+      "codename": null,
+      "title": "Remote agent deployment, and a deep audit of the agents and detections",
+      "summary": "Agents can now be installed from the console over SSH or WinRM with a technical account, including on hosts that network discovery has just found. A deep audit hardened the agents and installers, encrypted hardening backups at rest, and corrected detections, log search, firewall analysis and data loss prevention.",
+      "sections": [
+        {
+          "heading": "New",
+          "items": [
+            "Remote agent deployment: store an SSH password, key or certificate, or a WinRM password or client certificate; test a host without changing it; deploy to a list, a range or hosts picked on the network map. Host keys are pinned on first contact, each host gets a one-time enrolment token, and every deployment needs a second signature.",
+            "A newly discovered host without an agent raises one review item with a prefilled deployment.",
+            "Approvals show the time left, remind approvers before a request expires, and tell the requester when a request was signed and how long remains to run it.",
+            "Agent 2.1.3."
+          ]
+        },
+        {
+          "heading": "Fixed",
+          "items": [
+            "Compliance scans across all agents now wait for every host and score a silent host as not assessed; before, one passing host could hide a failing one.",
+            "Agents refuse to terminate system processes or themselves, refuse user names that read as command options, leave a symbolic link's target untouched when asked to quarantine it, and no longer lose file-integrity events after a busy period.",
+            "Installers: a piped install could pick up an agent program lying in the current directory instead of the server's; files holding the enrolment secret were briefly readable by local users.",
+            "Windows agents: the directory holding the agent's credentials is readable only by the system and administrators, and a re-run of the installer upgrades a running agent in place.",
+            "Hardening backups, which can include system credential files, are now encrypted at rest.",
+            "Four-eyes actions are audited with the address and browser of the person who ran them.",
+            "Detections: sequences logged within the same second now match; late runs no longer skip events; regular expressions answer the same on every log store.",
+            "Firewall analysis: fewer false shadowed, redundant and exposed-service findings for Check Point applications, FortiGate address-limited services, and reject versus drop.",
+            "Data loss prevention reads UTF-16 text and detects Mastercard numbers in the 2221 to 2720 range.",
+            "Log lines from 29 February and December lines read in January are dated correctly.",
+            "Releasing a network isolation, or undoing another containment action, no longer fails on large installations."
+          ]
+        }
+      ],
+      "fixed": [],
+      "verification": {
+        "proven": [
+          "On a real Debian 12 host: agent 2.1.3 installed with the console's command; containment refused system processes and option-like user names on the host; UTF-16 files and Mastercard 2-series numbers were detected; all six drills were proven; a remote deployment over SSH, approved by a second person, reinstalled the agent and the host enrolled again as the same agent.",
+          "On a Windows 11 host: the installer upgraded a running agent to 2.1.3 in place, the agent's credential directory was limited to the system and administrators, all six drills were proven, and an isolation cut the host off while it kept reporting, then was released through four-eyes.",
+          "Every console page at desktop and phone width; the changed pages in both themes.",
+          "Full test suite on SQLite and PostgreSQL."
+        ],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "Database migrations run on upgrade. Upgrade agents to 2.1.3.",
+        "Compliance scans across all agents now wait for every targeted host, up to the collection deadline, before scoring."
+      ]
+    },
     {
       "version": "1.5.2",
       "date": "2026-09-26",
