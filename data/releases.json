@@ -4,6 +4,44 @@
   "updated": "2026-09-26",
   "releases": [
     {
+      "version": "1.5.1",
+      "date": "2026-09-26",
+      "channel": "stable",
+      "codename": null,
+      "title": "More response playbooks, and Ask again for expired containment requests",
+      "summary": "Six more example playbooks answer the starter detections and hunt hits, and a containment request that expired before anyone signed it can now be asked for again instead of leaving the response stuck.",
+      "sections": [
+        {
+          "heading": "New",
+          "items": [
+            "Six more example playbooks, switched off: password spraying (block after approval, collect authentication logs, review item), new administrator (collect accounts, persistence and logins, open a case, notify), local account created, privilege escalation attempts, a host that stopped sending logs, and IOC hunt hits (open a case, collect processes, connections and persistence, isolate after approval).",
+            "Each detection example listens to its own starter detection, and an upgrade adds only the examples an installation never had.",
+            "Ask again on a containment step whose approval expired: the same request is filed in the name of whoever asks, and someone else approves it.",
+            "Response playbooks are documented: triggers, steps, four-eyes, dry run and the examples."
+          ]
+        },
+        {
+          "heading": "Fixed",
+          "items": [
+            "A detections test failed every day before 10:00 UTC from the 10th of the month because of how it built its log timestamp; the product itself was not affected."
+          ]
+        }
+      ],
+      "fixed": [],
+      "verification": {
+        "proven": [
+          "On a running 1.5.0 installation: the new examples were added on upgrade, switched off and each bound to its starter detection.",
+          "Ask again from the console re-filed an expired block request for a real Debian 12 host, and the new request waited for a second signature.",
+          "Full test suite on SQLite and PostgreSQL."
+        ],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "No database migration. Six example playbooks are added, switched off."
+      ]
+    },
+    {
       "version": "1.5.0",
       "date": "2026-09-26",
       "channel": "stable",
