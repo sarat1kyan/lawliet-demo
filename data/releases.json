@@ -4,6 +4,51 @@
   "updated": "2026-09-26",
   "releases": [
     {
+      "version": "1.5.2",
+      "date": "2026-09-26",
+      "channel": "stable",
+      "codename": null,
+      "title": "Signed copies, a rebuilt wall, and Windows proven end to end",
+      "summary": "The console now carries the name of the company it was built for, the operations wall was rebuilt around one sentence, and a long audit closed sandbox gaps, fixed Windows rollbacks that could leave a host weaker than before, and made the Windows installer work on a clean machine.",
+      "sections": [
+        {
+          "heading": "New",
+          "items": [
+            "Licensed to: the client name a bundle is built for signs the sign-in screen, the sidebar and the wall.",
+            "Wall mode rebuilt: one sentence says how many things need a person and why; waiting work worst first, with approvals counting down to their expiry; a grid of hosts by protection module, lit where a drill proved it; it says when it stopped updating.",
+            "Licence features and containment actions read as words, not as keys."
+          ]
+        },
+        {
+          "heading": "Fixed",
+          "items": [
+            "Sandbox accounts could administer the installation (create administrators, reset two-factor, sign approvals, change the licence or settings) and reach real agents, network nodes, evidence, review items, reports and playbooks. All closed.",
+            "Containment waited behind hardening on the agent: an approved block could take minutes to start. Agents 2.1.2 give containment its own lane.",
+            "The Windows installer took the Microsoft Store placeholder for Python and failed on every clean Windows 11; it now finds a real Python or installs one.",
+            "Windows hardening rollbacks wrote fixed values instead of the ones they replaced, some weaker than the Windows default (automatic updates off, no lockout, LAN Manager hashes stored). Every rollback now restores what was there. Two policy checks passed when the policy was not configured.",
+            "Exposure mishandled IPv6 and client-port rules and was slow on large estates; playbook runs could stay running forever; stories mixed sandbox and real rows; network zones matched by octets.",
+            "Console: scan pages showed no control titles; several pages claimed there was no data while still loading or hid failed requests.",
+            "Customer bundles shipped files they should not (macOS libraries, source maps, developer scripts); verification now checks every module and screen."
+          ]
+        }
+      ],
+      "fixed": [],
+      "verification": {
+        "proven": [
+          "On a real Debian 12 host: a real password spray ran the SSH playbook, the block waited for a second signature, ran once approved and was undone the same way; a fix plan's hardening run applied its controls and the rescan moved by exactly those controls; agent 2.1.2 proved all six drills.",
+          "On a clean Windows 11 host: the fixed installer set up the agent, all six drills were proven, a CIS scan matched the host's defaults, and two controls were hardened and rolled back through four-eyes.",
+          "Every console page in both themes at desktop and phone width; a customer bundle built, verified, installed and licensed.",
+          "Full test suite on SQLite and PostgreSQL."
+        ],
+        "not_proven": []
+      },
+      "not_included": [],
+      "upgrade": [
+        "No database migration. Upgrade agents to 2.1.2.",
+        "Sandbox accounts lose installation administration rights."
+      ]
+    },
+    {
       "version": "1.5.1",
       "date": "2026-09-26",
       "channel": "stable",
