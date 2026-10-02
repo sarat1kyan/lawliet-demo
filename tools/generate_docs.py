@@ -56,7 +56,7 @@ HEAD = """<!doctype html>
   <nav class="nav" aria-label="Primary">
     <a href="../#platform">Platform</a>
     <a href="../#security">Security</a>
-    <a href="../#pricing">Pricing</a>
+    <a href="../bundles.html">Bundles</a>
     <a href="./" aria-current="true">Docs</a>
   </nav>
   <div class="hdr-cta">
@@ -65,7 +65,7 @@ HEAD = """<!doctype html>
   </div>
 </header>
 <div class="sheet glass-rail" id="sheet" aria-hidden="true"><div class="sheet-inner">
-  <a href="../#platform">Platform</a><a href="../#security">Security</a><a href="../#pricing">Pricing</a><a href="./">Docs</a>
+  <a href="../#platform">Platform</a><a href="../#security">Security</a><a href="../bundles.html">Bundles</a><a href="./">Docs</a>
   <a class="btn btn-primary" href="../#demo">Book a demo</a>
 </div></div>
 <div class="docs-layout">

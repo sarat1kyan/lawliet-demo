@@ -93,6 +93,18 @@
   /* ---- Demo form (Netlify contract preserved) ---- */
   (function () {
     var form = $('#demoForm'); if (!form) return;
+    // A build configured on the Bundles page is handed over here.
+    (function () {
+      var raw; try { raw = sessionStorage.getItem('lawliet-build'); } catch (e) { return; }
+      if (!raw) return;
+      try {
+        var d = JSON.parse(raw);
+        var bf = $('#buildField'); if (bf && d.summary) bf.value = d.summary;
+        var fleet = form.querySelector('select[name="fleet_size"]');
+        if (fleet && d.fleet) { for (var i = 0; i < fleet.options.length; i++) { if (fleet.options[i].text === d.fleet) { fleet.selectedIndex = i; break; } } }
+      } catch (e) {}
+      try { sessionStorage.removeItem('lawliet-build'); } catch (e) {}
+    })();
     var sent = $('#formSent'), btn = $('#formBtn');
     function fieldError(id, msg) { var e = $('#err-' + id); if (e) e.textContent = msg || ''; }
     function validate() {

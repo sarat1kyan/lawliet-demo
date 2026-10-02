@@ -248,8 +248,9 @@ for (const [w, h, name] of VIEWPORTS) {
   const pressed = () => pg.$$eval('.mod', els => els.filter(e => e.getAttribute('aria-pressed') === 'true').map(e => e.getAttribute('data-mod')).sort());
   const click = async id => { await pg.click('[data-mod="' + id + '"]'); await pg.waitForTimeout(90); };
   const same = (a, b2) => a.slice().sort().join(',') === b2.slice().sort().join(',');
+  const bundlesURL = BASE.replace(/\/[^/]*$/, '') + '/bundles.html';
   try {
-    await pg.goto(BASE, { waitUntil: 'load' }); await pg.waitForTimeout(400);
+    await pg.goto(bundlesURL, { waitUntil: 'load' }); await pg.waitForTimeout(400);
     // coupling: network -> firewall; firewall off -> both off
     if (await press('network') !== 'true') await click('network');
     note(await press('network') === 'true' && await press('firewall') === 'true', 'network did not pull in firewall');
@@ -280,24 +281,20 @@ for (const [w, h, name] of VIEWPORTS) {
     await pg.reload({ waitUntil: 'load' }); await pg.waitForTimeout(300);
     for (const id of ['compliance', 'firewall', 'logs', 'dlp', 'forensics']) { if (await press(id) !== 'true') await click(id); }
     note((await pg.$eval('#buildSuggest', e => e.textContent)).indexOf('Complete') !== -1, 'Complete suggestion missing on five modules');
-    // quote CTA fills the field and it is in the form data
+    // quote CTA stores the build for the landing form (cross-page handoff)
     await pg.reload({ waitUntil: 'load' }); await pg.waitForTimeout(300);
     await click('network'); // compliance, firewall, network
     await pg.selectOption('#buildSize', '500');
-    await pg.click('#buildQuote'); await pg.waitForTimeout(150);
+    // click the CTA but stop it following its href so we can read the handoff here
+    await pg.evaluate(() => { const a = document.getElementById('buildQuote'); a.addEventListener('click', e => e.preventDefault(), { once: true }); a.click(); });
+    await pg.waitForTimeout(100);
     const expected = 'Build your own, up to 500 agents: Compliance and hardening, Firewall governance, Network discovery and topology';
-    const bf = await pg.$eval('#buildField', e => e.value);
-    note(bf === expected, 'build field text wrong: ' + bf);
-    const fd = await pg.evaluate(() => new URLSearchParams(new FormData(document.getElementById('demoForm'))).get('build'));
-    note(fd === expected, 'build not in form data');
-    const fleet = await pg.$eval('#demoForm select[name="fleet_size"]', e => e.value);
-    note(fleet === 'Up to 500', 'fleet_size not set from build size: ' + fleet);
-    // build field empty when opened from elsewhere (fresh reload, no build click)
-    await pg.reload({ waitUntil: 'load' }); await pg.waitForTimeout(200);
-    note(await pg.$eval('#buildField', e => e.value) === '', 'build field not empty by default');
-    // no price anywhere on the page
-    const body = await pg.evaluate(() => document.body.innerText);
-    note(!/\$\s?\d|\d\s?(USD|EUR)|per agent a year/i.test(body), 'a price pattern appears on the page');
+    const stored = await pg.evaluate(() => { try { return JSON.parse(sessionStorage.getItem('lawliet-build')); } catch (e) { return null; } });
+    note(stored && stored.summary === expected, 'stored build summary wrong: ' + (stored && stored.summary));
+    note(stored && stored.fleet === 'Up to 500', 'stored fleet wrong: ' + (stored && stored.fleet));
+    // no price anywhere on the bundles page
+    const bbody = await pg.evaluate(() => document.body.innerText);
+    note(!/\$\s?\d|\d\s?(USD|EUR)|per agent a year/i.test(bbody), 'a price pattern appears on bundles');
     // no horizontal overflow at three widths with a selection active
     for (const w of [360, 768, 1440]) {
       await pg.setViewportSize({ width: w, height: 900 }); await pg.waitForTimeout(150);
@@ -306,7 +303,28 @@ for (const [w, h, name] of VIEWPORTS) {
       const ov = await pg.evaluate(() => ({ sw: document.documentElement.scrollWidth, iw: window.innerWidth }));
       note(ov.sw <= ov.iw + 1, 'build overflow at ' + w + ' (' + ov.sw + '>' + ov.iw + ')');
     }
-    note(errs.length === 0, 'build js errors: ' + errs.slice(0, 2).join(' | '));
+    note(errs.length === 0, 'bundles js errors: ' + errs.slice(0, 2).join(' | '));
+
+    // landing picks up the handoff and fills its form; building nothing leaves it empty
+    const lp = await b.newPage({ viewport: { width: 1280, height: 900 } });
+    const lerrs = []; lp.on('pageerror', e => lerrs.push(e.message));
+    await lp.evaluate(() => {}).catch(() => {});
+    await lp.goto(bundlesURL, { waitUntil: 'load' }); await lp.waitForTimeout(200);
+    await lp.evaluate(v => { try { sessionStorage.setItem('lawliet-build', v); } catch (e) {} }, JSON.stringify({ summary: expected, fleet: 'Up to 500' }));
+    await lp.goto(BASE, { waitUntil: 'load' }); await lp.waitForTimeout(500);
+    note(await lp.$eval('#buildField', e => e.value) === expected, 'landing did not fill build field from handoff');
+    const lfleet = await lp.$eval('#demoForm select[name="fleet_size"]', e => e.value);
+    note(lfleet === 'Up to 500', 'landing did not set fleet from handoff: ' + lfleet);
+    note(await lp.evaluate(() => { try { return sessionStorage.getItem('lawliet-build'); } catch (e) { return 'x'; } }) === null, 'handoff not cleared after use');
+    await lp.reload({ waitUntil: 'load' }); await lp.waitForTimeout(300);
+    note(await lp.$eval('#buildField', e => e.value) === '', 'build field not empty on a plain landing visit');
+    // landing is product-only: no pricing section, nav points to Bundles, no price text
+    note(await lp.$('#pricing') === null && await lp.$('#build-panel') === null, 'pricing content still on landing');
+    note(await lp.$('a[href="/bundles.html"]') !== null, 'landing nav missing Bundles link');
+    const landingBody = await lp.evaluate(() => document.body.innerText);
+    note(!/\$\s?\d|\d\s?(USD|EUR)|per agent a year/i.test(landingBody), 'a price pattern appears on landing');
+    note(lerrs.length === 0, 'landing js errors: ' + lerrs.slice(0, 2).join(' | '));
+    await lp.close();
   } catch (e) { fails.push('EXC ' + e.message); }
   const pass = fails.length === 0;
   results.push({ key: 'build', name: 'build-your-own', pass, fails });
