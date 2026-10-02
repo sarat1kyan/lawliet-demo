@@ -31,8 +31,6 @@
   var suggestEl = doc.getElementById('buildSuggest');
   var sizeEl = doc.getElementById('buildSize');
   var quoteEl = doc.getElementById('buildQuote');
-  var buildField = doc.getElementById('buildField');
-  var fleetEl = doc.querySelector('#demoForm select[name="fleet_size"]');
 
   function selected() { return ORDER.filter(function (id) { return sel[id]; }); }
   function subsetOf(setArr) { var s = selected(); return s.length > 0 && s.every(function (id) { return setArr.indexOf(id) !== -1; }); }
@@ -146,12 +144,11 @@
 
   if (quoteEl) {
     quoteEl.addEventListener('click', function () {
-      if (buildField) buildField.value = summaryText();
-      if (fleetEl) {
-        var want = SIZE_FLEET[sizeEl.value] || 'Up to 30';
-        for (var i = 0; i < fleetEl.options.length; i++) { if (fleetEl.options[i].text === want) { fleetEl.selectedIndex = i; break; } }
-      }
-      // the anchor's href="#demo" scrolls to the (currently locked) quote form
+      // The quote form lives on the landing page; hand the build over to it.
+      // The anchor's href="/#demo" performs the navigation.
+      try {
+        sessionStorage.setItem('lawliet-build', JSON.stringify({ summary: summaryText(), fleet: SIZE_FLEET[sizeEl.value] || 'Up to 30' }));
+      } catch (e) {}
     });
   }
 
