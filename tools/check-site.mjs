@@ -188,9 +188,9 @@ for (const [w, h, name] of VIEWPORTS) {
     note(await pg.$$eval('#relIndex .rel-index-item', e => e.length) === N, 'version index count mismatch');
 
     // deep link
-    await pg.goto(relURL + '#v1-3-0', { waitUntil: 'load' }); await pg.waitForTimeout(700);
-    const dl = await pg.$eval('#v1-3-0', e => ({ open: e.open, top: e.getBoundingClientRect().top }));
-    note(dl.open && dl.top < 500, 'deep link #v1-3-0 did not open and scroll');
+    await pg.goto(relURL + '#v1-3-0-b', { waitUntil: 'load' }); await pg.waitForTimeout(700);
+    const dl = await pg.$eval('#v1-3-0-b', e => ({ open: e.open, top: e.getBoundingClientRect().top }));
+    note(dl.open && dl.top < 500, 'deep link #v1-3-0-b did not open and scroll');
 
     // text filter
     await pg.fill('#relSearch', 'ClickHouse'); await pg.waitForTimeout(250);
