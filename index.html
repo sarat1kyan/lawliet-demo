@@ -32,7 +32,7 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
 <link rel="preload" as="image" href="/assets/img/brand/mark-512.webp" type="image/webp" imagesrcset="/assets/img/brand/mark-512.webp 1x, /assets/img/brand/mark-1024.webp 2x">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
 <link rel="stylesheet" href="/assets/css/tokens.css?v=7">
-<link rel="stylesheet" href="/assets/css/site.css?v=9">
+<link rel="stylesheet" href="/assets/css/site.css?v=10">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Lawliet","applicationCategory":"SecurityApplication","operatingSystem":"Linux, macOS, Windows","description":"Self-hosted security and compliance console. Compliance scanning with per-control evidence, hardening with approval and rollback, network discovery, firewall analysis, file integrity monitoring, data loss prevention, forensics and SIEM forwarding. Runs on your own servers, offline.","url":"https://justlawliet.net/"}
 </script>
@@ -324,9 +324,22 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
         </div>
       </article>
 
+      <article class="panel glass panel-new">
+        <div class="panel-copy"><span class="pn mono">07</span><h3>Honeypots</h3><p>Decoys planted across the hosts you already manage - fake credentials, services, canary tokens and accounts. A decoy has no legitimate use, so any touch is a high-severity alert with one-click containment.</p>
+          <span class="chip new">New in 1.5.4</span><span class="chip ex">Example - web-01</span></div>
+        <div class="panel-viz">
+          <div class="bait">
+            <div class="bait-row"><span class="bk mono">/root/.aws/credentials</span><span class="bt">decoy file</span><span class="stat pass">Quiet</span></div>
+            <div class="bait-row"><span class="bk mono">:22 sshd (fake)</span><span class="bt">decoy service</span><span class="stat pass">Quiet</span></div>
+            <div class="bait-row tripped"><span class="bk mono">/srv/app/prod.env</span><span class="bt">decoy file</span><span class="stat fail">Touched 03:14</span></div>
+          </div>
+          <p class="viz-foot"><span class="tag crit">High</span> Read by <span class="mono">curl</span> as user <span class="mono">www-data</span> on web-01. <span class="tag ok-tag">Contain</span></p>
+        </div>
+      </article>
+
     </div>
   </div>
-  <div class="wrap"><div class="rail-progress" aria-hidden="true"><span id="railCount" class="mono">1 / 6</span><span class="track"><i id="railBar"></i></span></div></div>
+  <div class="wrap"><div class="rail-progress" aria-hidden="true"><span id="railCount" class="mono">1 / 7</span><span class="track"><i id="railBar"></i></span></div></div>
 </section>
 
 <!-- ===== Scene 5: review queue and bell ===== -->
@@ -510,6 +523,6 @@ setTimeout(function(){if(!window.__lwReady){d.classList.remove('anim');}},3000);
 <script src="/assets/js/vendor/gsap.min.js?v=7" defer></script>
 <script src="/assets/js/vendor/ScrollTrigger.min.js?v=7" defer></script>
 <script src="/assets/js/vendor/lenis.min.js?v=7" defer></script>
-<script src="/assets/js/main.js?v=10" defer></script>
+<script src="/assets/js/main.js?v=11" defer></script>
 </body>
 </html>

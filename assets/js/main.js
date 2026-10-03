@@ -287,6 +287,9 @@
   (function () {
     var track = $('#railTrack'), bar = $('#railBar'), count = $('#railCount');
     if (!track) return;
+    var N = Math.max(1, $$('#railTrack .panel').length);
+    if (count) count.textContent = '1 / ' + N;
+    if (bar) bar.style.width = (100 / N) + '%';
     mm.add(DESKTOP, function () {
       var dist = track.scrollWidth - track.clientWidth;
       var tw = gsap.to(track, {
@@ -294,7 +297,7 @@
         scrollTrigger: {
           trigger: '#modules', start: 'top top', end: function () { return '+=' + (track.scrollWidth - track.clientWidth); },
           pin: true, scrub: 0.6, invalidateOnRefresh: true, anticipatePin: 1,
-          onUpdate: function (s) { var n = Math.min(6, Math.floor(s.progress * 5.999) + 1); if (count) count.textContent = n + ' / 6'; if (bar) bar.style.width = (100 / 6 + s.progress * (100 - 100 / 6)) + '%'; }
+          onUpdate: function (s) { var n = Math.min(N, Math.floor(s.progress * (N - 0.001)) + 1); if (count) count.textContent = n + ' / ' + N; if (bar) bar.style.width = (100 / N + s.progress * (100 - 100 / N)) + '%'; }
         }
       });
       return function () { if (tw.scrollTrigger) tw.scrollTrigger.kill(); tw.kill(); gsap.set(track, { x: 0 }); };

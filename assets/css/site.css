@@ -212,6 +212,17 @@
 .timeline li::before { content: ""; position: absolute; left: -18px; top: 0.45em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .logs { display: flex; flex-direction: column; gap: 4px; font-size: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 3px; color: var(--muted); max-height: 150px; overflow: hidden; }
 .logs .hit { color: var(--crit-ink); }
+/* Honeypots (deception) module viz */
+.bait { display: flex; flex-direction: column; gap: 8px; }
+.bait-row { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 10px; align-items: center; padding: 9px 10px; border: 1px solid var(--line); border-radius: 3px; font-size: 12.5px; }
+.bait-row .bk { min-width: 0; overflow-wrap: anywhere; }
+.bait-row .bt { color: var(--muted-2); font-size: 11.5px; letter-spacing: 0.02em; }
+.bait-row.tripped { border-color: rgba(239,68,68,0.45); background: rgba(239,68,68,0.06); }
+.bait-row.tripped .bk { color: var(--crit-ink); }
+.panel-copy .chip.new { margin-top: 14px; }
+.chip.new { color: var(--rose-ink); border-color: rgba(224,86,154,0.5); margin-right: 8px; }
+.chip.new::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--rose-ink); }
+.panel-new { position: relative; border-color: rgba(224,86,154,0.28); box-shadow: 0 0 0 1px rgba(224,86,154,0.10), 0 24px 60px -36px rgba(224,86,154,0.5); }
 .rail-progress { display: flex; align-items: center; gap: 14px; margin-top: 22px; }
 .rail-progress #railCount { color: var(--rose-ink); font-size: 13px; letter-spacing: 0.1em; }
 .rail-progress .track { flex: 1; height: 2px; background: var(--line-strong); position: relative; }
