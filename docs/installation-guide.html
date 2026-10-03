@@ -145,7 +145,7 @@ h1 { font-size: clamp(32px, 4.4vw, 50px); line-height: 1.06; letter-spacing: -0.
 /* Terminal: the one lifted object on the page. */
 .term {
   background: var(--term-bg); color: var(--term-ink);
-  border-radius: 14px; box-shadow: var(--shadow);
+  border-radius: 14px; box-shadow: none;
   border: 1px solid var(--term-line); overflow: hidden;
   font: 13.5px/1.75 var(--mono);
 }
@@ -337,7 +337,7 @@ footer .inner { max-width: 1180px; margin: 0 auto; padding: 24px; display: flex;
     background-image: var(--g-grain);
     -webkit-backdrop-filter: blur(56px) saturate(1.15);
     backdrop-filter: blur(56px) saturate(1.15);
-    box-shadow: inset 0 1px 0 var(--g-edge), var(--g-shadow);
+    box-shadow: none;
     border-color: var(--g-line);
   }
   .card :is(.table-wrap, details, .flow), details :is(.table-wrap, details) {
@@ -425,9 +425,9 @@ footer .inner { max-width: 1180px; margin: 0 auto; padding: 24px; display: flex;
         <table>
           <thead><tr><th>You need</th><th>Details</th></tr></thead>
           <tbody>
-            <tr><td>A Linux server</td><td>Any current 64-bit distribution: Ubuntu, Debian, RHEL, Rocky, Alma. Intel/AMD or ARM.</td></tr>
-            <tr><td>Minimum Hardware Requirements</td><td>4 CPU cores, 8 GB RAM, 40 GB free disk for a small estate. Give it more as the number of monitored hosts grows.</td></tr>
-            <tr><td>Docker</td><td>Docker Engine 24 or newer with the Compose plugin, running, and usable by the account you install with.</td></tr>
+            <tr><td>A Linux server</td><td>Any current 64-bit distribution: Ubuntu, Debian, RHEL, Rocky, Alma. Intel/AMD or ARM &mdash; the bundle carries native code for both.</td></tr>
+            <tr><td>Hardware</td><td>Starts at 4 CPU cores, 8 GB RAM and 40 GB free disk. It scales with the number of monitored hosts and, above all, with how much log history you keep &mdash; see <a href="#sizing">Sizing the server</a> below.</td></tr>
+            <tr><td>Docker</td><td>Docker Engine 24 or newer with the Compose plugin (<code>docker compose</code>), running, and usable by the account you install with. The installer checks for both and stops if either is missing.</td></tr>
             <tr><td>Tools</td><td><code>bash</code>, <code>curl</code>, <code>tar</code>. <code>openssl</code> only if you want the installer to create a self-signed certificate.</td></tr>
             <tr><td>An address</td><td>The DNS name or IP address operators and monitored hosts will use to reach the server.</td></tr>
             <tr><td>A certificate</td><td>Recommended: a TLS certificate and private key (PEM) for that name, from your own certificate authority. Otherwise the installer can generate a self-signed one.</td></tr>
@@ -435,6 +435,28 @@ footer .inner { max-width: 1180px; margin: 0 auto; padding: 24px; display: flex;
           </tbody>
         </table>
       </div>
+
+      <h3 id="sizing" style="margin-top:1.4em">Sizing the server</h3>
+      <p class="intro">One server runs the whole stack in containers (PostgreSQL, Redis, the ClickHouse
+      log store, the API and the console). CPU and RAM track the number of agents reporting and how many
+      scans run at once; <strong>disk is driven mostly by log/SIEM retention and stored evidence</strong>.
+      The installer warns and asks before continuing with less than 10 GB free. Treat the figures below as
+      starting points and grow disk as your retention window grows.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Estate</th><th>CPU</th><th>RAM</th><th>Free disk</th></tr></thead>
+          <tbody>
+            <tr><td>Evaluation / up to 10 hosts</td><td class="num">4 cores</td><td class="num">8 GB</td><td class="num">40 GB</td></tr>
+            <tr><td>Up to 50 hosts</td><td class="num">8 cores</td><td class="num">16 GB</td><td class="num">100 GB</td></tr>
+            <tr><td>Up to 200 hosts</td><td class="num">8&ndash;16 cores</td><td class="num">32 GB</td><td class="num">250 GB</td></tr>
+            <tr><td>200+ hosts</td><td class="num">16+ cores</td><td class="num">64 GB</td><td class="num">500 GB+</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="intro" style="margin-top:.6em">If you collect a lot of syslog or keep long log history, size disk
+      for the log store first: a busy estate can generate tens of GB of logs per week. SSD storage is
+      recommended for the database and log store.</p>
 
       <ul class="check" data-group="before">
         <li><label><input type="checkbox" data-key="b1"><span>Docker is installed and <code>docker info</code> works for my account</span></label></li>
